@@ -16,8 +16,10 @@ class GlobalExceptionHandler {
             .body(
                 ApiModel.Response<ApiModel.Payload>(
                     code = exception.code,
-                    error = exception.message,
-                    extra = exception.stackTrace.contentToString(),
+                    error = ApiModel.Error(
+                        message = exception.message,
+                        stacktrace = exception.stackTrace.contentToString(),
+                    ),
                 ),
             )
     }
@@ -29,8 +31,10 @@ class GlobalExceptionHandler {
             .body(
                 ApiModel.Response<ApiModel.Payload>(
                     code = AppReturnCode.FAILED,
-                    error = exception.message,
-                    extra = exception.stackTrace.contentToString(),
+                    error = ApiModel.Error(
+                        message = exception.message,
+                        stacktrace = exception.stackTrace.contentToString(),
+                    ),
                 ),
             )
     }

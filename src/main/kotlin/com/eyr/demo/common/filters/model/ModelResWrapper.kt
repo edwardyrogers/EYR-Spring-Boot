@@ -27,7 +27,6 @@ class ModelResWrapper(
                 "code" to AppReturnCode.valueOf(res["code"] as String).code,
                 "payload" to res["payload"],
                 "error" to res["error"],
-                "extra" to res["extra"],
             )
         )
 

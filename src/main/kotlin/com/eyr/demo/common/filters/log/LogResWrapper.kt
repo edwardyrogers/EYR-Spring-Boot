@@ -33,7 +33,6 @@ class LogResWrapper(
                 "code" to res["code"],
                 "payload" to res["payload"],
                 "error" to res["error"],
-                "extra" to res["extra"],
             )
         )
 
