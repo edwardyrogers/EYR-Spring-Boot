@@ -29,12 +29,12 @@ class LogReqWrapper(
 
     fun log() {
         val mapper = ObjectMapper()
-        val rawData = mapper.readValue(
+        val req = mapper.readValue(
             this.body,
             object: TypeReference<HashMap<String, Any>>() {}
         )
         val logMap = mapOf(
-            "body" to rawData
+            "body" to req
         )
         val prettied = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(logMap)
 

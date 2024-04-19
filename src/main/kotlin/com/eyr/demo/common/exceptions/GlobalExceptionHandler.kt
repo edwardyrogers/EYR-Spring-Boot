@@ -1,32 +1,37 @@
 package com.eyr.demo.common.exceptions
 
-
-import org.slf4j.LoggerFactory
-import org.springframework.http.HttpStatus
+import com.eyr.demo.common.constants.AppReturnCode
+import com.eyr.demo.common.models.ApiModel
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import java.io.IOException
+
 
 @ControllerAdvice
 class GlobalExceptionHandler {
-    companion object {
-        private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
+    @ExceptionHandler(BadRequestException::class)
+    fun handleBadRequestException(exception: BadRequestException): ResponseEntity<Any> {
+        return ResponseEntity
+            .badRequest()
+            .body(
+                ApiModel.Response<ApiModel.Payload>(
+                    code = exception.code,
+                    error = exception.message,
+                    extra = exception.stackTrace.contentToString(),
+                ),
+            )
     }
 
-//    @ExceptionHandler(HelloWorldException::class)
-//    fun handleStudentNotFoundException(exception: HelloWorldException): ResponseEntity<Any> {
-//        logger.info("Edward Global Exception 1")
-//        return ResponseEntity
-//            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-//            .body(exception.message)
-//    }
-
     @ExceptionHandler(Exception::class)
-    fun exception(exception: Exception): ResponseEntity<Any> {
-        logger.info("Edward Global Exception 2")
+    fun handleException(exception: Exception): ResponseEntity<Any> {
         return ResponseEntity
-            .status(500)
-            .body(exception.message)
+            .internalServerError()
+            .body(
+                ApiModel.Response<ApiModel.Payload>(
+                    code = AppReturnCode.FAILED,
+                    error = exception.message,
+                    extra = exception.stackTrace.contentToString(),
+                ),
+            )
     }
 }

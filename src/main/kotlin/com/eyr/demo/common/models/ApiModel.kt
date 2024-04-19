@@ -10,6 +10,10 @@ class ApiModel {
         @JsonProperty("code")
         val code: AppReturnCode,
         @JsonProperty("payload")
-        val payload: T?,
+        val payload: T? = null,
+        @JsonProperty("error")
+        val error: String? = null,
+        @JsonProperty("extra")
+        val extra: String? = null,
     )
 }

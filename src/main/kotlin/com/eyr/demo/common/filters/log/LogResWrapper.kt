@@ -23,19 +23,25 @@ class LogResWrapper(
 
     fun log(request: HttpServletRequest) {
         val mapper = ObjectMapper()
-        val resData = mapper.readValue(
+        val res = mapper.readValue(
             this.byteArrayOutputStream.toString(),
             object : TypeReference<HashMap<String, Any>>() {}
         )
         val prettied = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(
             mapOf(
                 "status" to "${response.status}",
-                "code" to resData["code"],
-                "payload" to resData["payload"],
+                "code" to res["code"],
+                "payload" to res["payload"],
+                "error" to res["error"],
+                "extra" to res["extra"],
             )
         )
 
-        LOGGER.info("[${request.method}] <-- ${request.requestURI} $prettied")
+        if (response.status in 200..299) {
+            LOGGER.info("[${request.method}] <-- ${request.requestURI} $prettied")
+        } else {
+            LOGGER.error("[${request.method}] <-- ${request.requestURI} $prettied")
+        }
 
         response.outputStream.write(byteArrayOutputStream.toByteArray())
     }

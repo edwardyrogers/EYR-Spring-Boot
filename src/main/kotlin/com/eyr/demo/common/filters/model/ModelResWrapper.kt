@@ -25,7 +25,9 @@ class ModelResWrapper(
         val modified = mapper.writeValueAsString(
             mapOf(
                 "code" to AppReturnCode.valueOf(res["code"] as String).code,
-                "payload" to res["payload"]
+                "payload" to res["payload"],
+                "error" to res["error"],
+                "extra" to res["extra"],
             )
         )
 
