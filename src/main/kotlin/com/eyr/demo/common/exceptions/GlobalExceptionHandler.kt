@@ -1,6 +1,6 @@
 package com.eyr.demo.common.exceptions
 
-import com.eyr.demo.common.constants.AppReturnCode
+import com.eyr.demo.common.constants.AppErrorCode
 import com.eyr.demo.common.models.ApiModel
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
 class GlobalExceptionHandler {
-    @ExceptionHandler(BadRequestException::class)
-    fun handleBadRequestException(exception: BadRequestException): ResponseEntity<Any> {
+    @ExceptionHandler(RequestFailedException::class)
+    fun handleRequestFailedException(exception: RequestFailedException): ResponseEntity<Any> {
         return ResponseEntity
             .badRequest()
             .body(
                 ApiModel.Response<ApiModel.Payload>(
-                    code = exception.code,
                     error = ApiModel.Error(
-                        message = exception.message,
+                        code = exception.code,
+                        msg = exception.msg,
                         stacktrace = exception.stackTrace.contentToString(),
                     ),
                 ),
@@ -30,9 +30,9 @@ class GlobalExceptionHandler {
             .internalServerError()
             .body(
                 ApiModel.Response<ApiModel.Payload>(
-                    code = AppReturnCode.FAILED,
                     error = ApiModel.Error(
-                        message = exception.message,
+                        code = AppErrorCode.UNKNOWN_REASON,
+                        msg = exception.message,
                         stacktrace = exception.stackTrace.contentToString(),
                     ),
                 ),
