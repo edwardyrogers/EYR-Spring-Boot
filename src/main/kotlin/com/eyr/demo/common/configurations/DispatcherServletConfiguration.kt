@@ -2,6 +2,7 @@ package com.eyr.demo.common.configurations
 
 import jakarta.servlet.Filter
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.filter.DelegatingFilterProxy
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer
 
 @Configuration
@@ -11,7 +12,9 @@ class DispatcherServletConfiguration: AbstractAnnotationConfigDispatcherServletI
     }
 
     override fun getServletFilters(): Array<Filter>? {
-        return arrayOf()
+        return arrayOf(
+            DelegatingFilterProxy("logFilter")
+        )
     }
 
     override fun getRootConfigClasses(): Array<Class<*>?> {

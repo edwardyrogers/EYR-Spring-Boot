@@ -10,9 +10,9 @@ class ApiModel {
         @JsonProperty("code")
         val code: AppErrorCode,
         @JsonProperty("msg")
-        val msg: String?,
+        val msg: String? = null,
         @JsonProperty("stacktrace")
-        val stacktrace: String?,
+        val stacktrace: String? = null,
     )
 
     data class Response<T: Payload> (

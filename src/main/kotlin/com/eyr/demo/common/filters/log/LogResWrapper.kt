@@ -37,9 +37,9 @@ class LogResWrapper(
         )
 
         if (response.status in 200..299) {
-            LOGGER.info("[${request.method}] <-- ${request.requestURI} $prettied")
+            LOGGER.info("<-- [${request.method}] ${request.requestURI} $prettied")
         } else {
-            LOGGER.error("[${request.method}] <-- ${request.requestURI} $prettied")
+            LOGGER.error("<-- [${request.method}] ${request.requestURI} $prettied")
         }
 
         response.outputStream.write(byteArrayOutputStream.toByteArray())

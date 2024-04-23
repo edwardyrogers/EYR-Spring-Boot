@@ -28,17 +28,21 @@ class LogReqWrapper(
     )
 
     fun log() {
-        val mapper = ObjectMapper()
-        val req = mapper.readValue(
-            this.body,
-            object: TypeReference<HashMap<String, Any>>() {}
-        )
-        val logMap = mapOf(
-            "body" to req
-        )
-        val prettied = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(logMap)
+        runCatching {
+            val mapper = ObjectMapper()
+            val req = mapper.readValue(
+                this.body,
+                object : TypeReference<HashMap<String, Any>>() {}
+            )
+            val logMap = mapOf(
+                "body" to req
+            )
+            val prettied = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(logMap)
 
-        LOGGER.info("[${request.method}] --> ${request.requestURI} $prettied")
+            LOGGER.info("--> [${request.method}] ${request.requestURI} $prettied")
+        }.getOrElse {
+            LOGGER.error("--> [${request.method}] ${request.requestURI} Error occurred!!!")
+        }
     }
 
     override fun getInputStream(): ServletInputStream {
