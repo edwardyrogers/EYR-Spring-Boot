@@ -11,7 +11,6 @@ class API001ServiceImpl : API001Service {
     override fun api001001(request: API001Model.API001001REQ): ApiModel.Response<API001Model.API001001RES> {
         throw RequestFailedException(
             code = AppErrorCode.VALIDATION_FAILED,
-            msg = null,
         )
     }
 }

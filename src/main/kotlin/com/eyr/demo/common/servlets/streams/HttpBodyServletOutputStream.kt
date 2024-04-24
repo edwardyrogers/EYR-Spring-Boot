@@ -4,7 +4,10 @@ import jakarta.servlet.ServletOutputStream
 import jakarta.servlet.WriteListener
 import java.io.ByteArrayOutputStream
 
-class HttpBodyServletOutputStream(private val outputStream: ByteArrayOutputStream, ): ServletOutputStream() {
+
+class HttpBodyServletOutputStream(
+    private val outputStream: ByteArrayOutputStream
+): ServletOutputStream() {
 
     override fun write(b: Int) = outputStream.write(b)
 

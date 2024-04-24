@@ -5,5 +5,5 @@ import com.eyr.demo.common.constants.AppErrorCode
 
 class RequestFailedException(
     val code: AppErrorCode,
-    val msg: String?,
+    val msg: String? = null,
 ) : RuntimeException(msg)
