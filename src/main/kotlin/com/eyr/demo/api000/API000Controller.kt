@@ -22,4 +22,10 @@ class API000Controller {
     ): ApiModel.Response<API000Model.API000001RES>  {
         return service.api000001(request)
     }
+    @PostMapping("API000002")
+    fun api000002(
+        @Valid @RequestBody request: API000Model.API000002REQ
+    ): ApiModel.Response<API000Model.API000002RES>  {
+        return service.api000002(request)
+    }
 }

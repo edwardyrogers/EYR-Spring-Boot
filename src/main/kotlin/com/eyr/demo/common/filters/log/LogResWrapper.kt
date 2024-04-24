@@ -30,7 +30,6 @@ class LogResWrapper(
         val prettied = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(
             mapOf(
                 "status" to "${response.status}",
-                "code" to res["code"],
                 "payload" to res["payload"],
                 "error" to res["error"],
             )

@@ -6,6 +6,7 @@ import com.eyr.demo.common.models.ApiModel
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -32,6 +33,23 @@ class GlobalExceptionHandler {
                     error = ApiModel.Error(
                         code = AppErrorCode.BODY_VALIDATION_FAILED,
                         msg = exception.body.detail,
+                        stacktrace = exception.stackTrace.contentToString(),
+                    ),
+                ),
+            )
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException::class)
+    fun handleMismatchedInputException(exception: HttpMessageNotReadableException): ResponseEntity<Any> {
+        LOGGER.error("--- [${AppConstant.ON_GOING.uppercase()}] MismatchedInputException: ${exception.message}")
+
+        return ResponseEntity
+            .badRequest()
+            .body(
+                ApiModel.Response<ApiModel.Payload>(
+                    error = ApiModel.Error(
+                        code = AppErrorCode.CANNOT_DESERIALIZE_VALUE,
+                        msg = exception.message,
                         stacktrace = exception.stackTrace.contentToString(),
                     ),
                 ),
