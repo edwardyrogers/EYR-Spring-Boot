@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank
 class API001Model {
     data class API001001REQ (
         @field:NotBlank
-        val name: String
+        val name: String = "",
     )
 
     data class API001001RES (

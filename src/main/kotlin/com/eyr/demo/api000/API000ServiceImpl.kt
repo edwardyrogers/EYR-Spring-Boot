@@ -32,7 +32,7 @@ class API000ServiceImpl : API000Service {
             danceRepository.save(
                 DanceModel(
                     name = request.danceName,
-                    type = DanceUtil.DanceType.valueOf(request.danceType)
+                    type = DanceUtil.DanceType.entries[request.danceType.toInt()]
                 )
             )
 

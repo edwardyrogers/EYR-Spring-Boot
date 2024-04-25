@@ -18,9 +18,10 @@ class API000Model {
 
     data class API000002REQ(
         @field: NotBlank
-        val danceName: String,
+        val danceName: String = "",
+
         @field: NotBlank
-        val danceType: String,
+        val danceType: String = "",
     )
 
     data class API000002RES(
