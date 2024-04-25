@@ -11,12 +11,12 @@ class DanceUtil {
         NO_TYPE,
         SWING_DANCE;
 
-        val index: Int get() = ordinal
+        val index get() = ordinal.toString()
     }
 
     class DanceTypeSerializer : JsonSerializer<DanceType>() {
         override fun serialize(p0: DanceType?, p1: JsonGenerator?, p2: SerializerProvider?) {
-            p1?.writeNumber(p0?.index ?: 0)
+            p1?.writeNumber(p0?.index)
         }
     }
 }
