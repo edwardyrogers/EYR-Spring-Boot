@@ -1,4 +1,4 @@
-package com.eyr.demo.common.data.repos.dance
+package com.eyr.demo.common.data.repositories.dance
 
 import jakarta.persistence.*
 
@@ -10,7 +10,7 @@ data class DanceModel(
 
     @Column
     @Enumerated(EnumType.ORDINAL)
-    val type: DanceUtil.DanceType = DanceUtil.DanceType.NO_TYPE,
+    val type: DanceHelper.DanceType? = null,
 
     @Column
     val name: String = "",

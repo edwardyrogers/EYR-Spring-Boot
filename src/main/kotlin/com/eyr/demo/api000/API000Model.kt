@@ -1,6 +1,5 @@
 package com.eyr.demo.api000
 
-import com.eyr.demo.common.data.repos.dance.DanceModel
 import com.eyr.demo.common.models.ApiModel
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -12,16 +11,19 @@ class API000Model {
     )
 
     data class API000001RES(
-        @JsonProperty("dances")
-        val dances: List<DanceModel> = listOf()
+        @JsonProperty("result")
+        val result: String = ""
     ) : ApiModel.Payload()
 
     data class API000002REQ(
         @field: NotBlank
-        val danceName: String = "",
+        val username: String = "",
 
         @field: NotBlank
-        val danceType: String = "",
+        val password: String = "",
+
+        @field: NotBlank
+        val role: String = "",
     )
 
     data class API000002RES(
