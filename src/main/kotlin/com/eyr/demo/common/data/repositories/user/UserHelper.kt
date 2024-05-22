@@ -1,6 +1,6 @@
 package com.eyr.demo.common.data.repositories.user
 
-import com.eyr.demo.common.data.repositories.user.UserHelper.Permission.*
+import com.eyr.demo.common.data.repositories.user.UserHelper.UserPermission.*
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
@@ -11,8 +11,12 @@ class UserHelper {
 
     @JsonSerialize(using = UserRoleSerializer::class)
     enum class UserRole(
-        private val permissions: Set<Permission>
+        private val permissions: Set<UserPermission>
     ) {
+        STRANGER(
+            emptySet()
+        ),
+
         REGULAR(
             emptySet()
         ),
@@ -36,7 +40,7 @@ class UserHelper {
         val authorities: MutableList<SimpleGrantedAuthority>
             get() = run {
                 val authorities = permissions
-                    .map { permission -> SimpleGrantedAuthority(permission.name) }
+                    .map { permission -> SimpleGrantedAuthority(permission.scope) }
                     .toMutableList()
 
                 authorities.add(SimpleGrantedAuthority("ROLE_$name"))
@@ -50,8 +54,8 @@ class UserHelper {
         }
     }
 
-    enum class Permission(
-        private val permission: String
+    enum class UserPermission(
+        val scope: String
     ) {
         ADMIN_CREATE("admin:create"),
         ADMIN_READ("admin:read"),

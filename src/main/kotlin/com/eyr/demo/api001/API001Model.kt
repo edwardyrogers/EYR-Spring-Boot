@@ -14,4 +14,14 @@ class API001Model {
         @JsonProperty("greeting")
         val greeting: String
     ) : ApiModel.Payload()
+
+    data class API001002REQ (
+        @field:NotBlank
+        val name: String = "",
+    )
+
+    data class API001002RES (
+        @JsonProperty("greeting")
+        val greeting: String
+    ) : ApiModel.Payload()
 }

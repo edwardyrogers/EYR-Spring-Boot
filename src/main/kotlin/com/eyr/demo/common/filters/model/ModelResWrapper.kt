@@ -1,6 +1,6 @@
 package com.eyr.demo.common.filters.model
 
-import com.eyr.demo.common.constants.AppErrorCode
+import com.eyr.demo.common.constants.ReturnCode
 import com.eyr.demo.common.servlets.streams.HttpBodyServletOutputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -27,10 +27,11 @@ class ModelResWrapper(
                 "payload" to res["payload"],
                 "error" to if (res["error"] != null) {
                     val err = res["error"] as HashMap<*, *>
-                    val errCode = AppErrorCode.valueOf(err["code"] as String)
+                    val errCode = ReturnCode.valueOf(err["code"] as String)
                     val errMsg = err["msg"] ?: errCode.msg
 
                     mapOf(
+                        "timestamp" to err["timestamp"],
                         "code" to errCode.code,
                         "msg" to errMsg,
                         "stacktrace" to err["stacktrace"]

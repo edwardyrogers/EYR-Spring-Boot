@@ -16,17 +16,25 @@ class DemoApplication : CommandLineRunner {
     override fun run(vararg args: String?) {
         service.api000002(
             request = API000Model.API000002REQ(
-                username = "user",
-                password = "\$2a\$12\$yMX1IbCqMDpCiNaTjx17Fe3/16geftzCmUzBXmYeAPzjRarFGBBUe",
+                username = "stranger",
+                password = "password",
                 role = "0"
             )
         )
 
         service.api000002(
             request = API000Model.API000002REQ(
-                username = "admin",
-                password = "\$2a\$12\$yMX1IbCqMDpCiNaTjx17Fe3/16geftzCmUzBXmYeAPzjRarFGBBUe",
+                username = "user",
+                password = "password",
                 role = "1"
+            )
+        )
+
+        service.api000002(
+            request = API000Model.API000002REQ(
+                username = "admin",
+                password = "password",
+                role = "3"
             )
         )
     }

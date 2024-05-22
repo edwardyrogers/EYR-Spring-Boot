@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(AppConstant.PATH_API_V1)
-@PreAuthorize("hasRole('ADMIN')")
 class API000Controller {
 
     @Autowired
     lateinit var service: API000Service
 
     @PostMapping("API000001")
-    @PreAuthorize("hasAuthority('admin:read')")
     fun api000001(
         @Valid @RequestBody request: API000Model.API000001REQ
     ): ApiModel.Response<API000Model.API000001RES>  {
@@ -29,8 +27,9 @@ class API000Controller {
     }
 
     @PostMapping("API000002")
+    @PreAuthorize("hasAuthority('admin:read')")
     fun api000002(
-        @Valid @RequestBody request: API000Model.API000002REQ
+         @RequestBody @Valid request: API000Model.API000002REQ
     ): ApiModel.Response<API000Model.API000002RES>  {
         return service.api000002(request)
     }

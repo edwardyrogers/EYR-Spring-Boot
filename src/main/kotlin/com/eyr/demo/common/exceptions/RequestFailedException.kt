@@ -1,9 +1,9 @@
 package com.eyr.demo.common.exceptions
 
-import com.eyr.demo.common.constants.AppErrorCode
+import com.eyr.demo.common.constants.ReturnCode
 
 
 class RequestFailedException(
-    val code: AppErrorCode,
+    val code: ReturnCode,
     val msg: String? = null,
 ) : RuntimeException(msg)

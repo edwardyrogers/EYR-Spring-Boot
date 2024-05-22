@@ -1,6 +1,6 @@
 package com.eyr.demo.api000
 
-import com.eyr.demo.common.constants.AppErrorCode
+import com.eyr.demo.common.constants.ReturnCode
 import com.eyr.demo.common.data.repositories.user.UserHelper
 import com.eyr.demo.common.data.repositories.user.UserModel
 import com.eyr.demo.common.data.repositories.user.UserRepository
@@ -34,13 +34,15 @@ class API000ServiceImpl : API000Service {
 
     override fun api000002(request: API000Model.API000002REQ): ApiModel.Response<API000Model.API000002RES> {
         return runCatching {
-            userRepository.save(
+            val user = userRepository.save(
                 UserModel(
                     username = request.username,
                     password = passwordEncoder.encode(request.password),
                     role = UserHelper.UserRole.entries[request.role.toInt()],
                 )
             )
+
+            println("User role: " + user.role);
 
             ApiModel.Response(
                 payload = API000Model.API000002RES(
@@ -50,7 +52,7 @@ class API000ServiceImpl : API000Service {
         }.getOrElse {
             when (it) {
                 is IllegalArgumentException -> throw RequestFailedException(
-                    code = AppErrorCode.BODY_VALIDATION_FAILED,
+                    code = ReturnCode.BODY_VALIDATION_FAILED,
                     msg = "Dance type ${request.role} is out of constant"
                 )
 
