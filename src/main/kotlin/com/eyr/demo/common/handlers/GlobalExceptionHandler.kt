@@ -6,6 +6,7 @@ import com.eyr.demo.common.models.ApiModel
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -70,6 +71,21 @@ class GlobalExceptionHandler {
                     error = ApiModel.Error(
                         code = ReturnCode.VALIDATION_FAILED,
                         msg = errors.joinToString(", "),
+                        stacktrace = exception.stackTrace.contentToString(),
+                    ),
+                ),
+            )
+    }
+
+    @ExceptionHandler(UsernameNotFoundException::class)
+    fun handleUsernameNotFoundException(exception: UsernameNotFoundException): ResponseEntity<Any> {
+        return ResponseEntity
+            .internalServerError()
+            .body(
+                ApiModel.Response<ApiModel.Payload>(
+                    error = ApiModel.Error(
+                        code = ReturnCode.ACCESS_DENIED,
+                        msg = exception.localizedMessage,
                         stacktrace = exception.stackTrace.contentToString(),
                     ),
                 ),
