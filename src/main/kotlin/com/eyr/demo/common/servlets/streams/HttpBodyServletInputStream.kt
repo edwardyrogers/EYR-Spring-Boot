@@ -15,5 +15,5 @@ class HttpBodyServletInputStream(
 
     override fun isReady(): Boolean = true
 
-    override fun setReadListener(p0: ReadListener?) { }
+    override fun setReadListener(p0: ReadListener?) {}
 }

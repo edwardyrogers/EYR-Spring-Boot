@@ -6,7 +6,7 @@ import org.springframework.web.filter.DelegatingFilterProxy
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer
 
 @Configuration
-class DispatcherServletConfiguration: AbstractAnnotationConfigDispatcherServletInitializer() {
+class DispatcherServletConfiguration : AbstractAnnotationConfigDispatcherServletInitializer() {
     override fun getServletMappings(): Array<String?> {
         return arrayOfNulls(0)
     }

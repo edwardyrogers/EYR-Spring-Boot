@@ -1,9 +1,7 @@
 package com.eyr.demo.common.data.repositories.user
 
-import com.eyr.demo.common.data.repositories.user.UserHelper.*
-
+import com.eyr.demo.common.data.repositories.user.UserHelper.UserRole
 import jakarta.persistence.*
-
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

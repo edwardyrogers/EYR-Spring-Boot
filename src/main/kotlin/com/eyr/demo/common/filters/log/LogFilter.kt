@@ -1,24 +1,26 @@
 package com.eyr.demo.common.filters.log
 
-import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
-import jakarta.servlet.ServletRequest
-import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
+import org.springframework.web.filter.OncePerRequestFilter
 
 
 @Order(0)
 @Component("logFilter")
-class LogFilter : Filter {
-    override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
-        val reqWrapped = LogReqWrapper(request as HttpServletRequest)
-        val resWrapped = LogResWrapper(response as HttpServletResponse)
+class LogFilter : OncePerRequestFilter() {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain,
+    ) {
+        val reqWrapped = LogReqWrapper(request)
+        val resWrapped = LogResWrapper(response)
 
         reqWrapped.log()
-        chain!!.doFilter(reqWrapped, resWrapped)
+        filterChain.doFilter(reqWrapped, resWrapped)
         resWrapped.log(request)
     }
 }

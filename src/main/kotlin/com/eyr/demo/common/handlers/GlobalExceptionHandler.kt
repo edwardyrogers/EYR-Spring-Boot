@@ -4,23 +4,23 @@ import com.eyr.demo.common.constants.ReturnCode
 import com.eyr.demo.common.exceptions.RequestFailedException
 import com.eyr.demo.common.models.ApiModel
 import jakarta.servlet.http.HttpServletResponse
-
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-
 import java.util.function.Consumer
 
 
 @ControllerAdvice
 class GlobalExceptionHandler {
-
     @ExceptionHandler(AccessDeniedException::class)
-    fun handleAccessDeniedException(response: HttpServletResponse, exception: AccessDeniedException): ResponseEntity<Any> {
+    fun handleAccessDeniedException(
+        response: HttpServletResponse,
+        exception: AccessDeniedException,
+    ): ResponseEntity<Any> {
         response.sendError(403)
 
         return ResponseEntity

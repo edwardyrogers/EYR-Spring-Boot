@@ -7,11 +7,11 @@ import java.io.ByteArrayOutputStream
 
 class HttpBodyServletOutputStream(
     private val outputStream: ByteArrayOutputStream
-): ServletOutputStream() {
+) : ServletOutputStream() {
 
     override fun write(b: Int) = outputStream.write(b)
 
     override fun isReady(): Boolean = true
 
-    override fun setWriteListener(p0: WriteListener?) { }
+    override fun setWriteListener(p0: WriteListener?) {}
 }
