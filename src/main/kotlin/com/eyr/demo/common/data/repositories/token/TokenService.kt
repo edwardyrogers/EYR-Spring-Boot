@@ -23,6 +23,7 @@ class TokenService(
 
     fun findByToken(token: String): TokenModel =
         tokenRepository.findByToken(token) ?: throw RequestFailedException(
-            code = ReturnCode.GENERAL_ERROR
+            code = ReturnCode.ACCESS_DENIED,
+            msg = "Token not found"
         )
 }

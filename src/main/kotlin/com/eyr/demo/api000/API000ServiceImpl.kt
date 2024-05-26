@@ -45,7 +45,7 @@ class API000ServiceImpl(
             val accessToken = jwtService.genAccessToken(user = user)
             val refreshToken = jwtService.genRefreshToken(user = user)
 
-            tokenService.save(user = user, token = accessToken)
+//            tokenService.save(user = user, token = accessToken)
 
             ApiModel.Response(
                 payload = API000Model.API000002RES(

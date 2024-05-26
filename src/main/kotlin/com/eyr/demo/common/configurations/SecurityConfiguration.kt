@@ -2,7 +2,9 @@ package com.eyr.demo.common.configurations
 
 import com.eyr.demo.common.constants.AppConstant
 import com.eyr.demo.common.data.repositories.user.UserHelper.UserRole
+import com.eyr.demo.common.filters.error.ErrorFilter
 import com.eyr.demo.common.filters.jwt.JwtFilter
+import com.eyr.demo.common.filters.jwt.JwtService
 import com.eyr.demo.common.filters.log.LogFilter
 import com.eyr.demo.common.filters.model.ModelFilter
 import org.springframework.context.annotation.Bean
@@ -23,12 +25,15 @@ class SecurityConfiguration(
     private val logFilter: LogFilter,
     private val modelFilter: ModelFilter,
     private val jwtFilter: JwtFilter,
+    private val errorFilter: ErrorFilter,
     private val authenticationProvider: AuthenticationProvider,
+    private val jwtService: JwtService,
 ) {
     companion object {
         val WHITE_LIST_URL = arrayOf(
-            "/api/v1/API000001",
-            "/api/v1/API000002",
+            "/${AppConstant.PATH_API_V1}/API000001",
+            "/${AppConstant.PATH_API_V1}/API000002",
+            "/${AppConstant.PATH_API_V1}/API000003",
         )
     }
 
@@ -48,10 +53,18 @@ class SecurityConfiguration(
                 .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
+//                .logout { logout ->
+//                    logout
+//                        .logoutUrl("/${AppConstant.PATH_API_V1}/API000003")
+//                        .addLogoutHandler(jwtService)
+//                        .logoutSuccessHandler { request, response, authentication ->
+//                            SecurityContextHolder.clearContext()
+//                        }
+//                }
                 .addFilterBefore(modelFilter, JwtFilter::class.java)
                 .addFilterBefore(logFilter, ModelFilter::class.java)
-
-            http.build()
+                .addFilterBefore(errorFilter, LogFilter::class.java)
+                .build()
         }
     }
 }

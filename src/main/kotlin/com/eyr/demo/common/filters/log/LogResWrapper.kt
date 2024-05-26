@@ -2,7 +2,7 @@ package com.eyr.demo.common.filters.log
 
 import com.eyr.demo.common.servlets.streams.HttpBodyServletOutputStream
 import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.json.JsonMapper
 import jakarta.servlet.ServletOutputStream
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -24,7 +24,8 @@ class LogResWrapper(
     private val byteArrayOutputStream = ByteArrayOutputStream()
 
     fun log(request: HttpServletRequest) {
-        val mapper = ObjectMapper()
+        val mapper = JsonMapper()
+
         val res = mapper.readValue(
             this.byteArrayOutputStream.toString(),
             object : TypeReference<HashMap<String, Any>>() {}
@@ -33,7 +34,15 @@ class LogResWrapper(
             mapOf(
                 "status" to "${response.status}",
                 "payload" to res["payload"],
-                "error" to res["error"],
+                "error" to if (res["error"] != null) {
+                    val err = res["error"] as HashMap<*, *>
+
+                    mapOf(
+                        "timestamp" to err["timestamp"],
+                        "code" to err["code"],
+                        "msg" to err["msg"],
+                    )
+                } else null,
             )
         )
 

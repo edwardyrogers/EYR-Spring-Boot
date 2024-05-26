@@ -21,7 +21,6 @@ class API000Controller(
     }
 
     @PostMapping("API000002")
-//    @PreAuthorize("hasAuthority('admin:read')")
     fun api000002(
         @RequestBody @Valid request: API000Model.API000002REQ
     ): ApiModel.Response<API000Model.API000002RES> {

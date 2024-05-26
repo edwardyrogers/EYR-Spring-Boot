@@ -5,8 +5,12 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.web.authentication.logout.LogoutHandler
 import org.springframework.stereotype.Service
 import java.security.Key
 import java.util.*
@@ -14,7 +18,7 @@ import java.util.function.Function
 
 
 @Service
-class JwtService {
+class JwtService : LogoutHandler {
     @Value("\${application.security.jwt.secret-key}")
     private val secretKey: String? = null
 
@@ -74,4 +78,7 @@ class JwtService {
     private fun isTokenExpired(token: String): Boolean =
         getClaimExpiration(token).before(Date())
 
+    override fun logout(request: HttpServletRequest?, response: HttpServletResponse?, authentication: Authentication?) {
+        println("Edward")
+    }
 }

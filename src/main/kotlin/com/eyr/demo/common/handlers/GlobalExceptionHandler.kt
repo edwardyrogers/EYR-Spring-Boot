@@ -3,6 +3,8 @@ package com.eyr.demo.common.handlers
 import com.eyr.demo.common.constants.ReturnCode
 import com.eyr.demo.common.exceptions.RequestFailedException
 import com.eyr.demo.common.models.ApiModel
+import com.eyr.demo.common.models.ApiModel.Payload
+import com.eyr.demo.common.models.ApiModel.Response
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
@@ -21,13 +23,13 @@ class GlobalExceptionHandler {
     fun handleAccessDeniedException(
         response: HttpServletResponse,
         exception: AccessDeniedException,
-    ): ResponseEntity<Any> {
-        response.sendError(403)
+    ): ResponseEntity<Response<Payload>> {
+        exception.printStackTrace()
 
         return ResponseEntity
-            .status(403)
+            .badRequest()
             .body(
-                ApiModel.Response<ApiModel.Payload>(
+                Response(
                     error = ApiModel.Error(
                         code = ReturnCode.ACCESS_DENIED,
                         msg = exception.localizedMessage,
@@ -38,11 +40,13 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RequestFailedException::class)
-    fun handleRequestFailedException(exception: RequestFailedException): ResponseEntity<Any> {
+    fun handleRequestFailedException(exception: RequestFailedException): ResponseEntity<Response<Payload>> {
+        exception.printStackTrace()
+
         return ResponseEntity
             .badRequest()
             .body(
-                ApiModel.Response<ApiModel.Payload>(
+                Response(
                     error = ApiModel.Error(
                         code = exception.code,
                         msg = exception.msg,
@@ -64,10 +68,12 @@ class GlobalExceptionHandler {
             }
         )
 
+        exception.printStackTrace()
+
         return ResponseEntity
             .badRequest()
             .body(
-                ApiModel.Response<ApiModel.Payload>(
+                Response<Payload>(
                     error = ApiModel.Error(
                         code = ReturnCode.VALIDATION_FAILED,
                         msg = errors.joinToString(", "),
@@ -79,10 +85,12 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException::class)
     fun handleUsernameNotFoundException(exception: UsernameNotFoundException): ResponseEntity<Any> {
+        exception.printStackTrace()
+
         return ResponseEntity
             .internalServerError()
             .body(
-                ApiModel.Response<ApiModel.Payload>(
+                Response<Payload>(
                     error = ApiModel.Error(
                         code = ReturnCode.ACCESS_DENIED,
                         msg = exception.localizedMessage,
@@ -93,11 +101,13 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handleException(exception: Exception): ResponseEntity<Any> {
+    fun handleException(exception: Exception): ResponseEntity<Response<Payload>> {
+        exception.printStackTrace()
+
         return ResponseEntity
             .internalServerError()
             .body(
-                ApiModel.Response<ApiModel.Payload>(
+                Response(
                     error = ApiModel.Error(
                         code = ReturnCode.GENERAL_ERROR,
                         msg = exception.localizedMessage,
