@@ -22,18 +22,22 @@ class LogReqWrapper(
     }
 
     private val body: ByteArray = StreamUtils.copyToByteArray(
-        this.request.inputStream
+        request.inputStream
     )
 
     private val byteArrayInputStream = ByteArrayInputStream(
-        this.body
+        body
     )
 
     fun log() {
         runCatching {
+            if (body.isEmpty()) {
+                return
+            }
+
             val mapper = ObjectMapper()
             val req = mapper.readValue(
-                this.body,
+                body,
                 object : TypeReference<HashMap<String, Any>>() {}
             )
 
@@ -45,20 +49,20 @@ class LogReqWrapper(
             LOGGER.info("--> [${request.method}] ${request.requestURI} $prettied")
         }.getOrElse {
             LOGGER.error("--> [${request.method}] ${request.requestURI} Error occurred!!!")
-            it
+            it.printStackTrace()
         }
     }
 
     override fun getInputStream(): ServletInputStream {
         return HttpBodyServletInputStream(
-            inputStream = this.byteArrayInputStream
+            inputStream = byteArrayInputStream
         )
     }
 
     override fun getReader(): BufferedReader {
         return BufferedReader(
             InputStreamReader(
-                this.byteArrayInputStream
+                byteArrayInputStream
             )
         )
     }

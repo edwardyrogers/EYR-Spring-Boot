@@ -31,9 +31,7 @@ class UserService(
                     code = ReturnCode.BODY_VALIDATION_FAILED, msg = "Role $role is out of bounds"
                 )
 
-                else -> throw RequestFailedException(
-                    code = ReturnCode.GENERAL_ERROR
-                )
+                else -> throw it
             }
         }
 

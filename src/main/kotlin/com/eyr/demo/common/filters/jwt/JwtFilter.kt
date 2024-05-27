@@ -65,9 +65,9 @@ class JwtFilter(
 
             filterChain.doFilter(request, response)
 
-            if (response.status == HttpStatus.FORBIDDEN.value()) {
-                throw AccessDeniedException("Forbidden")
-            }
+//            if (response.status == HttpStatus.FORBIDDEN.value()) {
+//                throw AccessDeniedException("Forbidden")
+//            }
         }
     }
 }

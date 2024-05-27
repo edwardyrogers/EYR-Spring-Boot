@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
-
 @Component("logFilter")
 class LogFilter : OncePerRequestFilter() {
     override fun doFilterInternal(

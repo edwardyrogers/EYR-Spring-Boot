@@ -63,7 +63,6 @@ class SecurityConfiguration(
 //                }
                 .addFilterBefore(modelFilter, JwtFilter::class.java)
                 .addFilterBefore(logFilter, ModelFilter::class.java)
-                .addFilterBefore(errorFilter, LogFilter::class.java)
                 .build()
         }
     }

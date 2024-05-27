@@ -47,6 +47,7 @@ class JwtService : LogoutHandler {
     fun getUsername(token: String): String =
         getClaim(token) { obj: Claims -> obj.subject }
 
+
     private fun getClaimExpiration(token: String): Date =
         getClaim(token) { obj: Claims -> obj.expiration }
 
