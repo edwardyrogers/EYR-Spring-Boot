@@ -6,6 +6,7 @@ import com.eyr.demo.common.data.repositories.user.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -32,12 +33,13 @@ class JwtFilter(
                 return
             }
 
-            val authorization =
-                request.getHeader("Authorization") ?: throw AccessDeniedException("Please, provide header")
+            val authorization = if (request.getHeader("Authorization") != null) {
+                request.getHeader("Authorization")
+            } else {
+                throw AccessDeniedException("Please, provide header")
+            }
 
             if (!authorization.startsWith("Bearer ")) {
-                filterChain.doFilter(request, response)
-
                 throw AccessDeniedException("Please, check token type")
             }
 
@@ -62,6 +64,10 @@ class JwtFilter(
             }
 
             filterChain.doFilter(request, response)
+
+            if (response.status == HttpStatus.FORBIDDEN.value()) {
+                throw AccessDeniedException("Forbidden")
+            }
         }
     }
 }

@@ -24,12 +24,17 @@ class LogResWrapper(
     private val byteArrayOutputStream = ByteArrayOutputStream()
 
     fun log(request: HttpServletRequest) {
+        if ("$byteArrayOutputStream".isEmpty()) {
+            return
+        }
+
         val mapper = JsonMapper()
 
         val res = mapper.readValue(
-            this.byteArrayOutputStream.toString(),
+            "$byteArrayOutputStream",
             object : TypeReference<HashMap<String, Any>>() {}
         )
+
         val prettied = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(
             mapOf(
                 "status" to "${response.status}",

@@ -5,7 +5,7 @@ import com.eyr.demo.common.exceptions.RequestFailedException
 import com.eyr.demo.common.models.ApiModel
 import com.eyr.demo.common.models.ApiModel.Payload
 import com.eyr.demo.common.models.ApiModel.Response
-import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -21,15 +21,31 @@ import java.util.function.Consumer
 class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException::class)
     fun handleAccessDeniedException(
-        response: HttpServletResponse,
-        exception: AccessDeniedException,
+        exception: Exception,
     ): ResponseEntity<Response<Payload>> {
         exception.printStackTrace()
 
         return ResponseEntity
-            .badRequest()
+            .status(HttpStatus.FORBIDDEN)
             .body(
                 Response(
+                    error = ApiModel.Error(
+                        code = ReturnCode.ACCESS_DENIED,
+                        msg = exception.localizedMessage,
+                        stacktrace = exception.stackTrace.contentToString(),
+                    ),
+                ),
+            )
+    }
+
+    @ExceptionHandler(UsernameNotFoundException::class)
+    fun handleUsernameNotFoundException(exception: UsernameNotFoundException): ResponseEntity<Any> {
+        exception.printStackTrace()
+
+        return ResponseEntity
+            .status(HttpStatus.FORBIDDEN)
+            .body(
+                Response<Payload>(
                     error = ApiModel.Error(
                         code = ReturnCode.ACCESS_DENIED,
                         msg = exception.localizedMessage,
@@ -77,23 +93,6 @@ class GlobalExceptionHandler {
                     error = ApiModel.Error(
                         code = ReturnCode.VALIDATION_FAILED,
                         msg = errors.joinToString(", "),
-                        stacktrace = exception.stackTrace.contentToString(),
-                    ),
-                ),
-            )
-    }
-
-    @ExceptionHandler(UsernameNotFoundException::class)
-    fun handleUsernameNotFoundException(exception: UsernameNotFoundException): ResponseEntity<Any> {
-        exception.printStackTrace()
-
-        return ResponseEntity
-            .internalServerError()
-            .body(
-                Response<Payload>(
-                    error = ApiModel.Error(
-                        code = ReturnCode.ACCESS_DENIED,
-                        msg = exception.localizedMessage,
                         stacktrace = exception.stackTrace.contentToString(),
                     ),
                 ),

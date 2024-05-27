@@ -19,11 +19,17 @@ class ModelResWrapper(
     private val byteArrayOutputStream = ByteArrayOutputStream()
 
     fun writeOutputStream() {
+        if ("$byteArrayOutputStream".isEmpty()) {
+            return
+        }
+
         val mapper = ObjectMapper()
+
         val res = mapper.readValue(
-            byteArrayOutputStream.toString(),
+            "$byteArrayOutputStream",
             object : TypeReference<HashMap<String, Any>>() {}
         )
+
         val modified = mapper.writeValueAsString(
             mapOf(
                 "payload" to res["payload"],
