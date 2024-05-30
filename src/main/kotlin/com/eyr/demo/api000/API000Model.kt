@@ -38,4 +38,24 @@ class API000Model {
         @JsonProperty("refresh_token")
         val refreshToken: String
     ) : ApiModel.Payload()
+
+    data class API000003REQ(
+        @JsonProperty("pk")
+        val pubKey: String,
+    )
+
+    data class API000003RES(
+        @JsonProperty("pk")
+        val pubKey: String,
+    ) : ApiModel.Payload()
+
+    data class API000004REQ(
+        @JsonProperty("data")
+        val data: String,
+    )
+
+    data class API000004RES(
+        @JsonProperty("data")
+        val data: String,
+    ) : ApiModel.Payload()
 }

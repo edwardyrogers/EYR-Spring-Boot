@@ -26,4 +26,18 @@ class API000Controller(
     ): ApiModel.Response<API000Model.API000002RES> {
         return service.api000002(request)
     }
+
+    @PostMapping("API000003")
+    fun api000003(
+        @RequestBody @Valid request: API000Model.API000003REQ
+    ): ApiModel.Response<API000Model.API000003RES> {
+        return service.api000003(request)
+    }
+
+    @PostMapping("API000004")
+    fun api000004(
+        @RequestBody @Valid request: API000Model.API000004REQ
+    ): ApiModel.Response<API000Model.API000004RES> {
+        return service.api000004(request)
+    }
 }
