@@ -63,7 +63,9 @@ class API000ServiceImpl(
     @OptIn(ExperimentalEncodingApi::class)
     override fun api000003(request: API000Model.API000003REQ): ApiModel.Response<API000Model.API000003RES> {
         return run {
-            val publicKey = cryptoService.genRSAKeyPair("your_random_string_here").first
+            cryptoService.setFrontendPublicKeyByte(Base64.decode(request.pubKey))
+
+            val publicKey = cryptoService.genRSAKeyPair().first
 
             ApiModel.Response(
                 payload = API000Model.API000003RES(
@@ -80,7 +82,12 @@ class API000ServiceImpl(
 
             ApiModel.Response(
                 payload = API000Model.API000004RES(
-                    data = String(
+                    encryptedData = Base64.encode(
+                        cryptoService.doRSAEncryption(
+                            data = "Hello, Frontend!".toByteArray(),
+                        )
+                    ),
+                    decryptedData = Base64.encode(
                         cryptoService.doRSADecryption(encryptedBytes)
                     )
                 )

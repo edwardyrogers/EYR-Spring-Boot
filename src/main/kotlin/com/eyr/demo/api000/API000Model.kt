@@ -55,7 +55,9 @@ class API000Model {
     )
 
     data class API000004RES(
-        @JsonProperty("data")
-        val data: String,
+        @JsonProperty("encryptedData")
+        val encryptedData: String,
+        @JsonProperty("decryptedData")
+        val decryptedData: String,
     ) : ApiModel.Payload()
 }
