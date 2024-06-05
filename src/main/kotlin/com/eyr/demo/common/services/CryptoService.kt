@@ -6,7 +6,10 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.RSAKeyGenParameterSpec
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 import kotlin.random.Random
+
 
 @Service
 class CryptoService {
@@ -17,7 +20,7 @@ class CryptoService {
 
     @OptIn(ExperimentalUnsignedTypes::class)
     fun setFrontendPublicKeyByte(key: ByteArray) = run {
-        frontendPublicKeyByte = key.map { it.toUByte() }.toUByteArray().toByteArray()
+        frontendPublicKeyByte = key
     }
 
     private fun getRSAPublicKey(): PublicKey = run {
@@ -37,19 +40,18 @@ class CryptoService {
     @OptIn(ExperimentalUnsignedTypes::class)
     fun genRSAKeyPair(): Pair<ByteArray, ByteArray> = run {
         val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
-
         val parameterSpec = RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4)
         val secureRandom = SecureRandom.getInstance("SHA1PRNG")
+
         secureRandom.setSeed(ByteArray(32) { Random.nextInt(256).toByte() })
 
         keyPairGenerator.initialize(parameterSpec, secureRandom)
 
         val keyPairGenerated = keyPairGenerator.generateKeyPair()
-        val publicKeyString = keyPairGenerated.public.encoded.map { it.toUByte() }.toUByteArray().toByteArray()
-        val privateKeyString = keyPairGenerated.private.encoded.map { it.toUByte() }.toUByteArray().toByteArray()
+        val publicKeyString = keyPairGenerated.public.encoded
+        val privateKeyString = keyPairGenerated.private.encoded
 
         backendKeyPair = Pair(publicKeyString, privateKeyString)
-
         backendKeyPair
     }
 
@@ -62,6 +64,20 @@ class CryptoService {
     fun doRSADecryption(data: ByteArray): ByteArray = run {
         val cipher: Cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
         cipher.init(Cipher.DECRYPT_MODE, getRSAPrivateKey())
+        cipher.doFinal(data)
+    }
+
+    fun doAESEncryption(key: ByteArray, data: ByteArray): ByteArray = run {
+        val secretKey = SecretKeySpec(key, "AES")
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, IvParameterSpec(key))
+        cipher.doFinal(data)
+    }
+
+    fun doAESDecryption(key: ByteArray, data: ByteArray): ByteArray = run {
+        val secretKey = SecretKeySpec(key, "AES")
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(key))
         cipher.doFinal(data)
     }
 }

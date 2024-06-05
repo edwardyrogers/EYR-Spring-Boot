@@ -79,16 +79,28 @@ class API000ServiceImpl(
     override fun api000004(request: API000Model.API000004REQ): ApiModel.Response<API000Model.API000004RES> {
         return run {
             val encryptedBytes = Base64.decode(request.data)
+            val encryptedKey = encryptedBytes.sliceArray(0 until 256)
+            val encryptedData = encryptedBytes.sliceArray(256 until encryptedBytes.size)
+            val decryptedKey = cryptoService.doRSADecryption(encryptedKey)
+
+            val key = ByteArray(16)
+            val resEncryptedData = cryptoService.doAESEncryption(
+                key = key,
+                data = "Hello, Frontend!".toByteArray(),
+            )
+            val resEncryptedKey = cryptoService.doRSAEncryption(key)
+            val combinedList = resEncryptedKey.plus(resEncryptedData)
 
             ApiModel.Response(
                 payload = API000Model.API000004RES(
                     encryptedData = Base64.encode(
-                        cryptoService.doRSAEncryption(
-                            data = "Hello, Frontend!".toByteArray(),
-                        )
+                        combinedList
                     ),
                     decryptedData = Base64.encode(
-                        cryptoService.doRSADecryption(encryptedBytes)
+                        cryptoService.doAESDecryption(
+                            key = decryptedKey,
+                            data = encryptedData,
+                        )
                     )
                 )
             )
