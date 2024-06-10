@@ -8,8 +8,7 @@ import com.eyr.demo.common.services.CryptoService
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
+import java.util.*
 
 @Service
 class API000ServiceImpl(
@@ -20,12 +19,12 @@ class API000ServiceImpl(
     private val authenticationManager: AuthenticationManager,
 ) : API000Service {
 
-    override fun api000001(request: API000Model.API000001REQ): ApiModel.Response<API000Model.API000001RES> {
+    override fun api000001(body: API000Model.API000001REQ): ApiModel.Response<API000Model.API000001RES> {
         return run {
             val user = userService.create(
-                username = request.username,
-                password = request.password,
-                role = request.role.toInt(),
+                username = body.username,
+                password = body.password,
+                role = body.role.toInt(),
             )
 
             ApiModel.Response(
@@ -36,16 +35,16 @@ class API000ServiceImpl(
         }
     }
 
-    override fun api000002(request: API000Model.API000002REQ): ApiModel.Response<API000Model.API000002RES> {
+    override fun api000002(body: API000Model.API000002REQ): ApiModel.Response<API000Model.API000002RES> {
         return run {
             authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
-                    request.username,
-                    request.password,
+                    body.username,
+                    body.password,
                 )
             )
 
-            val user = userService.findByUsername(username = request.username)
+            val user = userService.findByUsername(username = body.username)
             val accessToken = jwtService.genAccessToken(user = user)
             val refreshToken = jwtService.genRefreshToken(user = user)
 
@@ -60,48 +59,26 @@ class API000ServiceImpl(
         }
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
-    override fun api000003(request: API000Model.API000003REQ): ApiModel.Response<API000Model.API000003RES> {
+    override fun api000003(body: API000Model.API000003REQ): ApiModel.Response<API000Model.API000003RES> {
         return run {
-            cryptoService.setFrontendPublicKeyByte(Base64.decode(request.pubKey))
+            cryptoService.setFrontendPublicKeyByte(Base64.getDecoder().decode(body.pubKey))
 
             val publicKey = cryptoService.genRSAKeyPair().first
 
             ApiModel.Response(
                 payload = API000Model.API000003RES(
-                    pubKey = Base64.encode(publicKey)
+                    pubKey = Base64.getEncoder().encodeToString(publicKey)
                 )
             )
         }
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
-    override fun api000004(request: API000Model.API000004REQ): ApiModel.Response<API000Model.API000004RES> {
+    override fun api000004(body: API000Model.API000004REQ): ApiModel.Response<API000Model.API000004RES> {
         return run {
-            val encryptedBytes = Base64.decode(request.data)
-            val encryptedKey = encryptedBytes.sliceArray(0 until 256)
-            val encryptedData = encryptedBytes.sliceArray(256 until encryptedBytes.size)
-            val decryptedKey = cryptoService.doRSADecryption(encryptedKey)
-
-            val key = ByteArray(16)
-            val resEncryptedData = cryptoService.doAESEncryption(
-                key = key,
-                data = "Hello, Frontend!".toByteArray(),
-            )
-            val resEncryptedKey = cryptoService.doRSAEncryption(key)
-            val combinedList = resEncryptedKey.plus(resEncryptedData)
-
             ApiModel.Response(
                 payload = API000Model.API000004RES(
-                    encryptedData = Base64.encode(
-                        combinedList
-                    ),
-                    decryptedData = Base64.encode(
-                        cryptoService.doAESDecryption(
-                            key = decryptedKey,
-                            data = encryptedData,
-                        )
-                    )
+                    encryptedData = "Hello Frontend",
+                    decryptedData = body.data,
                 )
             )
         }

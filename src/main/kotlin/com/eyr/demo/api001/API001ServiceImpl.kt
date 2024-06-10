@@ -8,17 +8,17 @@ import org.springframework.stereotype.Service
 
 @Service
 class API001ServiceImpl : API001Service {
-    override fun api001001(request: API001Model.API001001REQ): ApiModel.Response<API001Model.API001001RES> {
+    override fun api001001(body: API001Model.API001001REQ): ApiModel.Response<API001Model.API001001RES> {
         throw RequestFailedException(
             code = ReturnCode.VALIDATION_FAILED,
         )
     }
 
-    override fun api001002(request: API001Model.API001002REQ): ApiModel.Response<API001Model.API001002RES> {
+    override fun api001002(body: API001Model.API001002REQ): ApiModel.Response<API001Model.API001002RES> {
         return run {
             ApiModel.Response(
                 payload = API001Model.API001002RES(
-                    greeting = "hello ${request.name}"
+                    greeting = "hello ${body.name}"
                 )
             )
         }

@@ -1,9 +1,12 @@
 package com.eyr.demo.api000
 
 import com.eyr.demo.common.data.repositories.user.UserModel
+import com.eyr.demo.common.jsonisers.CryptoDecryptedJsonDeserialiser
+import com.eyr.demo.common.jsonisers.CryptoEncryptedJsonSerialiser
 import com.eyr.demo.common.models.ApiModel
 import com.fasterxml.jackson.annotation.JsonProperty
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import jakarta.validation.constraints.NotBlank
 
 class API000Model {
@@ -50,11 +53,13 @@ class API000Model {
     ) : ApiModel.Payload()
 
     data class API000004REQ(
+        @JsonDeserialize(using = CryptoDecryptedJsonDeserialiser::class)
         @JsonProperty("data")
         val data: String,
     )
 
     data class API000004RES(
+        @JsonSerialize(using = CryptoEncryptedJsonSerialiser::class)
         @JsonProperty("encryptedData")
         val encryptedData: String,
         @JsonProperty("decryptedData")

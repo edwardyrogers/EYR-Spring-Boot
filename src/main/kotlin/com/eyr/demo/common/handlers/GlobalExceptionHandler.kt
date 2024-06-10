@@ -7,6 +7,7 @@ import com.eyr.demo.common.models.ApiModel.Payload
 import com.eyr.demo.common.models.ApiModel.Response
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.validation.FieldError
@@ -72,7 +73,6 @@ class GlobalExceptionHandler {
             )
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationExceptions(exception: MethodArgumentNotValidException): ResponseEntity<Any> {
         val errors: MutableList<String> = mutableListOf()
 
@@ -93,6 +93,23 @@ class GlobalExceptionHandler {
                     error = ApiModel.Error(
                         code = ReturnCode.VALIDATION_FAILED,
                         msg = errors.joinToString(", "),
+                        stacktrace = exception.stackTrace.contentToString(),
+                    ),
+                ),
+            )
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException::class)
+    fun handleHttpMessageNotReadableException(exception: HttpMessageNotReadableException): ResponseEntity<Response<Payload>> {
+        exception.printStackTrace()
+
+        return ResponseEntity
+            .badRequest()
+            .body(
+                Response(
+                    error = ApiModel.Error(
+                        code = ReturnCode.GENERAL_ERROR,
+                        msg = exception.message,
                         stacktrace = exception.stackTrace.contentToString(),
                     ),
                 ),

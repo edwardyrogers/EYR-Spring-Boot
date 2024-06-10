@@ -31,14 +31,9 @@ class ErrorFilter(
 
     private fun handler(response: HttpServletResponse, it: Throwable?) {
         val entity = when (it) {
-            is SignatureException -> {
+            is AccessDeniedException, is SignatureException -> {
                 response.status = HttpStatus.FORBIDDEN.value()
-                globalExceptionHandler.handleAccessDeniedException(it)
-            }
-
-            is AccessDeniedException -> {
-                response.status = HttpStatus.FORBIDDEN.value()
-                globalExceptionHandler.handleAccessDeniedException(it)
+                globalExceptionHandler.handleAccessDeniedException(Exception(it))
             }
 
             is RequestFailedException -> {
@@ -48,7 +43,7 @@ class ErrorFilter(
 
             else -> {
                 response.status = HttpStatus.INTERNAL_SERVER_ERROR.value()
-                globalExceptionHandler.handleException(Exception(it?.localizedMessage))
+                globalExceptionHandler.handleException(Exception(it))
             }
         }
 

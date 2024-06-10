@@ -15,29 +15,29 @@ class API000Controller(
 ) {
     @PostMapping("API000001")
     fun api000001(
-        @Valid @RequestBody request: API000Model.API000001REQ
+        @Valid @RequestBody body: API000Model.API000001REQ
     ): ApiModel.Response<API000Model.API000001RES> {
-        return service.api000001(request)
+        return service.api000001(body)
     }
 
     @PostMapping("API000002")
     fun api000002(
-        @RequestBody @Valid request: API000Model.API000002REQ
+        @RequestBody @Valid body: API000Model.API000002REQ
     ): ApiModel.Response<API000Model.API000002RES> {
-        return service.api000002(request)
+        return service.api000002(body)
     }
 
     @PostMapping("API000003")
     fun api000003(
-        @RequestBody @Valid request: API000Model.API000003REQ
+        @RequestBody @Valid body: API000Model.API000003REQ
     ): ApiModel.Response<API000Model.API000003RES> {
-        return service.api000003(request)
+        return service.api000003(body)
     }
 
     @PostMapping("API000004")
     fun api000004(
-        @RequestBody @Valid request: API000Model.API000004REQ
+        @RequestBody @Valid body: API000Model.API000004REQ
     ): ApiModel.Response<API000Model.API000004RES> {
-        return service.api000004(request)
+        return service.api000004(body)
     }
 }

@@ -13,7 +13,7 @@ class DemoApplication(
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
         service.api000001(
-            request = API000Model.API000001REQ(
+            body = API000Model.API000001REQ(
                 username = "stranger",
                 password = "password",
                 role = "0"
@@ -21,7 +21,7 @@ class DemoApplication(
         )
 
         service.api000001(
-            request = API000Model.API000001REQ(
+            body = API000Model.API000001REQ(
                 username = "user",
                 password = "password",
                 role = "1"
@@ -29,7 +29,7 @@ class DemoApplication(
         )
 
         service.api000001(
-            request = API000Model.API000001REQ(
+            body = API000Model.API000001REQ(
                 username = "admin",
                 password = "password",
                 role = "2"
