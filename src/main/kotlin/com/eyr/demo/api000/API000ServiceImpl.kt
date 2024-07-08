@@ -61,13 +61,11 @@ class API000ServiceImpl(
 
     override fun api000003(body: API000Model.API000003REQ): ApiModel.Response<API000Model.API000003RES> {
         return run {
-            cryptoService.setFrontendPublicKeyByte(Base64.getDecoder().decode(body.pubKey))
-
-            val publicKey = cryptoService.genRSAKeyPair().first
-
             ApiModel.Response(
                 payload = API000Model.API000003RES(
-                    pubKey = Base64.getEncoder().encodeToString(publicKey)
+                    pubKey = Base64.getEncoder().encodeToString(
+                        cryptoService.genRSAKeyPair().first
+                    )
                 )
             )
         }
