@@ -72,6 +72,8 @@ class API000ServiceImpl(
     }
 
     override fun api000004(body: API000Model.API000004REQ): ApiModel.Response<API000Model.API000004RES> {
+        Thread.sleep(1000)
+
         return run {
             ApiModel.Response(
                 payload = API000Model.API000004RES(
