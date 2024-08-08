@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.util.function.Consumer
+import javax.crypto.BadPaddingException
 
 
 @ControllerAdvice
@@ -102,6 +103,20 @@ class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleHttpMessageNotReadableException(exception: HttpMessageNotReadableException): ResponseEntity<Response<Payload>> {
         exception.printStackTrace()
+
+        val maybeBadPaddingException = exception.cause?.cause
+
+        if (maybeBadPaddingException is BadPaddingException) {
+            return ResponseEntity.status(420).body(
+                Response(
+                    error = ApiModel.Error(
+                        code = ReturnCode.GENERAL_ERROR,
+                        msg = exception.message,
+                        stacktrace = exception.stackTrace.contentToString(),
+                    )
+                )
+            )
+        }
 
         return ResponseEntity
             .badRequest()

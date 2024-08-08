@@ -8,13 +8,11 @@ import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import kotlin.random.Random
-
 
 @Service
 class CryptoService {
 
-    private lateinit var backendKeyPair: Pair<ByteArray, ByteArray>
+    private lateinit var backendRSAKeyPair: Pair<ByteArray, ByteArray>
 
     private lateinit var frontendPublicKeyByte: ByteArray
 
@@ -31,19 +29,21 @@ class CryptoService {
     }
 
     private fun getRSAPrivateKey(): PrivateKey = run {
-        val privateKey = backendKeyPair.second
+        val privateKey = backendRSAKeyPair.second
         val keyFactory = KeyFactory.getInstance("RSA")
         val privateKeySpec = PKCS8EncodedKeySpec(privateKey)
         keyFactory.generatePrivate(privateKeySpec)
     }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    fun genRSAKeyPair(): Pair<ByteArray, ByteArray> = run {
+    fun genOrGetRSAKeyPair(): Pair<ByteArray, ByteArray> = run {
+        if (::backendRSAKeyPair.isInitialized) return backendRSAKeyPair
+
         val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
         val parameterSpec = RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4)
         val secureRandom = SecureRandom.getInstance("SHA1PRNG")
 
-        secureRandom.setSeed(ByteArray(32) { Random.nextInt(256).toByte() })
+        secureRandom.setSeed(ByteArray(32) { SecureRandom().nextInt(256).toByte() })
 
         keyPairGenerator.initialize(parameterSpec, secureRandom)
 
@@ -51,8 +51,8 @@ class CryptoService {
         val publicKeyString = keyPairGenerated.public.encoded
         val privateKeyString = keyPairGenerated.private.encoded
 
-        backendKeyPair = Pair(publicKeyString, privateKeyString)
-        backendKeyPair
+        backendRSAKeyPair = Pair(publicKeyString, privateKeyString)
+        backendRSAKeyPair
     }
 
     fun doRSAEncryption(data: ByteArray): ByteArray = run {
