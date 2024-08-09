@@ -70,14 +70,14 @@ class CryptoService {
     fun doAESEncryption(key: ByteArray, data: ByteArray): ByteArray = run {
         val secretKey = SecretKeySpec(key, "AES")
         val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, IvParameterSpec(key))
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, IvParameterSpec(key.copyOfRange(16, key.size)))
         cipher.doFinal(data)
     }
 
     fun doAESDecryption(key: ByteArray, data: ByteArray): ByteArray = run {
         val secretKey = SecretKeySpec(key, "AES")
         val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(key))
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(key.copyOfRange(16, key.size)))
         cipher.doFinal(data)
     }
 }
