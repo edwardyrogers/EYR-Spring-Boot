@@ -1,7 +1,5 @@
 package com.eyr.demo.common.jsonisers
 
-import com.eyr.demo.common.constants.ReturnCode
-import com.eyr.demo.common.exceptions.RequestFailedException
 import com.eyr.demo.common.services.CryptoService
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
@@ -23,7 +21,7 @@ class CryptoEncryptedJsonSerialiser(
 
     override fun serialize(value: String, generator: JsonGenerator, provider: SerializerProvider) = run {
         if (!enabled) {
-            generator.writeString(value.toString())
+            generator.writeString(value)
             return
         }
 

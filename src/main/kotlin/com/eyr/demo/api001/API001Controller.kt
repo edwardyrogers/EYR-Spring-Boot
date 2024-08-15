@@ -15,7 +15,6 @@ class API001Controller(
     private val service: API001Service
 ) {
     @PostMapping("API001001")
-    @PreAuthorize("hasAuthority('admin:read')")
     fun api001001(
         @Valid @RequestBody body: API001Model.API001001REQ
     ): ApiModel.Response<API001Model.API001001RES> {
@@ -23,6 +22,7 @@ class API001Controller(
     }
 
     @PostMapping("API001002")
+    @PreAuthorize("hasAuthority('admin:read')")
     fun api001002(
         @Valid @RequestBody body: API001Model.API001002REQ
     ): ApiModel.Response<API001Model.API001002RES> {
