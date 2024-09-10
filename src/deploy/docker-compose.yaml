@@ -15,11 +15,38 @@ services:
     networks:
       - eyr
 
-  eyr-backend:
-    container_name: eyr-backend
+  eyr-backend-1:
+    container_name: eyr-backend-1
     image: eyr-backend
     expose:
       - 8080
+    networks:
+      - eyr
+    environment:
+      - HAZELCAST_URL=eyr-hazelcast:5701
+
+  eyr-backend-2:
+    container_name: eyr-backend-2
+    image: eyr-backend
+    expose:
+      - 8080
+    networks:
+      - eyr
+    environment:
+      - HAZELCAST_URL=eyr-hazelcast:5701
+
+  eyr-hazelcast:
+    container_name: eyr-hazelcast
+    image: hazelcast/hazelcast:5.5.0
+    environment:
+      - HZ_NETWORK_PUBLICADDRESS=eyr-hazelcast:5701
+      - HZ_CLUSTERNAME=eyr-one-piece
+    volumes:
+      - ./hazelcast.yaml:/opt/hazelcast/config/hazelcast.yaml
+    expose:
+      - 5701
+    ports:
+      - '5701:5701'
     networks:
       - eyr
 
