@@ -19,13 +19,13 @@ import java.util.function.Function
 
 @Service
 class JwtService : LogoutHandler {
-    @Value("\${application.security.jwt.secret-key}")
+    @Value("\${app.security.jwt.secret-key}")
     private val secretKey: String? = null
 
-    @Value("\${application.security.jwt.access.expiration}")
+    @Value("\${app.security.jwt.access.expiration}")
     private val accessExpiration: Long = 0
 
-    @Value("\${application.security.jwt.refresh.expiration}")
+    @Value("\${app.security.jwt.refresh.expiration}")
     private val refreshExpiration: Long = 0
 
     private val signInKey: Key

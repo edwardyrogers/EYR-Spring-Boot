@@ -15,7 +15,7 @@ import java.util.*
 class CryptoDecryptedJsonDeserialiser(
     private val cryptoService: CryptoService,
 ) : JsonDeserializer<String>() {
-    @Value("\${cryptography.enabled}")
+    @Value("\${app.cryptography.enabled}")
     private val enabled: Boolean = false
 
     override fun deserialize(parser: JsonParser, context: DeserializationContext): String = run {

@@ -16,7 +16,7 @@ class CryptoEncryptedJsonSerialiser(
     private val cryptoService: CryptoService,
 ) : JsonSerializer<String>() {
 
-    @Value("\${cryptography.enabled}")
+    @Value("\${app.cryptography.enabled}")
     private val enabled: Boolean = false
 
     override fun serialize(value: String, generator: JsonGenerator, provider: SerializerProvider) = run {

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: demo
+
+  hazelcast:
+    hazelcast:
+      config: classpath:hazelcast.yaml
+
+app:
+  security:
+    jwt:
+      secret-key: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+      access:
+        expiration: 86400000
+      refresh:
+        expiration: 604800000
+
+  cryptography:
+    enabled: true
+    rsa:
+      algorithms: "${RSA_ALGORITHMS:RSA/ECB/PKCS1Padding}"
+    aes:
+      algorithms: "${AES_ALGORITHMS:AES/CBC/PKCS5Padding}"
