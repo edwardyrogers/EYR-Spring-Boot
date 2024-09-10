@@ -1,0 +1,26 @@
+hazelcast:
+  cluster-name: eyr-one-piece
+  instance-name: eyr-hazelcast
+
+  properties:
+    hazelcast.discovery.enabled: false
+    hazelcast.shutdownhook.enabled: false
+    hazelcast.http.healthcheck.enabled: false
+
+  network:
+    port:
+      auto-increment: true
+      port: 5701
+
+    join:
+      auto-detection:
+        enabled: false
+      multicast:
+        enabled: false
+        multicast-port: 5800
+      tcp-ip:
+        enabled: true
+
+  map:
+    crypto:
+      time-to-live-seconds: 10
