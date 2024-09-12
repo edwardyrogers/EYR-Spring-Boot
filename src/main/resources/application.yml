@@ -1,10 +1,8 @@
 spring:
   application:
     name: demo
-
   hazelcast:
-    hazelcast:
-      config: classpath:hazelcast.yaml
+    config: classpath:hazelcast.yaml
 
 app:
   security:

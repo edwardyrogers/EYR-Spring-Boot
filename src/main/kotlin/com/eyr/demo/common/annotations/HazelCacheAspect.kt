@@ -12,14 +12,15 @@ import java.util.concurrent.TimeUnit
 @Aspect
 @Component
 class HazelCacheAspect {
-    private val hazelcast: HazelcastInstance = Hazelcast.getHazelcastInstanceByName("eyr-hazelcast")
+    private val hazelcast: HazelcastInstance by lazy {
+        Hazelcast.getHazelcastInstanceByName("eyr-hazelcast")
+    }
 
     @Around("@annotation(hazelCache)")
     @Throws(Throwable::class)
     fun aroundAdvice(joinPoint: ProceedingJoinPoint, hazelCache: HazelCache): Any {
         val name = hazelCache.name
         val key = hazelCache.key
-        val lifetime = hazelCache.lifetime
 
         // Get the cache map
         val cache: IMap<String, Any> = hazelcast.getMap(name)
@@ -34,11 +35,7 @@ class HazelCacheAspect {
         val response = joinPoint.proceed()
 
         // Cache the response if necessary
-        if (lifetime > 0) {
-            cache.put(key, response, lifetime, TimeUnit.SECONDS)
-        } else {
-            cache.put(key, response)
-        }
+        cache.put(key, response)
 
         return response
     }

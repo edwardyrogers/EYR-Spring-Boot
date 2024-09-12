@@ -8,8 +8,6 @@ package com.eyr.demo.common.annotations
  *
  * @property name The name of the Hazelcast map (cache) where the data will be stored.
  * @property key The key under which the data will be stored in the Hazelcast map.
- * @property lifetime The time-to-live (TTL) of the cache entry in seconds.
- *                    If set to 0, the cache entry will never expire.
  */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
@@ -23,10 +21,4 @@ annotation class HazelCache(
      * The key under which the data will be stored in the Hazelcast map.
      */
     val key: String,
-
-    /**
-     * The time-to-live (TTL) of the cache entry in seconds.
-     * If set to 0, the cache entry will never expire.
-     */
-    val lifetime: Long = 0
 )
