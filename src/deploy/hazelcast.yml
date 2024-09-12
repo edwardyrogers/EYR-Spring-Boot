@@ -1,14 +1,30 @@
 hazelcast:
+  properties:
+    hazelcast.discovery.enabled: false
+    hazelcast.shutdownhook.enabled: false
+    hazelcast.http.healthcheck.enabled: false
+
   network:
+    port:
+      auto-increment: false
+      port: 5701
+
     join:
+      auto-detection:
+        enabled: false
+
       multicast:
         enabled: false
+        multicast-port: 5800
+
       tcp-ip:
         enabled: true
-        members:
-          - "eyr-hazelcast:5701"
+        member-list:
+          - 172.20.0.10:5701
+          - 172.20.0.11:5701
+
   map:
     crypto:
       backup-count: 1
       async-backup-count: 1
-      time-to-live-seconds: 10
+      time-to-live-seconds: 43200

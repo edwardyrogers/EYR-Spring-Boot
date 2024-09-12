@@ -9,18 +9,23 @@ hazelcast:
 
   network:
     port:
-      auto-increment: true
+      auto-increment: false
       port: 5701
 
     join:
       auto-detection:
         enabled: false
+
       multicast:
         enabled: false
         multicast-port: 5800
+
       tcp-ip:
         enabled: true
+        member-list:
+          - 172.20.0.10:5701
+          - 172.20.0.11:5701
 
   map:
     crypto:
-      time-to-live-seconds: 10
+      time-to-live-seconds: 43200

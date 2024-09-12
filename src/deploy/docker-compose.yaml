@@ -21,9 +21,8 @@ services:
     expose:
       - 8080
     networks:
-      - eyr
-    environment:
-      - HAZELCAST_URL=eyr-hazelcast:5701
+      eyr:
+        ipv4_address: 172.20.0.10
 
   eyr-backend-2:
     container_name: eyr-backend-2
@@ -31,25 +30,27 @@ services:
     expose:
       - 8080
     networks:
-      - eyr
-    environment:
-      - HAZELCAST_URL=eyr-hazelcast:5701
+      eyr:
+        ipv4_address: 172.20.0.11
 
-  eyr-hazelcast:
-    container_name: eyr-hazelcast
-    image: hazelcast/hazelcast:5.5.0
-    environment:
-      - HZ_NETWORK_PUBLICADDRESS=eyr-hazelcast:5701
-      - HZ_CLUSTERNAME=eyr-one-piece
-    volumes:
-      - ./hazelcast.yaml:/opt/hazelcast/config/hazelcast.yaml
-    expose:
-      - 5701
-    ports:
-      - '5701:5701'
-    networks:
-      - eyr
+  # eyr-hazelcast:
+  #   container_name: eyr-hazelcast
+  #   image: hazelcast/hazelcast:5.5.0
+  #   environment:
+  #     - HZ_NETWORK_PUBLICADDRESS=eyr-hazelcast:5701
+  #     - HZ_CLUSTERNAME=eyr-one-piece
+  #   volumes:
+  #     - ./hazelcast.yml:/opt/hazelcast/config/hazelcast.yml
+  #   expose:
+  #     - 5701
+  #   ports:
+  #     - '5701:5701'
+  #   networks:
+  #     - eyr
 
 networks:
   eyr:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

@@ -1,5 +1,6 @@
 package com.eyr.demo.common.annotations
 
+import com.hazelcast.core.Hazelcast
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.map.IMap
 import org.aspectj.lang.ProceedingJoinPoint
@@ -10,9 +11,9 @@ import java.util.concurrent.TimeUnit
 
 @Aspect
 @Component
-class HazelCacheAspect(
-        private val hazelcast: HazelcastInstance
-) {
+class HazelCacheAspect {
+    private val hazelcast: HazelcastInstance = Hazelcast.getHazelcastInstanceByName("eyr-hazelcast")
+
     @Around("@annotation(hazelCache)")
     @Throws(Throwable::class)
     fun aroundAdvice(joinPoint: ProceedingJoinPoint, hazelCache: HazelCache): Any {
