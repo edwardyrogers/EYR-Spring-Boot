@@ -22,6 +22,8 @@ data class UserModel(
     @Enumerated(EnumType.ORDINAL)
     val role: UserRole = UserRole.REGULAR,
 ) : UserDetails {
+    fun getUserID(): Long? = id
+
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = role.authorities
 
     override fun getPassword(): String = password

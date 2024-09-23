@@ -4,7 +4,7 @@ import com.eyr.demo.common.data.repositories.token.TokenService
 import com.eyr.demo.common.data.repositories.user.UserService
 import com.eyr.demo.common.filters.jwt.JwtService
 import com.eyr.demo.common.models.ApiModel
-import com.eyr.demo.common.services.CryptoService
+import com.eyr.demo.common.services.crypto.CryptoService
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service

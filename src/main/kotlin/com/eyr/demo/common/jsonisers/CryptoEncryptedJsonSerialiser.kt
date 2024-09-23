@@ -1,6 +1,6 @@
 package com.eyr.demo.common.jsonisers
 
-import com.eyr.demo.common.services.CryptoService
+import com.eyr.demo.common.services.crypto.CryptoService
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider

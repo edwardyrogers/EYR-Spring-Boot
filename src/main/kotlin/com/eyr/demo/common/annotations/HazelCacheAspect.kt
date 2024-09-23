@@ -1,41 +1,24 @@
 package com.eyr.demo.common.annotations
 
-import com.hazelcast.core.Hazelcast
-import com.hazelcast.core.HazelcastInstance
-import com.hazelcast.map.IMap
+import com.eyr.demo.common.services.hazelcast.HazelcastService
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Aspect
 @Component
-class HazelCacheAspect {
-    private val hazelcast: HazelcastInstance by lazy {
-        Hazelcast.getHazelcastInstanceByName("eyr-hazelcast")
-    }
-
+class HazelCacheAspect(
+    private val hazelcastService: HazelcastService
+) {
     @Around("@annotation(hazelCache)")
     @Throws(Throwable::class)
-    fun aroundAdvice(joinPoint: ProceedingJoinPoint, hazelCache: HazelCache): Any {
-        val name = hazelCache.name
-        val key = hazelCache.key
-
-        // Get the cache map
-        val cache: IMap<String, Any> = hazelcast.getMap(name)
-
-        // Try to get the value from the cache
-        val cachedValue = cache[key]
-        if (cachedValue != null) {
-            return cachedValue
+    fun aroundAdvice(joinPoint: ProceedingJoinPoint, hazelCache: HazelCache): Any? = run {
+        val clazz = joinPoint.signature.declaringType.name
+        val method = joinPoint.signature.name.replaceFirstChar { it.uppercase() }
+        hazelcastService.getOrCache("${clazz.substringAfterLast('.')}.$method", hazelCache.key) {
+            joinPoint.proceed()
         }
-
-        // Proceed with the original method call
-        val response = joinPoint.proceed()
-
-        // Cache the response if necessary
-        cache.put(key, response)
-
-        return response
     }
 }
