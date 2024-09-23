@@ -48,8 +48,8 @@ class CryptoEncryptedJsonSerialiser(
             generator.writeString(
                 Base64.getEncoder().encodeToString(
                     cryptoService.doAESEncryption(
-                            key = key,
-                            data = value.toByteArray(),
+                        key = key,
+                        data = value.toByteArray(),
                     )
                 )
             )

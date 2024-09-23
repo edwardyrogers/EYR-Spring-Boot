@@ -64,7 +64,7 @@ class CryptoServiceImpl(
         val privateKey = keyPair.second as ByteArray
         val keyFactory = KeyFactory.getInstance("RSA")
         val privateKeySpec = PKCS8EncodedKeySpec(privateKey)
-        val rsaPrivateKey =keyFactory.generatePrivate(privateKeySpec)
+        val rsaPrivateKey = keyFactory.generatePrivate(privateKeySpec)
         val cipher: Cipher = Cipher.getInstance(rsaAlgorithms)
         cipher.init(Cipher.DECRYPT_MODE, rsaPrivateKey)
         cipher.doFinal(data)
