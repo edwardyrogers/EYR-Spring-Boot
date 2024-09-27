@@ -1,11 +1,8 @@
 package com.eyr.demo.api001
 
-import com.eyr.demo.common.constants.ReturnCode
 import com.eyr.demo.common.data.fiegnclients.eyrspringbootmicro.EYRSpringBootMicroClient
 import com.eyr.demo.common.data.fiegnclients.eyrspringbootmicro.EYRSpringBootMicroModel
-import com.eyr.demo.common.exceptions.RequestFailedException
 import com.eyr.demo.common.models.ApiModel
-
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,7 +1,6 @@
 package com.eyr.demo.common.models
 
 import com.eyr.demo.common.constants.ReturnCode
-import com.eyr.demo.common.exceptions.RequestFailedException
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 
