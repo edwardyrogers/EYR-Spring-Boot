@@ -1,6 +1,7 @@
 package com.eyr.demo.common.models
 
 import com.eyr.demo.common.constants.ReturnCode
+import com.eyr.demo.common.exceptions.RequestFailedException
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 
@@ -16,12 +17,10 @@ class ApiModel {
         val msg: String? = null,
         @JsonProperty("stacktrace")
         val stacktrace: String? = null,
-    )
+    ) : Payload()
 
     data class Response<T : Payload>(
         @JsonProperty("payload")
-        val payload: T? = null,
-        @JsonProperty("error")
-        val error: Error? = null,
+        val payload: T,
     )
 }

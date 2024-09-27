@@ -24,14 +24,14 @@ class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException::class)
     fun handleAccessDeniedException(
         exception: Exception,
-    ): ResponseEntity<Response<Payload>> {
+    ): ResponseEntity<Response<ApiModel.Error>> {
         exception.printStackTrace()
 
         return ResponseEntity
             .status(HttpStatus.FORBIDDEN)
             .body(
                 Response(
-                    error = ApiModel.Error(
+                    payload = ApiModel.Error(
                         code = ReturnCode.ACCESS_DENIED,
                         msg = exception.localizedMessage,
                         stacktrace = exception.stackTrace.contentToString(),
@@ -48,7 +48,7 @@ class GlobalExceptionHandler {
             .status(HttpStatus.FORBIDDEN)
             .body(
                 Response<Payload>(
-                    error = ApiModel.Error(
+                    payload = ApiModel.Error(
                         code = ReturnCode.ACCESS_DENIED,
                         msg = exception.localizedMessage,
                         stacktrace = exception.stackTrace.contentToString(),
@@ -65,7 +65,7 @@ class GlobalExceptionHandler {
             .badRequest()
             .body(
                 Response(
-                    error = ApiModel.Error(
+                    payload = ApiModel.Error(
                         code = exception.code,
                         msg = exception.msg,
                         stacktrace = exception.stackTrace.contentToString(),
@@ -91,7 +91,7 @@ class GlobalExceptionHandler {
             .badRequest()
             .body(
                 Response<Payload>(
-                    error = ApiModel.Error(
+                    payload = ApiModel.Error(
                         code = ReturnCode.VALIDATION_FAILED,
                         msg = errors.joinToString(", "),
                         stacktrace = exception.stackTrace.contentToString(),
@@ -109,7 +109,7 @@ class GlobalExceptionHandler {
         if (maybeBadPaddingException is BadPaddingException) {
             return ResponseEntity.status(420).body(
                 Response(
-                    error = ApiModel.Error(
+                    payload = ApiModel.Error(
                         code = ReturnCode.GENERAL_ERROR,
                         msg = exception.message,
                         stacktrace = exception.stackTrace.contentToString(),
@@ -122,7 +122,7 @@ class GlobalExceptionHandler {
             .badRequest()
             .body(
                 Response(
-                    error = ApiModel.Error(
+                    payload = ApiModel.Error(
                         code = ReturnCode.GENERAL_ERROR,
                         msg = exception.message,
                         stacktrace = exception.stackTrace.contentToString(),
@@ -139,7 +139,7 @@ class GlobalExceptionHandler {
             .internalServerError()
             .body(
                 Response(
-                    error = ApiModel.Error(
+                    payload = ApiModel.Error(
                         code = ReturnCode.GENERAL_ERROR,
                         msg = exception.localizedMessage,
                         stacktrace = exception.stackTrace.contentToString(),

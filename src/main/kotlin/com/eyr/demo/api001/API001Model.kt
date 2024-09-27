@@ -5,9 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.NotBlank
 
 class API001Model {
-    class API001001REQ
+    data class API001001REQ(
+        @field:NotBlank
+        val name: String = "",
+    )
 
-    class API001001RES : ApiModel.Payload()
+    data class API001001RES(
+        @JsonProperty("greeting")
+        val greeting: String
+    ) : ApiModel.Payload()
 
     data class API001002REQ(
         @field:NotBlank

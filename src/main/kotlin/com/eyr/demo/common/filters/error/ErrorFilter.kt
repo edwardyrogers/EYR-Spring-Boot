@@ -2,6 +2,7 @@ package com.eyr.demo.common.filters.error
 
 import com.eyr.demo.common.exceptions.RequestFailedException
 import com.eyr.demo.common.handlers.GlobalExceptionHandler
+import com.eyr.demo.common.models.ApiModel
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.security.SignatureException
 import jakarta.servlet.FilterChain
@@ -50,17 +51,16 @@ class ErrorFilter(
         val mapper = ObjectMapper()
         val modified = mapper.writeValueAsString(
             mapOf(
-                "payload" to entity.body?.payload,
-                "error" to if (entity.body?.error != null) {
-                    val err = entity.body?.error
-
-                    mapOf(
-                        "timestamp" to err?.timestamp,
-                        "code" to err?.code,
-                        "msg" to err?.msg,
-                        "stacktrace" to err?.stacktrace
-                    )
-                } else null,
+                "payload" to entity.body?.let { body ->
+                    (body.payload as? ApiModel.Error)?.let { err ->
+                        mapOf(
+                            "timestamp" to err.timestamp,
+                            "code" to err.code,
+                            "msg" to err.msg,
+                            "stacktrace" to err.stacktrace
+                        )
+                    }
+                }
             )
         )
 

@@ -16,7 +16,7 @@ class API000ServiceImpl(
     private val jwtService: JwtService,
     private val userService: UserService,
     private val tokenService: TokenService,
-    private val authenticationManager: AuthenticationManager,
+    private val authenticationManager: AuthenticationManager
 ) : API000Service {
 
     override fun api000001(body: API000Model.API000001REQ): ApiModel.Response<API000Model.API000001RES> {
@@ -72,8 +72,6 @@ class API000ServiceImpl(
     }
 
     override fun api000004(body: API000Model.API000004REQ): ApiModel.Response<API000Model.API000004RES> {
-        Thread.sleep(2000)
-
         return run {
             ApiModel.Response(
                 payload = API000Model.API000004RES(

@@ -36,6 +36,7 @@ class SecurityConfiguration(
             "/${AppConstant.PATH_API_V1}/API000003",
             "/${AppConstant.PATH_API_V1}/API000004",
             "/${AppConstant.PATH_API_V1}/API001001",
+            "/${AppConstant.PATH_API_V1}/API001002",
         )
     }
 
