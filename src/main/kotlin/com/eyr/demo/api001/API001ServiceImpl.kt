@@ -1,7 +1,10 @@
 package com.eyr.demo.api001
 
+import cc.worldline.common.HsbcKeyUtil
+import com.eyr.demo.common.constants.ReturnCode
 import com.eyr.demo.common.data.fiegnclients.eyrspringbootmicro.EYRSpringBootMicroClient
 import com.eyr.demo.common.data.fiegnclients.eyrspringbootmicro.EYRSpringBootMicroModel
+import com.eyr.demo.common.exceptions.RequestFailedException
 import com.eyr.demo.common.models.ApiModel
 import org.springframework.stereotype.Service
 
@@ -19,7 +22,7 @@ class API001ServiceImpl(
                 payload = API001Model.API001001RES(
                     greeting = run {
                         val res = eyrSpringBootMicroClient.api000001(
-                            apiKey = "ApiKey",
+                            apiKey = HsbcKeyUtil.getApiKey(),
                             body = EYRSpringBootMicroModel.API000001REQ(
                                 req = body.name
                             )

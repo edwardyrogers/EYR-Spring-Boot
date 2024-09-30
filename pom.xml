@@ -125,6 +125,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>cc.worldline.common</groupId>
+            <artifactId>hsbc-backend-util</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -39,15 +39,6 @@ class LogResWrapper(
             mapOf(
                 "status" to "${response.status}",
                 "payload" to res["payload"],
-                "error" to if (res["error"] != null) {
-                    val err = res["error"] as HashMap<*, *>
-
-                    mapOf(
-                        "timestamp" to err["timestamp"],
-                        "code" to err["code"],
-                        "msg" to err["msg"],
-                    )
-                } else null,
             )
         )
 

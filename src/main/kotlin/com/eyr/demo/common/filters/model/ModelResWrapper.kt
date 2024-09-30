@@ -1,6 +1,7 @@
 package com.eyr.demo.common.filters.model
 
 import com.eyr.demo.common.constants.ReturnCode
+import com.eyr.demo.common.models.ApiModel
 import com.eyr.demo.common.servlets.streams.HttpBodyServletOutputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -32,19 +33,28 @@ class ModelResWrapper(
 
         val modified = mapper.writeValueAsString(
             mapOf(
-                "payload" to res["payload"],
-                "error" to if (res["error"] != null) {
-                    val err = res["error"] as HashMap<*, *>
-                    val errCode = ReturnCode.valueOf(err["code"] as String)
-                    val errMsg = err["msg"] ?: errCode.msg
+                "payload" to run {
+                    val payload = when (val payloadData = res["payload"]) {
+                        is HashMap<*, *> -> {
+                            // Safely cast the keys and values
+                            payloadData.filterKeys { it is String }
+                                .mapKeys { it.key as String }
+                                .mapValues { it.value as Any }
+                        }
+                        else -> {
+                            // Handle the case where data is not a HashMap
+                            emptyMap()
+                        }
+                    }
 
-                    mapOf(
-                        "timestamp" to err["timestamp"],
-                        "code" to errCode.code,
-                        "msg" to errMsg,
-                        "stacktrace" to err["stacktrace"]
-                    )
-                } else null,
+                    // Modify the payload if "code" exists
+                    val updatedPayload = payload.toMutableMap()  // Create a mutable copy
+                    if (updatedPayload["code"] != null) {
+                        updatedPayload["code"] = ReturnCode.valueOf(updatedPayload["code"] as String).code
+                    }
+
+                    updatedPayload
+                },
             )
         )
 
