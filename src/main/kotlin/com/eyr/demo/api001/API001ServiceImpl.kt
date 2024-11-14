@@ -1,6 +1,6 @@
 package com.eyr.demo.api001
 
-import cc.worldline.common.HsbcKeyUtil
+import com.eyr.demo.core.kotlin.HsbcKeyUtil
 import com.eyr.demo.common.constants.ReturnCode
 import com.eyr.demo.common.data.fiegnclients.eyrspringbootmicro.EYRSpringBootMicroClient
 import com.eyr.demo.common.data.fiegnclients.eyrspringbootmicro.EYRSpringBootMicroModel

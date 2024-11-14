@@ -19,7 +19,7 @@ class ModelResWrapper(
 
     private val byteArrayOutputStream = ByteArrayOutputStream()
 
-    fun writeOutputStream() {
+    fun writeOutputStream(req: ModelReqWrapper) {
         if ("$byteArrayOutputStream".isEmpty()) {
             return
         }

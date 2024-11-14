@@ -18,7 +18,7 @@ class ModelFilter : OncePerRequestFilter() {
 
         filterChain.doFilter(reqWrapped, resWrapped)
 
-        resWrapped.writeOutputStream()
+        resWrapped.writeOutputStream(reqWrapped)
     }
 }
 

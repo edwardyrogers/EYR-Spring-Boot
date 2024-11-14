@@ -7,6 +7,7 @@ import com.eyr.demo.common.models.ApiModel
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 
 class API000Model {
