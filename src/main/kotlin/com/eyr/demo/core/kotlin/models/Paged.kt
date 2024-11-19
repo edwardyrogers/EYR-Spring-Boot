@@ -1,6 +1,6 @@
-package com.eyr.demo.core.kotlin.models
+package cc.worldline.common.models
 
-import com.eyr.demo.core.kotlin.interfaces.Payload
+import cc.worldline.common.interfaces.Payload
 import org.springframework.data.domain.Page
 
 /**

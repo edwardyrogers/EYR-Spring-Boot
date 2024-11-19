@@ -1,6 +1,6 @@
-package com.eyr.demo.core.kotlin.constants
+package cc.worldline.common.constants
 
-import com.eyr.demo.core.kotlin.interfaces.Code
+import cc.worldline.common.interfaces.Code
 import java.text.MessageFormat
 import java.util.*
 

@@ -1,4 +1,4 @@
-package com.eyr.demo.core.kotlin.streams
+package cc.worldline.common.streams
 
 import java.io.InputStream
 import javax.servlet.ReadListener

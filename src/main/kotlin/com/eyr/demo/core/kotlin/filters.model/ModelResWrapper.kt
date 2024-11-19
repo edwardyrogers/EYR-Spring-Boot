@@ -1,7 +1,7 @@
-package com.eyr.demo.core.kotlin.filters.model
+package cc.worldline.common.filters.model
 
-import com.eyr.demo.core.kotlin.objects.RequestMetadata
-import com.eyr.demo.core.kotlin.streams.HttpBodyServletOutputStream
+import cc.worldline.common.objects.RequestMetadata
+import cc.worldline.common.streams.HttpBodyServletOutputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.ByteArrayOutputStream
@@ -24,7 +24,11 @@ class ModelResWrapper(
     private val response: HttpServletResponse
 ) : HttpServletResponseWrapper(response) {
 
-    private val byteArrayOutputStream = ByteArrayOutputStream()
+    private val servletOutputStream = HttpBodyServletOutputStream(
+        ByteArrayOutputStream(), ::writeOutputStream
+    )
+
+    private val outputStream get() = servletOutputStream.outputStream
 
     /**
      * Writes the modified output stream based on the original response.
@@ -35,14 +39,12 @@ class ModelResWrapper(
      *
      */
     fun writeOutputStream() {
-        if ("$byteArrayOutputStream".isEmpty()) {
-            return
-        }
+        if (this.response.isCommitted) return
 
         val mapper = ObjectMapper()
 
         val res = mapper.readValue(
-            "$byteArrayOutputStream",
+            "$outputStream",
             object : TypeReference<HashMap<String, Any>>() {}
         )
 
@@ -58,12 +60,12 @@ class ModelResWrapper(
                             // Safely cast the keys and values
                             payload.filterKeys { it is String }
                                 .mapKeys { it.key as String }
-                                .mapValues { it.value as Any }
+                                .mapValues { it.value }
                         }
 
                         else -> {
                             // Handle the case where data is not a HashMap
-                            emptyMap()
+                            emptyMap<String, Any?>()
                         }
                     }
 
@@ -83,11 +85,7 @@ class ModelResWrapper(
      *
      * @return A [ServletOutputStream] that writes to the captured byte array output stream.
      */
-    override fun getOutputStream(): ServletOutputStream {
-        return HttpBodyServletOutputStream(
-            outputStream = this.byteArrayOutputStream,
-        )
-    }
+    override fun getOutputStream(): ServletOutputStream = servletOutputStream
 
     /**
      * Returns a writer for writing the response body.
@@ -100,7 +98,7 @@ class ModelResWrapper(
     override fun getWriter(): PrintWriter {
         return PrintWriter(
             OutputStreamWriter(
-                this.byteArrayOutputStream,
+                this.outputStream,
                 this.response.characterEncoding
             )
         )

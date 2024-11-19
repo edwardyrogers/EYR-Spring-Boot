@@ -1,6 +1,6 @@
-package com.eyr.demo.core.kotlin.objects
+package cc.worldline.common.objects
 
-import com.eyr.demo.core.kotlin.models.Meta
+import cc.worldline.common.models.Meta
 
 object RequestMetadata {
     private val value = ThreadLocal<Meta>()
@@ -22,3 +22,4 @@ object RequestMetadata {
         value.set(Meta())
     }
 }
+

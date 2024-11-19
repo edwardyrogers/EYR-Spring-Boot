@@ -1,7 +1,7 @@
-package com.eyr.demo.core.kotlin.models
+package cc.worldline.common.models
 
-import com.eyr.demo.core.kotlin.interfaces.Payload
-import com.eyr.demo.core.kotlin.objects.RequestMetadata
+import cc.worldline.common.interfaces.Payload
+import cc.worldline.common.objects.RequestMetadata
 import javax.validation.Valid
 
 /**
@@ -20,6 +20,6 @@ open class Request<T : Payload>(
     open val payload: T,
 ) {
     companion object {
-        fun <T : Payload>feign(payload: T) = Request(meta = RequestMetadata.get(), payload)
+        fun <T : Payload> feign(payload: T) = Request(meta = RequestMetadata.get(), payload)
     }
 }

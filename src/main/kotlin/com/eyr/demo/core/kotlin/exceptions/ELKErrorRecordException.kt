@@ -1,10 +1,10 @@
-package com.eyr.demo.core.kotlin.exceptions
+package cc.worldline.common.exceptions
 
-import com.eyr.demo.core.kotlin.interfaces.Code
-import com.eyr.demo.core.kotlin.interfaces.Error
-import com.eyr.demo.core.kotlin.models.Failure
-import com.eyr.demo.core.kotlin.models.Response
-import com.eyr.demo.core.kotlin.objects.RequestMetadata
+import cc.worldline.common.interfaces.Code
+import cc.worldline.common.interfaces.Error
+import cc.worldline.common.models.Failure
+import cc.worldline.common.models.Response
+import cc.worldline.common.objects.RequestMetadata
 
 /**
  * Exception class for handling error records in ELK (Elasticsearch, Logstash, Kibana).

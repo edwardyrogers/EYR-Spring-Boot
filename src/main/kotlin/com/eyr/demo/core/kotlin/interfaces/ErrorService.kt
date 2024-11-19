@@ -1,4 +1,4 @@
-package com.eyr.demo.core.kotlin.interfaces
+package cc.worldline.common.interfaces
 
 import kotlin.reflect.KClass
 

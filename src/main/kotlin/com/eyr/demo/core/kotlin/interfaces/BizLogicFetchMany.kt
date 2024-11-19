@@ -1,6 +1,6 @@
-package com.eyr.demo.core.kotlin.interfaces
+package cc.worldline.common.interfaces
 
-import com.eyr.demo.core.kotlin.models.BizLogicModel
+import cc.worldline.common.models.BizLogicModel
 
 /**
  * Interface defining business logic for fetching multiple items in a paginated format.
@@ -14,5 +14,5 @@ interface BizLogicFetchMany {
      * @return A paginated response containing multiple items of type T.
      * @param T The type of data items being fetched.
      */
-    fun <T> execute(req: BizLogicModel.REQ.Data<T>): BizLogicModel.RES.Paginated<T>
+    suspend fun <T> execute(req: BizLogicModel.REQ.Data<T>): BizLogicModel.RES.Paginated<T>
 }

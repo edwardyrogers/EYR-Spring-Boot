@@ -1,6 +1,6 @@
-package com.eyr.demo.core.kotlin.interfaces
+package cc.worldline.common.interfaces
 
-import com.eyr.demo.core.kotlin.models.BizLogicModel
+import cc.worldline.common.models.BizLogicModel
 
 /**
  * Interface defining business logic for operations that return a custom value.
@@ -13,5 +13,5 @@ interface BizLogicValueReturn<R : BizLogicModel.REQ.ValueReturn, V> {
      * @param req The request object containing the necessary data to perform the operation.
      * @return A response object containing the result of the operation.
      */
-    fun execute(req: R): BizLogicModel.RES.Single<V>
+    suspend fun execute(req: R): BizLogicModel.RES.Single<V>
 }

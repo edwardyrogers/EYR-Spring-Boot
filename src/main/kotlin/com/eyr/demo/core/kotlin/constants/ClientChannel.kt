@@ -1,4 +1,4 @@
-package com.eyr.demo.core.kotlin.constants
+package cc.worldline.common.constants
 
 import com.fasterxml.jackson.annotation.JsonFormat
 

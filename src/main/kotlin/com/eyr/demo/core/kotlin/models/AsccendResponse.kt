@@ -1,6 +1,6 @@
-package com.eyr.demo.core.kotlin.models
+package cc.worldline.common.models
 
-import com.eyr.demo.core.kotlin.constants.AsccendCode
+import cc.worldline.common.constants.AsccendCode
 
 open class AsccendResponse(
     val code: AsccendCode,

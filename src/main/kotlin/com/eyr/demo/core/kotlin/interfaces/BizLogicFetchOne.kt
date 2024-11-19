@@ -1,6 +1,6 @@
-package com.eyr.demo.core.kotlin.interfaces
+package cc.worldline.common.interfaces
 
-import com.eyr.demo.core.kotlin.models.BizLogicModel
+import cc.worldline.common.models.BizLogicModel
 
 /**
  * A generic interface that defines a business logic contract for fetching data of a specified type.
@@ -14,5 +14,5 @@ interface BizLogicFetchOne {
      * @return A response object containing the result of the operation.
      * @param T The type of data being requested and returned.
      */
-    fun <T> execute(req: BizLogicModel.REQ.Data<T>): BizLogicModel.RES.Single<T>
+    suspend fun <T> execute(req: BizLogicModel.REQ.Data<T>): BizLogicModel.RES.Single<T>
 }

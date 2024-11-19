@@ -1,6 +1,6 @@
-package com.eyr.demo.core.kotlin.interfaces
+package cc.worldline.common.interfaces
 
-import com.eyr.demo.core.kotlin.models.BizLogicModel
+import cc.worldline.common.models.BizLogicModel
 
 /**
  * Interface defining business logic for operations that do not return a result.
@@ -13,5 +13,5 @@ interface BizLogicVoid<R : BizLogicModel.REQ.Void> {
      * @param req The request object containing the necessary data to execute the operation.
      * @return Void, indicating that no meaningful result is returned.
      */
-    fun execute(req: R)
+    suspend fun execute(req: R)
 }

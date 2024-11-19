@@ -1,4 +1,4 @@
-package com.eyr.demo.core.kotlin.utils
+package cc.worldline.common.utils
 
 import java.security.MessageDigest
 import java.text.SimpleDateFormat

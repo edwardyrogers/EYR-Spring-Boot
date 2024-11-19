@@ -1,4 +1,4 @@
-package com.eyr.demo.core.kotlin.models
+package cc.worldline.common.models
 
 import org.springframework.data.domain.Page
 

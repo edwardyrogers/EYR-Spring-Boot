@@ -1,7 +1,7 @@
-package com.eyr.demo.core.kotlin.models
+package cc.worldline.common.models
 
-import com.eyr.demo.core.kotlin.constants.ClientChannel
-import com.eyr.demo.core.kotlin.utils.KeyUtils
+import cc.worldline.common.constants.ClientChannel
+import cc.worldline.common.utils.KeyUtils
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*
 

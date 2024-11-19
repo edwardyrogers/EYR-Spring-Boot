@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.eyr.demo.core.kotlin.filters.model
+package cc.worldline.common.filters.model
 
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
@@ -40,8 +40,5 @@ class ModelFilter : OncePerRequestFilter() {
 
         // Continue the filter chain with the wrapped request and response
         chain.doFilter(reqWrapped, resWrapped)
-
-        // Write the output stream of the response using the wrapped request object
-        resWrapped.writeOutputStream()
     }
 }

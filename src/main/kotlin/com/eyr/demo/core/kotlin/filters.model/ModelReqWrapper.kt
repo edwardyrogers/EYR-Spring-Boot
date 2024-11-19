@@ -1,8 +1,8 @@
-package com.eyr.demo.core.kotlin.filters.model
+package cc.worldline.common.filters.model
 
-import com.eyr.demo.core.kotlin.models.Meta
-import com.eyr.demo.core.kotlin.objects.RequestMetadata
-import com.eyr.demo.core.kotlin.streams.HttpBodyServletInputStream
+import cc.worldline.common.models.Meta
+import cc.worldline.common.objects.RequestMetadata
+import cc.worldline.common.streams.HttpBodyServletInputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.util.StreamUtils
