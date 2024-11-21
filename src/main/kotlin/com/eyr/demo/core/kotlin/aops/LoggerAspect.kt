@@ -1,10 +1,10 @@
 package cc.worldline.common.aops
 
+import cc.worldline.common.constants.CoreConst
 import cc.worldline.common.models.Request
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.AfterReturning
 import org.aspectj.lang.annotation.AfterThrowing
@@ -22,7 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes
 class LoggerAspect {
 
     // Before the controller method is executed, log the request body
-    @Before(CONDITION)
+    @Before(CoreConst.MIDDLEWARE_CONDITION)
     fun logRequest(joinPoint: JoinPoint) = run {
         val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
         val request = requestAttributes?.request ?: return@run
@@ -40,7 +40,7 @@ class LoggerAspect {
 
     // After the controller method is executed, log the response body
     @AfterReturning(
-        value = CONDITION,
+        value = CoreConst.MIDDLEWARE_CONDITION,
         returning = "response"
     )
     fun logResponse(response: Any) = run {
@@ -65,7 +65,7 @@ class LoggerAspect {
 
     // Handle exceptions if you want to log errors in the response body
     @AfterThrowing(
-        value = CONDITION,
+        value = CoreConst.MIDDLEWARE_CONDITION,
         throwing = "exception"
     )
     fun logException(exception: Throwable) = run {
@@ -97,13 +97,5 @@ class LoggerAspect {
             enable(SerializationFeature.INDENT_OUTPUT)
             registerModule(JavaTimeModule())
         }
-
-        private const val CONDITION = "" +
-                "@annotation(org.springframework.web.bind.annotation.RequestMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.GetMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PostMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PutMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.DeleteMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PatchMapping)"
     }
 }

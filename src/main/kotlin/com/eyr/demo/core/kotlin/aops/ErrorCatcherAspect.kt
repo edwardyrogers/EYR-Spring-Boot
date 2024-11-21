@@ -1,5 +1,6 @@
 package cc.worldline.common.aops
 
+import cc.worldline.common.constants.CoreConst
 import cc.worldline.common.constants.ReturnCode
 import cc.worldline.common.exceptions.ELKErrorRecordException
 import cc.worldline.common.exceptions.ServiceException
@@ -21,7 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes
 class ErrorCatcherAspect(
     private val _errorService: ErrorService,
 ) {
-    @Around(CONDITION)
+    @Around(CoreConst.MIDDLEWARE_CONDITION)
     fun handleErrors(joinPoint: ProceedingJoinPoint): Any? = run {
         val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
         val request = requestAttributes?.request
@@ -56,15 +57,5 @@ class ErrorCatcherAspect(
                 )
             }
         }
-    }
-
-    companion object {
-        private const val CONDITION = "" +
-                "@annotation(org.springframework.web.bind.annotation.RequestMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.GetMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PostMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PutMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.DeleteMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PatchMapping)"
     }
 }

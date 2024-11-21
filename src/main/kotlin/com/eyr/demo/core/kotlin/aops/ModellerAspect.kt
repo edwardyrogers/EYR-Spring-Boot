@@ -1,5 +1,6 @@
 package cc.worldline.common.aops
 
+import cc.worldline.common.constants.CoreConst
 import cc.worldline.common.constants.ReturnCode
 import cc.worldline.common.exceptions.ServiceException
 import cc.worldline.common.models.Request
@@ -17,7 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes
 @Component
 @Order(1)
 class ModellerAspect {
-    @Around(CONDITION)
+    @Around(CoreConst.MIDDLEWARE_CONDITION)
     fun processRequest(joinPoint: ProceedingJoinPoint): Any? = run {
         val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
         val request = requestAttributes?.request
@@ -36,7 +37,7 @@ class ModellerAspect {
         joinPoint.proceed()
     }
 
-    @Around(CONDITION)
+    @Around(CoreConst.MIDDLEWARE_CONDITION)
     fun processResponse(joinPoint: ProceedingJoinPoint): Any = run {
         val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
         val request = requestAttributes?.request
@@ -55,32 +56,7 @@ class ModellerAspect {
         mapOf(
             "success" to result.success,
             "meta" to RequestMetadata.get().toMutableMap(),
-            "payload" to run {
-                when (val payload = result.payload) {
-                    is Map<*, *> -> {
-                        // Safely cast keys and values
-                        payload.filterKeys { it is String }
-                            .mapKeys { it.key as String }
-                            .mapValues { it.value }
-                            .toMutableMap()
-                    }
-
-                    else -> {
-                        // Handle the case where the payload is not a Map
-                        mapOf("data" to payload)
-                    }
-                }
-            }
+            "payload" to result.payload
         )
-    }
-
-    companion object {
-        private const val CONDITION = "" +
-                "@annotation(org.springframework.web.bind.annotation.RequestMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.GetMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PostMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PutMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.DeleteMapping) || " +
-                "@annotation(org.springframework.web.bind.annotation.PatchMapping)"
     }
 }
