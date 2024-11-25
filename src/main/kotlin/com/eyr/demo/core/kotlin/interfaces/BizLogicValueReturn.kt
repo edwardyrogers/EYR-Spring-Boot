@@ -13,5 +13,5 @@ interface BizLogicValueReturn<R : BizLogicModel.REQ.ValueReturn, V> {
      * @param req The request object containing the necessary data to perform the operation.
      * @return A response object containing the result of the operation.
      */
-    suspend fun execute(req: R): BizLogicModel.RES.Single<V>
+    fun execute(req: R): BizLogicModel.RES.Single<V>
 }

@@ -30,7 +30,7 @@ class ELKErrorRecordException(
         get() = Response.failure(
             Failure(
                 code = customFormattedCodeCallback(code) ?: "NotDefinedCustomFormattedCodeCallback${code.value}",
-                message = localizedMessage,
+                message = message,
                 stacktrace = stackTrace.contentToString()
             ),
         )

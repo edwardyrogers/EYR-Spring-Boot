@@ -13,5 +13,5 @@ interface BizLogicVoid<R : BizLogicModel.REQ.Void> {
      * @param req The request object containing the necessary data to execute the operation.
      * @return Void, indicating that no meaningful result is returned.
      */
-    suspend fun execute(req: R)
+    fun execute(req: R)
 }

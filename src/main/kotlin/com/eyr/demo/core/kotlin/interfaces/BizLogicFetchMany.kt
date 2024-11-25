@@ -14,5 +14,5 @@ interface BizLogicFetchMany {
      * @return A paginated response containing multiple items of type T.
      * @param T The type of data items being fetched.
      */
-    suspend fun <T> execute(req: BizLogicModel.REQ.Data<T>): BizLogicModel.RES.Paginated<T>
+    fun <T> execute(req: BizLogicModel.REQ.Data<T>): BizLogicModel.RES.Paginated<T>
 }

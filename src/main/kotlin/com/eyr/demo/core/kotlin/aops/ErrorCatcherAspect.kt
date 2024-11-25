@@ -18,7 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes
 
 @Aspect
 @Component
-@Order(2)
+@Order(0)
 class ErrorCatcherAspect(
     private val _errorService: ErrorService,
 ) {
@@ -33,21 +33,28 @@ class ErrorCatcherAspect(
 
         runCatching {
             // Proceed with the original execution
-            joinPoint.proceed()
+            return@run joinPoint.proceed()
         }.getOrElse {
-            when (it) {
+            it.printStackTrace()
+
+            return@run when (it) {
                 is ServiceException -> Response.failure(
                     Failure(
                         code = _errorService.formatErrorCode(it.code.value, joinPoint.target::class),
-                        message = it.localizedMessage,
+                        message = it.message,
                         stacktrace = it.stackTrace.contentToString()
                     ),
                 )
 
                 else -> throw ELKErrorRecordException(
-                    code = ReturnCode.UNEXPECTED_ERROR,
+                    code =
+                    if (it is ELKErrorRecordException)
+                        it.code
+                    else
+                        ReturnCode.UNEXPECTED_ERROR,
+
                     where = joinPoint.target::class,
-                    message = it.localizedMessage,
+                    message = it.message ?: "",
                     customFormattedCodeCallback = { code: Code ->
                         _errorService.formatErrorCode(
                             code.value,

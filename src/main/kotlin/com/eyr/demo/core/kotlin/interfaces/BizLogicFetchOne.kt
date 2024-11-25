@@ -14,5 +14,5 @@ interface BizLogicFetchOne {
      * @return A response object containing the result of the operation.
      * @param T The type of data being requested and returned.
      */
-    suspend fun <T> execute(req: BizLogicModel.REQ.Data<T>): BizLogicModel.RES.Single<T>
+    fun <T> execute(req: BizLogicModel.REQ.Data<T>): BizLogicModel.RES.Single<T>
 }
