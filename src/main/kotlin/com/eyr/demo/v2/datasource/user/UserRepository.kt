@@ -1,6 +1,5 @@
 package cc.worldline.customermanagement.v2.datasource.user
 
-import cc.worldline.customermanagement.v2.business.user.UserEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -8,7 +7,7 @@ import java.math.BigInteger
 import java.time.LocalDateTime
 import java.util.*
 
-interface UserRepository : JpaRepository<UserEntity, Long> {
+interface UserRepository : JpaRepository<UserRepoEntity, Long> {
     fun <T> findAllByCustomerNumber(pageable: Pageable, customerNumber: String, type: Class<T>): Page<T>
     fun <T> findAllByIc(pageable: Pageable, ic: String, type: Class<T>): Page<T>
     fun <T> findAllBy(pageable: Pageable, type: Class<T>): Page<T>

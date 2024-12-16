@@ -14,15 +14,13 @@ open class Response<T : Payload>(
     open val success: Boolean = true,
     open val payload: T,
 ) {
-    object VoidPayload : Payload
-
     companion object {
         /**
          * Creates a successful response with no payload (like Void).
          *
          * @return a Response object indicating success with no payload.
          */
-        fun success() = Response(true, VoidPayload)
+        fun success() = Response(true, Payload.Empty)
 
         /**
          * Creates a successful response.

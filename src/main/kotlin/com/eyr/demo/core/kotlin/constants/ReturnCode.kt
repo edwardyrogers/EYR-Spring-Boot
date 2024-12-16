@@ -27,7 +27,8 @@ enum class ReturnCode(
     DATE_FORMAT_INCORRECT("007", "date.format.incorrect"),
     MAPPER_NOT_MATCHED("008", "mapper.not.matched"),
     PROJECTION_NOT_MATCHED("009", "projection.not.matched"),
-    ASCCEND_ERROR("010", "asccend.error");
+    ASCCEND_ERROR("010", "asccend.error"),
+    ENDPOINT_NOT_FOUND("011", "endpoint.not.found");
 
     /**
      * Retrieves the message associated with the error code based on the provided locale.

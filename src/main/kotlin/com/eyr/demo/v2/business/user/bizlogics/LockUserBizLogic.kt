@@ -2,21 +2,23 @@ package cc.worldline.customermanagement.v2.business.user.bizlogics
 
 import cc.worldline.common.constants.ReturnCode
 import cc.worldline.common.exceptions.ServiceException
-import cc.worldline.common.interfaces.BizLogicVoid
+import cc.worldline.common.interfaces.BizLogicValueReturn
 import cc.worldline.common.models.BizLogicModel
-import cc.worldline.customermanagement.v2.business.user.UserEntity
+import cc.worldline.customermanagement.v2.business.user.UserBizMapper
+import cc.worldline.customermanagement.v2.business.user.UserProjector
 import cc.worldline.customermanagement.v2.common.constants.UserStatus
 import cc.worldline.customermanagement.v2.datasource.user.UserRepository
 import org.springframework.stereotype.Component
 
 @Component
 class LockUserBizLogic(
+    private val _mapper: UserBizMapper,
     private val _repository: UserRepository
-) : BizLogicVoid<LockUserBizLogic.REQ> {
+) : BizLogicValueReturn<LockUserBizLogic.REQ, LockUserBizLogic.RES> {
 
-    override suspend fun execute(req: REQ) = run {
+    override fun execute(req: REQ): BizLogicModel.RES.Single<RES> = run {
         val response = _repository.findByUsernameIgnoreCase(
-            req.username, UserEntity::class.java
+            req.username, UserProjector.UserEntity::class.java
         ).orElse(null)
 
         val entity = response ?: throw ServiceException(
@@ -25,13 +27,22 @@ class LockUserBizLogic(
 
         val newUser = entity.copy(status = UserStatus.LOCKED)
 
-        _repository.save(newUser)
+        val user = _repository.save(
+            _mapper.toUserRepoEntity(newUser)
+        )
 
-        Unit
+        return@run BizLogicModel.RES.Single(
+            RES(
+                hasLocked = user.status == UserStatus.LOCKED
+            )
+        )
     }
-
 
     data class REQ(
         val username: String
+    ) : BizLogicModel.REQ.ValueReturn()
+
+    data class RES(
+        val hasLocked: Boolean
     ) : BizLogicModel.REQ.Void()
 }

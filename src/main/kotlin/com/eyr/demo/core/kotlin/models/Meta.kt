@@ -23,9 +23,9 @@ open class Meta(
 
     open val deviceId: String = "",
 
-    open val cptKey: String = "",
+    open val cptKey: ByteArray = byteArrayOf(),
 
-    open val apiKey: String = KeyUtils.getApiKey(),
+    open val apiKey: String = KeyUtils.generateKey(),
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     open val client: ClientChannel = ClientChannel.UNKNOWN
@@ -37,8 +37,6 @@ open class Meta(
             "lang" to lang,
             "deviceId" to deviceId,
             "sessionId" to sessionId,
-            "apiKey" to apiKey,
-            "cptKey" to cptKey,
             "client" to client,
         )
     }

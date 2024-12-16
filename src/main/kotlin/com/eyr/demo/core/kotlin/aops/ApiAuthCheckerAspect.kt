@@ -39,9 +39,9 @@ class ApiAuthCheckerAspect(
             return@run joinPoint.proceed()
         }
 
-        LOGGER.info("--- API auth checking result: ${requestBody.meta.apiKey != KeyUtils.getApiKey()}")
+        LOGGER.info("--- API auth checking result: ${requestBody.meta.apiKey != KeyUtils.generateKey()}")
 
-        if (requestBody.meta.apiKey != KeyUtils.getApiKey()) {
+        if (requestBody.meta.apiKey != KeyUtils.generateKey()) {
             throw ServiceException(
                 ReturnCode.ACCESS_DENIED,
                 message = "Invalid API key"

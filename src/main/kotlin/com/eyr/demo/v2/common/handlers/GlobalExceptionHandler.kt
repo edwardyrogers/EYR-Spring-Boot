@@ -10,6 +10,7 @@ import cc.worldline.customermanagement.common.bean.ServiceError
 import cc.worldline.customermanagement.common.exception.CustomException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -23,27 +24,56 @@ class GlobalExceptionHandler(
 ) {
     private val _globalExceptionCoreHandler = GlobalExceptionCoreHandler(errorService)
 
+    @ExceptionHandler(HttpMessageNotReadableException::class)
+    fun httpMessageNotReadableException(
+        ex: HttpMessageNotReadableException,
+        request: HttpServletRequest,
+        handler: HandlerMethod
+    ): ResponseEntity<*> = run {
+        ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(
+                if (request.requestURI.startsWith("/api/v2/")) {
+                    _globalExceptionCoreHandler.httpMessageNotReadableException(
+                        ex, handler,
+                    )
+                } else {
+                    ApiResponse.failure(
+                        ServiceError(
+                            "400",
+                            ex.message ?: "Unknown error",
+                            null
+                        )
+                    )
+                }
+            )
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun methodArgumentNotValidException(
         ex: MethodArgumentNotValidException,
         request: HttpServletRequest,
         handler: HandlerMethod
     ): ResponseEntity<*> = run {
-        if (request.requestURI.startsWith("/api/v2/")) {
-            _globalExceptionCoreHandler.methodArgumentNotValidException(ex, handler)
-        } else {
-            val details = ex.bindingResult.allErrors.map { it.defaultMessage }
-            ResponseEntity.badRequest()
-                .body(
+        ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(
+                if (request.requestURI.startsWith("/api/v2/")) {
+                    _globalExceptionCoreHandler.methodArgumentNotValidException(
+                        ex, handler
+                    )
+                } else {
                     ApiResponse.failure(
                         ServiceError(
                             "400",
-                            details.joinToString(System.lineSeparator()),
+                            ex.bindingResult.allErrors
+                                .map { it.defaultMessage }
+                                .joinToString(System.lineSeparator()),
                             null
                         )
                     )
-                )
-        }
+                }
+            )
     }
 
     @ExceptionHandler(ELKErrorRecordException::class)
@@ -75,6 +105,7 @@ class GlobalExceptionHandler(
 
             } else {
                 val status = HttpStatus.INTERNAL_SERVER_ERROR
+
                 ApiResponse.failure(
                     ServiceError(
                         status.value().toString(),

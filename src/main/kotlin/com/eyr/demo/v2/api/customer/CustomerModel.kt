@@ -2,23 +2,25 @@ package cc.worldline.customermanagement.v2.api.customer
 
 import cc.worldline.common.interfaces.Payload
 import cc.worldline.common.models.Paged
-import cc.worldline.customermanagement.database.Gender
+import cc.worldline.customermanagement.v2.business.user.UserProjector
+import cc.worldline.customermanagement.v2.business.user.bizlogics.UpdateUserBizLogic
 import cc.worldline.customermanagement.v2.common.constants.StatementPreference
 import cc.worldline.customermanagement.v2.common.constants.UserStatus
-import com.fasterxml.jackson.annotation.JsonFormat
+import cc.worldline.customermanagement.v2.common.mask.MaskJsonSerialiser
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.JsonUnwrapped
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.math.BigInteger
-import java.time.LocalDate
-import java.time.LocalDateTime
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
+import javax.validation.constraints.Positive
 
 class CustomerModel {
     // ============================= GetCustomer
     @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
+        defaultImpl = GetCustomerREQ.ByID::class,
         property = "by"
     )
     @JsonSubTypes(
@@ -28,105 +30,40 @@ class CustomerModel {
         JsonSubTypes.Type(value = GetCustomerREQ.ByCustomerNumber::class, name = "CUSTOMER_NUMBER"),
     )
     sealed class GetCustomerREQ(
-        @field:NotNull
-        open val projection: Projection
+        open val proj: String = ""
     ) : Payload {
-        data class ByID(
-            @field:NotBlank
-            val id: BigInteger,
 
-            override val projection: Projection
-        ) : GetCustomerREQ(projection)
+        data class ByID(
+            @field:Positive
+            val id: BigInteger,
+        ) : GetCustomerREQ()
 
         data class ByIC(
             @field:NotBlank
             val ic: String,
-
-            override val projection: Projection
-        ) : GetCustomerREQ(projection)
+        ) : GetCustomerREQ()
 
         data class ByUsername(
             @field:NotBlank
             val username: String,
-
-            override val projection: Projection
-        ) : GetCustomerREQ(projection)
+        ) : GetCustomerREQ()
 
         data class ByCustomerNumber(
             @field:NotBlank
             val customerNumber: String,
-
-            override val projection: Projection
-        ) : GetCustomerREQ(projection)
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING)
-        enum class Projection {
-            FOR_LOGIN,
-        }
+        ) : GetCustomerREQ()
     }
 
     data class GetCustomerRES(
-        val id: BigInteger,
-
-        val username: String = "",
-
-        val email: String?,
-
-        val phoneNo: String?,
-
-        val ic: String = "",
-
-        val createdDate: LocalDateTime?,
-
-        val modifiedDate: LocalDateTime?,
-
-        val traceId: String?,
-
-        val status: UserStatus,
-
-        val statementPreference: StatementPreference?,
-
-        val nameEN: String?,
-
-        val nameZH: String,
-
-        val dateOfBirth: LocalDate,
-
-        val addressLine1: String,
-
-        val addressLine2: String?,
-
-        val addressLine3: String?,
-
-        val postalCode: String,
-
-        val city: String,
-
-        val stateCode: String,
-
-        val countryCode: String,
-
-        val customerNumber: String,
-
-        val cycleDate: String,
-
-        val gender: Gender,
-
-        val customerSince: String?,
-
-        val languagePreference: String?,
-
-        val phoneModifiedDate: LocalDateTime?,
-
-        val emailModifiedDate: LocalDateTime?,
-
-        val passwordModifiedDate: LocalDateTime?,
+        @JsonUnwrapped
+        val customer: UserProjector
     ) : Payload
 
     // ============================= GetCustomers
     @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
+        defaultImpl = GetCustomersREQ.All::class,
         property = "by"
     )
     @JsonSubTypes(
@@ -135,9 +72,6 @@ class CustomerModel {
         JsonSubTypes.Type(value = GetCustomersREQ.All::class, name = "ALL"),
     )
     sealed class GetCustomersREQ(
-        @field:NotNull
-        open val projection: Projection,
-
         open val sort: String? = null,
 
         open val orderBy: String = "createdDate",
@@ -145,33 +79,24 @@ class CustomerModel {
         open val pageSize: Int = 20,
 
         open val pageNumber: Int = 0,
+
+        open val proj: String = ""
     ) : Payload {
         data class ByIC(
             @field: NotBlank
             val customerIC: String,
-
-            override val projection: Projection,
-        ) : GetCustomersREQ(projection)
+        ) : GetCustomersREQ()
 
         data class ByCustomerNumber(
             @field: NotBlank
             val customerNumber: String,
+        ) : GetCustomersREQ()
 
-            override val projection: Projection,
-        ) : GetCustomersREQ(projection)
-
-        data class All(
-            override val projection: Projection,
-        ) : GetCustomersREQ(projection)
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING)
-        enum class Projection {
-            FOR_GENERAL,
-        }
+        class All : GetCustomersREQ()
     }
 
     data class GetCustomersRES(
-        val customers: Paged<GetCustomerRES>
+        val customers: Paged<out UserProjector>
     ) : Payload
 
     // ============================= LockCustomer
@@ -180,10 +105,15 @@ class CustomerModel {
         val username: String
     ) : Payload
 
+    data class LockCustomerRES(
+        val hasLocked: Boolean
+    ) : Payload
+
     // ============================= UpdateCustomer
     @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
+        defaultImpl = UpdateCustomerREQ.ByID::class,
         property = "by"
     )
     @JsonSubTypes(
@@ -192,72 +122,70 @@ class CustomerModel {
         JsonSubTypes.Type(value = UpdateCustomerREQ.ByCustomerNumber::class, name = "CUSTOMER_NUMBER"),
     )
     sealed class UpdateCustomerREQ(
-        open var email: String? = null,
+        open val username: String? = null,
 
-        open var phoneNo: String? = null,
+        open val customerNumber: String? = null,
 
-        open var ic: String? = null,
+        open val email: String? = null,
 
-        open var traceId: String? = null,
+        open val phoneNo: String? = null,
 
-        open var status: UserStatus? = null,
+        open val ic: String? = null,
 
-        open var statementPreference: StatementPreference? = null,
+        open val traceId: String? = null,
 
-        open var nameEN: String? = null,
+        open val status: UserStatus? = null,
 
-        open var nameZH: String? = null,
+        open val statementPreference: StatementPreference? = null,
 
-        open var dateOfBirth: String? = null,
+        open val nameEN: String? = null,
 
-        open var addressLine1: String? = null,
+        open val nameZH: String? = null,
 
-        open var addressLine2: String? = null,
+        open val dateOfBirth: String? = null,
 
-        open var addressLine3: String? = null,
+        open val addressLine1: String? = null,
 
-        open var postalCode: String? = null,
+        open val addressLine2: String? = null,
 
-        open var city: String? = null,
+        open val addressLine3: String? = null,
 
-        open var stateCode: String? = null,
+        open val postalCode: String? = null,
 
-        open var countryCode: String? = null,
+        open val city: String? = null,
 
-        open var cycleDate: String? = null
+        open val stateCode: String? = null,
+
+        open val countryCode: String? = null,
+
+        open val cycleDate: String? = null,
     ) : Payload {
         data class ByID(
-            @field: NotBlank
+            @field: Positive
             val id: BigInteger,
-
-            val username: String? = null,
-            val customerNumber: String? = null,
         ) : UpdateCustomerREQ()
 
         data class ByUsername(
             @field: NotBlank
-            val username: String,
-
-            val customerNumber: String? = null,
+            override val username: String,
         ) : UpdateCustomerREQ()
 
         data class ByCustomerNumber(
             @field: NotBlank
-            val customerNumber: String,
-
-            val username: String? = null
+            override val customerNumber: String,
         ) : UpdateCustomerREQ()
     }
 
     data class UpdateCustomerRES(
-        val originalData: String,
-        val updatedData: String
+        val updatedUser: UserProjector.UserEntity,
+        val updateUserAnalyticData: UpdateUserBizLogic.UpdateUserAnalyticData
     ) : Payload
 
     // ============================= VerifyCustomer
     @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
+        defaultImpl = VerifyCustomerREQ.ByPwd::class,
         property = "by"
     )
     @JsonSubTypes(
@@ -283,6 +211,7 @@ class CustomerModel {
     @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
+        defaultImpl = SyncCustomerREQ.ForEmail::class,
         property = "for"
     )
     @JsonSubTypes(
