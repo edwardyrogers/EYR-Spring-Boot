@@ -10,13 +10,16 @@ class MaskJsonSerialiser : JsonSerializer<Any>() {
     @Value("\${cryptography.enabled}")
     private val enabled: Boolean = false
 
+    @Value("\${cryptography.masking-length}")
+    private val maskingLen: Int = 1
+
     override fun serialize(value: Any, generator: JsonGenerator, provider: SerializerProvider) = run {
         if (!enabled) {
             generator.writeString(value.toString())
             return@run
         }
 
-        if (value.toString().length < 3) {
+        if (value.toString().length < maskingLen) {
             generator.writeString(value.toString())
             return@run
         }
@@ -24,7 +27,7 @@ class MaskJsonSerialiser : JsonSerializer<Any>() {
         generator.writeString(
             MaskUtils.mask(
                 value.toString(),
-                3,
+                maskingLen,
                 MaskUtils.generateKey()
             )
         )

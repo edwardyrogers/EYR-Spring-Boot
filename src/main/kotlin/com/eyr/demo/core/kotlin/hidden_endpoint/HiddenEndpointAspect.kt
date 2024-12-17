@@ -16,7 +16,7 @@ class HiddenEndpointAspect(
     @Before("@annotation(hiddenEndpoint)")
     fun beforeMethodExecution(joinPoint: JoinPoint, hiddenEndpoint: HiddenEndpoint) = run {
         // You can add more custom logic here based on the NotExposure annotation
-        if (hiddenEndpoint.isForceShown) return
+        if (hiddenEndpoint.isForceShown) return@run
 
         if (_environment.activeProfiles.contains("prod")) {
             throw ServiceException(

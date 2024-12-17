@@ -17,6 +17,12 @@ object RequestMetadata {
         }
     }
 
+    fun update(block: Meta.() -> Meta) = run {
+        val currentMeta = get()
+        val updatedMeta = currentMeta.block() // Apply the updates to the current Meta
+        set(updatedMeta) // Save the updated Meta back to ThreadLocal
+    }
+
     fun clear() = run {
         value.remove()
         value.set(Meta())

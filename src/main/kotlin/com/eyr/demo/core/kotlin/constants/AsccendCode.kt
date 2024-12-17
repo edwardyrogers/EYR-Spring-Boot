@@ -44,7 +44,7 @@ enum class AsccendCode(
 
     companion object {
         private fun fromCode(code: String): AsccendCode? = run {
-            values().find { it.value == code }
+            return@run values().find { it.value == code }
         }
 
         fun fromJson(errorMSG: String): AsccendResponse = run {
@@ -52,7 +52,7 @@ enum class AsccendCode(
                 "{$errorMSG}", Map::class.java
             )
 
-            AsccendResponse(
+            return@run AsccendResponse(
                 code = fromCode(result["code"].toString()) ?: UNKNOWN,
                 message = result["message"].toString()
             )
@@ -61,7 +61,7 @@ enum class AsccendCode(
         fun toMessage(vararg params: Any): String = run {
             val resourceBundle = ResourceBundle.getBundle("hsbc_core_messages", Locale.ENGLISH)
             val message = resourceBundle.getString("asccend.error")
-            MessageFormat.format(message, *params)
+            return@run MessageFormat.format(message, *params)
         }
     }
 }

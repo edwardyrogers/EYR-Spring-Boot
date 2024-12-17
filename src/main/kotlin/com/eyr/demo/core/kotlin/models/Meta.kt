@@ -1,8 +1,13 @@
 package cc.worldline.common.models
 
 import cc.worldline.common.constants.ClientChannel
+import cc.worldline.common.data.crypto.CryptoService
 import cc.worldline.common.utils.KeyUtils
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.*
 
 /**
@@ -23,6 +28,7 @@ open class Meta(
 
     open val deviceId: String = "",
 
+    @JsonDeserialize(using = JsonCPTKeyDeserializer::class)
     open val cptKey: ByteArray = byteArrayOf(),
 
     open val apiKey: String = KeyUtils.generateKey(),
@@ -39,5 +45,34 @@ open class Meta(
             "sessionId" to sessionId,
             "client" to client,
         )
+    }
+
+    fun copy(
+        lang: String = this.lang,
+        sessionId: String = this.sessionId,
+        deviceId: String = this.deviceId,
+        cptKey: ByteArray = this.cptKey,
+        apiKey: String = this.apiKey,
+        client: ClientChannel = this.client
+    ) = Meta(
+        lang,
+        sessionId,
+        deviceId,
+        cptKey,
+        apiKey,
+        client
+    )
+
+    class JsonCPTKeyDeserializer(
+        private val _cryptoService: CryptoService,
+    ) : JsonDeserializer<ByteArray>() {
+        override fun deserialize(
+            p: JsonParser,
+            ctxt: DeserializationContext
+        ): ByteArray = run {
+            val encryptedBytes = Base64.getDecoder().decode(p.text)
+            val encryptedKey = encryptedBytes.sliceArray(0 until 256)
+            return@run _cryptoService.doRSADecryption(encryptedKey)
+        }
     }
 }

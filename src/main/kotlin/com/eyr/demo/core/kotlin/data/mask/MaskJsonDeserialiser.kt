@@ -10,13 +10,17 @@ class MaskJsonDeserialiser : JsonDeserializer<String>() {
     @Value("\${cryptography.enabled}")
     private val enabled: Boolean = false
 
-    override fun deserialize(parser: JsonParser, context: DeserializationContext): String = run {
-        if (!enabled) return parser.valueAsString
-        if (parser.valueAsString.isEmpty()) return parser.valueAsString
+    @Value("\${cryptography.masking-length}")
+    private val maskingLen: Int = 1
 
-        MaskUtils.unmask(
+    override fun deserialize(parser: JsonParser, context: DeserializationContext): String = run {
+        if (!enabled) return@run parser.valueAsString
+        if (parser.valueAsString.isEmpty()) return@run parser.valueAsString
+        if (parser.valueAsString.length < maskingLen) return@run parser.valueAsString
+
+        return@run MaskUtils.unmask(
             parser.valueAsString,
-            3,
+            maskingLen,
             MaskUtils.generateKey()
         )
     }

@@ -1,13 +1,11 @@
 package cc.worldline.common.data.crypto
 
+import cc.worldline.common.objects.RequestMetadata
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import org.springframework.web.context.request.RequestAttributes
-import org.springframework.web.context.request.RequestContextHolder
-import org.springframework.web.context.request.ServletRequestAttributes
 import java.util.*
 
 @Component
@@ -24,34 +22,13 @@ class CryptoEncryptedJsonSerialiser(
             return
         }
 
-        val attributes = RequestContextHolder.getRequestAttributes()
-
-        if (attributes != null && attributes is ServletRequestAttributes) {
-            // Try finding the key set at request crypto deserializer or finding on the http header
-            val key = attributes.getAttribute(
-                "CurrentAESKey",
-                RequestAttributes.SCOPE_REQUEST,
-            ) as ByteArray? ?: run {
-                // If the current key is not found then try finding the key from the http header
-                val currKey = attributes.request.getHeader("Curr-Key")
-
-                if (currKey.isNotEmpty()) {
-                    val encryptedBytes = Base64.getDecoder().decode(currKey)
-                    val encryptedKey = encryptedBytes.sliceArray(0 until 256)
-                    cryptoService.doRSADecryption(encryptedKey)
-                } else {
-                    throw Exception("Crypto encryption -> cannot found AES key")
-                }
-            }
-
-            generator.writeString(
-                Base64.getEncoder().encodeToString(
-                    cryptoService.doAESEncryption(
-                        key = key,
-                        data = value.toString().toByteArray(),
-                    )
+        generator.writeString(
+            Base64.getEncoder().encodeToString(
+                cryptoService.doAESEncryption(
+                    key = RequestMetadata.get().cptKey,
+                    data = value.toString().toByteArray(),
                 )
             )
-        }
+        )
     }
 }

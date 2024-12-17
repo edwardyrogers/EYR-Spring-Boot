@@ -47,7 +47,7 @@ open class GlobalExceptionCoreHandler(
         handler: HandlerMethod
     ): Response<Failure> = run {
         // "Missing or null value for required parameter: 'nationalId' [payload.nationalId]"
-        Response.failure(
+        return@run Response.failure(
             Failure(
                 code = _errorService.formatErrorCode(
                     ReturnCode.INVALID.value,
@@ -96,7 +96,7 @@ open class GlobalExceptionCoreHandler(
         ex: MethodArgumentNotValidException,
         handler: HandlerMethod
     ): Response<Failure> = run {
-        Response.failure(
+        return@run Response.failure(
             Failure(
                 code = _errorService.formatErrorCode(
                     ReturnCode.INVALID.value,
@@ -133,7 +133,7 @@ open class GlobalExceptionCoreHandler(
     open fun elkErrorRecordException(
         ex: ELKErrorRecordException
     ): ResponseEntity<Response<Failure>> = run {
-        ResponseEntity
+        return@run ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
                 ex.failure
@@ -167,7 +167,7 @@ open class GlobalExceptionCoreHandler(
         ex: Exception,
         handler: HandlerMethod
     ): ResponseEntity<Response<Failure>> = run {
-        ResponseEntity
+        return@run ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
                 Response.failure(

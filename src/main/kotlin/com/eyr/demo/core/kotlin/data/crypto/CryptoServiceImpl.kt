@@ -57,7 +57,7 @@ class CryptoServiceImpl(
             val keyFactory = KeyFactory.getInstance("RSA")
             val privateKey = keyPair.second
             val privateKeySpec = PKCS8EncodedKeySpec(privateKey)
-            keyFactory.generatePrivate(privateKeySpec)
+            return@run keyFactory.generatePrivate(privateKeySpec)
         }
 
     override fun setRSAFrontendPubKeyByte(key: ByteArray) = run {
@@ -83,33 +83,33 @@ class CryptoServiceImpl(
         val publicKeyString = keyPairGenerated.public.encoded
         val privateKeyString = keyPairGenerated.private.encoded
 
-        Pair(publicKeyString, privateKeyString)
+        return@run Pair(publicKeyString, privateKeyString)
     }
 
     override fun doRSAEncryption(data: ByteArray): ByteArray = run {
         val cipher = Cipher.getInstance(rsaAlgo)
         cipher.init(Cipher.ENCRYPT_MODE, rsaPublicKey)
-        cipher.doFinal(data)
+        return@run cipher.doFinal(data)
     }
 
     override fun doRSADecryption(data: ByteArray): ByteArray = run {
         val cipher: Cipher = Cipher.getInstance(rsaAlgo)
         cipher.init(Cipher.DECRYPT_MODE, rsaPrivateKey)
-        cipher.doFinal(data)
+        return@run cipher.doFinal(data)
     }
 
     override fun doAESEncryption(key: ByteArray, data: ByteArray): ByteArray = run {
         val secretKey = SecretKeySpec(key, "AES")
         val cipher = Cipher.getInstance(aesAlgo)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, IvParameterSpec(key.copyOfRange(16, key.size)))
-        cipher.doFinal(data)
+        return@run cipher.doFinal(data)
     }
 
     override fun doAESDecryption(key: ByteArray, data: ByteArray): ByteArray = run {
         val secretKey = SecretKeySpec(key, "AES")
         val cipher = Cipher.getInstance(aesAlgo)
         cipher.init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(key.copyOfRange(16, key.size)))
-        cipher.doFinal(data)
+        return@run cipher.doFinal(data)
     }
 
     override fun encrypt(data: ByteArray): CryptoData = run {
@@ -119,9 +119,9 @@ class CryptoServiceImpl(
             val encryptedData = doAESEncryption(aesKey, data)
             val encryptedKey = doRSAEncryption(aesKey)
             val res = encryptedKey.plus(encryptedData)
-            CryptoData(Base64.getEncoder().encodeToString(res))
+            return@run CryptoData(Base64.getEncoder().encodeToString(res))
         } else {
-            CryptoData(String(data))
+            return@run CryptoData(String(data))
         }
     }
 
@@ -132,9 +132,9 @@ class CryptoServiceImpl(
             val encryptedKey = encryptedBytes.sliceArray(0 until 256)
             val encryptedData = encryptedBytes.sliceArray(256 until encryptedBytes.size)
             val decryptedKey = doRSADecryption(encryptedKey)
-            doAESDecryption(decryptedKey, encryptedData)
+            return@run doAESDecryption(decryptedKey, encryptedData)
         } else {
-            data.toByteArray()
+            return@run data.toByteArray()
         }
     }
 
