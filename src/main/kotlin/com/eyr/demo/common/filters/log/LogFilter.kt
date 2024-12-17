@@ -1,23 +1,35 @@
 package com.eyr.demo.common.filters.log
 
-import jakarta.servlet.FilterChain
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
+import org.hibernate.annotations.Filter
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import javax.servlet.FilterChain
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
-@Component("logFilter")
+@Component
+@Filter(name = "LogFilter")
+@Order(0)
 class LogFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain,
-    ) {
-        val reqWrapped = LogReqWrapper(request)
-        val resWrapped = LogResWrapper(response)
+        chain: FilterChain
+    ) = run {
+        if (!request.requestURI.startsWith("/api/v2/")) {
+            // If the request URI does not start with "/api/v2/",
+            // skip processing of this filter and continue with the next one in the chain
+            chain.doFilter(request, response)
+            return@run
+        }
 
-        reqWrapped.log()
-        filterChain.doFilter(reqWrapped, resWrapped)
-        resWrapped.log(request)
+        // Wrap the request and response objects to add custom behavior
+        val reqWrapped = LogReqWrapper(request) // Create a wrapped version of the request
+        val resWrapped = LogResWrapper(response) // Create a wrapped version of the response
+
+        reqWrapped.log() // Log the request
+        chain.doFilter(reqWrapped, resWrapped) // Proceed with the chain
+        resWrapped.log(request) // Log the response
     }
 }

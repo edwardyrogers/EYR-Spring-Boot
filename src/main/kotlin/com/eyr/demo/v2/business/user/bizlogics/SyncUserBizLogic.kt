@@ -1,6 +1,6 @@
 package cc.worldline.customermanagement.v2.business.user.bizlogics
 
-import cc.worldline.common.constants.ReturnCode
+import com.eyr.demo.common.constants.ReturnCode
 import cc.worldline.common.exceptions.ServiceException
 import cc.worldline.common.interfaces.BizLogicValueReturn
 import cc.worldline.common.models.BizLogicModel

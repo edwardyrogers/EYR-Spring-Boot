@@ -1,9 +1,6 @@
 package cc.worldline.customermanagement.v2.common.filters.apikey
 
-import cc.worldline.common.constants.ReturnCode
-import cc.worldline.common.exceptions.ServiceException
 import cc.worldline.common.models.Request
-import cc.worldline.common.utils.KeyUtils
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(AppConstant.PATH_API_V1)
+@RequestMapping("api/v1")
 class API000Controller(
     private val service: API000Service
 ) {
