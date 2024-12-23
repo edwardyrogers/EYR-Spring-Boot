@@ -30,7 +30,7 @@ class ApiGuardianAspect(
             return@run joinPoint.proceed()
         }
 
-        LOGGER.info("--- API auth checking result: ${requestBody.meta.apiKey != KeyUtils.generateKey()}")
+        LOGGER.info("--- Is API request not authenticated: ${requestBody.meta.apiKey != KeyUtils.generateKey()}")
 
         if (requestBody.meta.apiKey != KeyUtils.generateKey()) {
             throw ServiceException(

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponseWrapper
 import org.slf4j.LoggerFactory
+import org.springframework.core.env.Environment
 import java.io.ByteArrayOutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
@@ -24,7 +25,8 @@ import java.io.PrintWriter
  * @param response The original [HttpServletResponse] that is being wrapped.
  */
 class LogResWrapper(
-    private val response: HttpServletResponse
+    private val response: HttpServletResponse,
+    private val environment: Environment,
 ) : HttpServletResponseWrapper(response) {
 
     private val byteArrayOutputStream = ByteArrayOutputStream()
@@ -45,7 +47,11 @@ class LogResWrapper(
             object : TypeReference<HashMap<String, Any>>() {}
         )
 
-        val prettyRes = MAPPER.writeValueAsString(
+        val modelStr = if (environment.activeProfiles.contains("dev")) {
+            MAPPER
+        } else {
+            MAPPER.copy().disable(SerializationFeature.INDENT_OUTPUT)
+        }.writeValueAsString(
             mapOf(
                 "success" to res["success"],
                 "meta" to res["meta"],
@@ -56,9 +62,9 @@ class LogResWrapper(
         val isSuccess = res["success"] as? Boolean ?: false
 
         if (isSuccess) {
-            LOGGER.info("<-- [${request.method}] ${request.requestURI} $prettyRes")
+            LOGGER.info("<-- [${request.method}] ${request.requestURI} $modelStr")
         } else {
-            LOGGER.error("x-- [${request.method}] ${request.requestURI} $prettyRes")
+            LOGGER.error("x-- [${request.method}] ${request.requestURI} $modelStr")
         }
 
         response.outputStream.write(byteArrayOutputStream.toByteArray())

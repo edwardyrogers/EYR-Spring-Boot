@@ -10,6 +10,7 @@ import jakarta.servlet.ServletInputStream
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
 import org.slf4j.LoggerFactory
+import org.springframework.core.env.Environment
 import org.springframework.util.StreamUtils
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
@@ -24,7 +25,8 @@ import java.io.InputStreamReader
  * @param request The original [HttpServletRequest] that is being wrapped.
  */
 class LogReqWrapper(
-    private val request: HttpServletRequest
+    private val request: HttpServletRequest,
+    private val environment: Environment,
 ) : HttpServletRequestWrapper(request) {
 
     private val body: ByteArray = StreamUtils.copyToByteArray(
@@ -44,14 +46,18 @@ class LogReqWrapper(
             Meta::class.java
         )
 
-        val prettyReq = MAPPER.writeValueAsString(
+        val modelStr = if (environment.activeProfiles.contains("dev")) {
+            MAPPER
+        } else {
+            MAPPER.copy().disable(SerializationFeature.INDENT_OUTPUT)
+        }.writeValueAsString(
             mapOf(
                 "meta" to meta.toMutableMap(),
                 "payload" to req["payload"]
             )
         )
 
-        LOGGER.info("--> [${request.method}] ${request.requestURI} $prettyReq")
+        LOGGER.info("--> [${request.method}] ${request.requestURI} $modelStr")
     }
 
     /**
