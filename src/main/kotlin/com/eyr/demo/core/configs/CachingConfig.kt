@@ -1,4 +1,4 @@
-package cc.worldline.common.configs
+package com.eyr.demo.core.configs
 
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.spring.cache.HazelcastCacheManager

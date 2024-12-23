@@ -1,6 +1,6 @@
-package cc.worldline.common.data.crypto
+package com.eyr.demo.core.data.crypto
 
-import cc.worldline.common.objects.RequestMetadata
+import com.eyr.demo.core.objects.RequestMetadata
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider

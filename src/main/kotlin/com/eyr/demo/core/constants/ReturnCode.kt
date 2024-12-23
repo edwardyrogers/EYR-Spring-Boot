@@ -1,6 +1,6 @@
-package cc.worldline.common.constants
+package com.eyr.demo.core.constants
 
-import cc.worldline.common.interfaces.Code
+import com.eyr.demo.core.interfaces.Code
 import java.text.MessageFormat
 import java.util.*
 

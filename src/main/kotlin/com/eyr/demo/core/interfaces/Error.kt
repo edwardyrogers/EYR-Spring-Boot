@@ -1,4 +1,4 @@
-package cc.worldline.common.interfaces
+package com.eyr.demo.core.interfaces
 
 /**
  * Interface representing an error with a specific code.

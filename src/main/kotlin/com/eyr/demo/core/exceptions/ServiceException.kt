@@ -1,8 +1,8 @@
-package cc.worldline.common.exceptions
+package com.eyr.demo.core.exceptions
 
-import cc.worldline.common.interfaces.Code
-import cc.worldline.common.interfaces.Error
-import cc.worldline.common.objects.RequestMetadata
+import com.eyr.demo.core.interfaces.Code
+import com.eyr.demo.core.interfaces.Error
+import com.eyr.demo.core.objects.RequestMetadata
 
 /**
  * Exception class for handling service-related errors that are not logged into ELK (Elasticsearch, Logstash, Kibana).

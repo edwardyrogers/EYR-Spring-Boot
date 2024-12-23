@@ -1,13 +1,11 @@
-package cc.worldline.customermanagement.v2.common.handlers
+package com.eyr.demo.common.handlers
 
-import cc.worldline.common.exceptions.ELKErrorRecordException
-import cc.worldline.common.hendlers.GlobalExceptionCoreHandler
-import cc.worldline.common.interfaces.ErrorService
-import cc.worldline.common.models.Failure
-import cc.worldline.common.models.Response
-import cc.worldline.customermanagement.common.bean.ApiResponse
-import cc.worldline.customermanagement.common.bean.ServiceError
-import cc.worldline.customermanagement.common.exception.CustomException
+import com.eyr.demo.core.exceptions.ELKErrorRecordException
+import com.eyr.demo.core.handlers.GlobalExceptionCoreHandler
+import com.eyr.demo.core.interfaces.ErrorService
+import com.eyr.demo.core.models.Failure
+import com.eyr.demo.core.models.Response
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -15,7 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.HandlerMethod
-import javax.servlet.http.HttpServletRequest
 
 
 @RestControllerAdvice
@@ -33,19 +30,9 @@ class GlobalExceptionHandler(
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(
-                if (request.requestURI.startsWith("/api/v2/")) {
-                    _globalExceptionCoreHandler.httpMessageNotReadableException(
-                        ex, handler,
-                    )
-                } else {
-                    ApiResponse.failure(
-                        ServiceError(
-                            "400",
-                            ex.message ?: "Unknown error",
-                            null
-                        )
-                    )
-                }
+                _globalExceptionCoreHandler.httpMessageNotReadableException(
+                    ex, handler,
+                )
             )
     }
 
@@ -58,21 +45,9 @@ class GlobalExceptionHandler(
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(
-                if (request.requestURI.startsWith("/api/v2/")) {
-                    _globalExceptionCoreHandler.methodArgumentNotValidException(
-                        ex, handler
-                    )
-                } else {
-                    ApiResponse.failure(
-                        ServiceError(
-                            "400",
-                            ex.bindingResult.allErrors
-                                .map { it.defaultMessage }
-                                .joinToString(System.lineSeparator()),
-                            null
-                        )
-                    )
-                }
+                _globalExceptionCoreHandler.methodArgumentNotValidException(
+                    ex, handler
+                )
             )
     }
 
@@ -89,32 +64,6 @@ class GlobalExceptionHandler(
         request: HttpServletRequest,
         handler: HandlerMethod
     ): ResponseEntity<*> = run {
-        if (request.requestURI.startsWith("/api/v2/")) {
-            _globalExceptionCoreHandler.exception(ex, handler)
-        } else {
-            ex.printStackTrace()
-            if (ex is CustomException) {
-                ApiResponse.failure(
-                    ServiceError(
-                        ex.code ?: "500",
-                        ex.localizedMessage,
-                        null
-                    )
-                )
-                    .let { ResponseEntity.status(ex.status ?: HttpStatus.INTERNAL_SERVER_ERROR.value()).body(it) }
-
-            } else {
-                val status = HttpStatus.INTERNAL_SERVER_ERROR
-
-                ApiResponse.failure(
-                    ServiceError(
-                        status.value().toString(),
-                        ex.message ?: ex.localizedMessage,
-                        null
-                    )
-                )
-                    .let { ResponseEntity.status(status).body(it) }
-            }
-        }
+        _globalExceptionCoreHandler.exception(ex, handler)
     }
 }

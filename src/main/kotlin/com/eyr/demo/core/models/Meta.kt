@@ -1,10 +1,10 @@
-package cc.worldline.common.models
+package com.eyr.demo.core.models
 
-import cc.worldline.common.constants.ClientChannel
-import cc.worldline.common.constants.ReturnCode
-import cc.worldline.common.data.crypto.CryptoService
-import cc.worldline.common.exceptions.ServiceException
-import cc.worldline.common.utils.KeyUtils
+import com.eyr.demo.core.constants.ClientChannel
+import com.eyr.demo.core.constants.ReturnCode
+import com.eyr.demo.core.data.crypto.CryptoService
+import com.eyr.demo.core.exceptions.ServiceException
+import com.eyr.demo.core.utils.KeyUtils
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -76,7 +76,7 @@ open class Meta(
             val cptKeyText = p.text
 
             if (cptKeyText.isNullOrEmpty()) {
-                LOGGER.info("No cpt key")
+                LOGGER.info("--- Empty cpt key")
                 return@run byteArrayOf()
             }
 

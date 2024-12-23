@@ -1,7 +1,7 @@
-package cc.worldline.common.data.crypto
+package com.eyr.demo.core.data.crypto
 
-import cc.worldline.common.constants.ReturnCode
-import cc.worldline.common.exceptions.ServiceException
+import com.eyr.demo.core.constants.ReturnCode
+import com.eyr.demo.core.exceptions.ServiceException
 import com.hazelcast.core.HazelcastInstance
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

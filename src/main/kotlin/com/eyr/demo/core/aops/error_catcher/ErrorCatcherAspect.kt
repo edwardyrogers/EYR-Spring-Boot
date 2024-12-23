@@ -1,20 +1,18 @@
-package cc.worldline.common.aops.error_catcher
+package com.eyr.demo.core.aops.error_catcher
 
-import cc.worldline.common.constants.CoreConst
-import cc.worldline.common.constants.ReturnCode
-import cc.worldline.common.exceptions.ELKErrorRecordException
-import cc.worldline.common.exceptions.ServiceException
-import cc.worldline.common.interfaces.Code
-import cc.worldline.common.interfaces.ErrorService
-import cc.worldline.common.models.Failure
-import cc.worldline.common.models.Response
+import com.eyr.demo.core.constants.CoreConst
+import com.eyr.demo.core.constants.ReturnCode
+import com.eyr.demo.core.exceptions.ELKErrorRecordException
+import com.eyr.demo.core.exceptions.ServiceException
+import com.eyr.demo.core.interfaces.Code
+import com.eyr.demo.core.interfaces.ErrorService
+import com.eyr.demo.core.models.Failure
+import com.eyr.demo.core.models.Response
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
-import org.springframework.web.context.request.RequestContextHolder
-import org.springframework.web.context.request.ServletRequestAttributes
 
 @Aspect
 @Component
@@ -24,13 +22,6 @@ class ErrorCatcherAspect(
 ) {
     @Around(CoreConst.MIDDLEWARE_CONDITION)
     fun handleErrors(joinPoint: ProceedingJoinPoint): Any? = run {
-        val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
-        val request = requestAttributes?.request
-
-        if (request != null && !request.requestURI.startsWith("/api/v2/")) {
-            return@run joinPoint.proceed()
-        }
-
         runCatching {
             // Proceed with the original execution
             return@run joinPoint.proceed()

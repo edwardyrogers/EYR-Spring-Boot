@@ -1,7 +1,7 @@
-package cc.worldline.common.aops.hidden_endpoint
+package com.eyr.demo.core.aops.hidden_endpoint
 
-import cc.worldline.common.constants.ReturnCode
-import cc.worldline.common.exceptions.ServiceException
+import com.eyr.demo.core.constants.ReturnCode
+import com.eyr.demo.core.exceptions.ServiceException
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before

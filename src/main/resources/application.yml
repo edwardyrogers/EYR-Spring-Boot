@@ -1,6 +1,10 @@
 spring:
+  profiles:
+    active: ${APP_ENV:dev}
+
   application:
     name: demo
+
   hazelcast:
     config: classpath:hazelcast.yaml
 

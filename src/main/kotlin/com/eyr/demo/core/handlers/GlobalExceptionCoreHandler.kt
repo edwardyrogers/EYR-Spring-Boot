@@ -1,12 +1,12 @@
 @file:Suppress("unused")
 
-package cc.worldline.common.handlers
+package com.eyr.demo.core.handlers
 
-import cc.worldline.common.constants.ReturnCode
-import cc.worldline.common.exceptions.ELKErrorRecordException
-import cc.worldline.common.interfaces.ErrorService
-import cc.worldline.common.models.Failure
-import cc.worldline.common.models.Response
+import com.eyr.demo.core.constants.ReturnCode
+import com.eyr.demo.core.exceptions.ELKErrorRecordException
+import com.eyr.demo.core.interfaces.ErrorService
+import com.eyr.demo.core.models.Failure
+import com.eyr.demo.core.models.Response
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import org.springframework.http.HttpStatus

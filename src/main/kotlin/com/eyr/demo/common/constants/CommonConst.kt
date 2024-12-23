@@ -1,7 +1,7 @@
-package cc.worldline.customermanagement.v2.common.constants
+package com.eyr.demo.common.constants
 
 class CommonConst {
     companion object {
-        const val SERVICE_NAME = "CSM"
+        const val SERVICE_NAME = "EYR"
     }
 }

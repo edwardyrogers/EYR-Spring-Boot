@@ -1,4 +1,4 @@
-package cc.worldline.customermanagement.v2.common.utils
+package com.eyr.demo.common.utils
 
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort

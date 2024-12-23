@@ -1,14 +1,14 @@
-package cc.worldline.customermanagement.v2.common.services.error
+package com.eyr.demo.common.error
 
-import cc.worldline.common.interfaces.ErrorService
-import cc.worldline.customermanagement.v2.common.constants.CSMReturnCode
-import cc.worldline.customermanagement.v2.common.constants.CommonConst
+import com.eyr.demo.common.constants.CommonConst
+import com.eyr.demo.common.constants.EYRReturnCode
+import com.eyr.demo.core.interfaces.ErrorService
 import org.springframework.stereotype.Service
 import kotlin.reflect.KClass
 
 @Service
 class ErrorServiceImpl : ErrorService {
     override fun formatErrorCode(errCode: String, where: KClass<*>): String = run {
-        "${CommonConst.SERVICE_NAME}${CSMReturnCode.findControllerCode(where)}${errCode}"
+        "${CommonConst.SERVICE_NAME}${EYRReturnCode.findControllerCode(where)}${errCode}"
     }
 }

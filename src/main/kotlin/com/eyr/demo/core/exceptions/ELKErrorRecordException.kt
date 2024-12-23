@@ -1,10 +1,10 @@
-package cc.worldline.common.exceptions
+package com.eyr.demo.core.exceptions
 
-import cc.worldline.common.interfaces.Code
-import cc.worldline.common.interfaces.Error
-import cc.worldline.common.models.Failure
-import cc.worldline.common.models.Response
-import cc.worldline.common.objects.RequestMetadata
+import com.eyr.demo.core.interfaces.Code
+import com.eyr.demo.core.interfaces.Error
+import com.eyr.demo.core.models.Failure
+import com.eyr.demo.core.models.Response
+import com.eyr.demo.core.objects.RequestMetadata
 
 /**
  * Exception class for handling error records in ELK (Elasticsearch, Logstash, Kibana).

@@ -1,6 +1,6 @@
-package cc.worldline.common.interfaces
+package com.eyr.demo.core.interfaces
 
-import cc.worldline.common.models.BizLogicModel
+import com.eyr.demo.core.models.BizLogicModel
 
 /**
  * A generic interface that defines a business logic contract for fetching data of a specified type.

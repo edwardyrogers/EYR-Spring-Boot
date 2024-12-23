@@ -1,6 +1,6 @@
-package cc.worldline.common.data.cache
+package com.eyr.demo.core.data.cache
 
-import cc.worldline.common.models.Request
+import com.eyr.demo.core.models.Request
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hazelcast.nio.ObjectDataInput
 import com.hazelcast.nio.ObjectDataOutput

@@ -1,11 +1,10 @@
-package cc.worldline.common.data.mask
+package com.eyr.demo.core.data.mask
 
-import cc.worldline.common.constants.ReturnCode
-import cc.worldline.common.exceptions.ServiceException
+import com.eyr.demo.core.constants.ReturnCode
+import com.eyr.demo.core.exceptions.ServiceException
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
-
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 

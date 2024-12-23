@@ -1,4 +1,4 @@
-package cc.worldline.common.constants
+package com.eyr.demo.core.constants
 
 import com.fasterxml.jackson.annotation.JsonFormat
 

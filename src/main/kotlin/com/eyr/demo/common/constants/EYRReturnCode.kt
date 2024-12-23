@@ -1,11 +1,11 @@
-package cc.worldline.customermanagement.v2.common.constants
+package com.eyr.demo.common.constants
 
-import cc.worldline.common.interfaces.Code
-import cc.worldline.customermanagement.v2.api.customer.CustomerController
+import com.eyr.demo.api.user.UserController
+import com.eyr.demo.core.interfaces.Code
 import java.text.MessageFormat
 import java.util.*
 
-enum class CSMReturnCode(
+enum class EYRReturnCode(
     override val value: String,
     override val msgKey: String
 ) : Code {
@@ -20,7 +20,7 @@ enum class CSMReturnCode(
     companion object {
         fun findControllerCode(controller: Any): String = run {
             when (controller) {
-                CustomerController::class -> "01"
+                UserController::class -> "01"
                 else -> "00"
             }
         }

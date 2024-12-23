@@ -1,6 +1,6 @@
-package cc.worldline.common.models
+package com.eyr.demo.core.models
 
-import cc.worldline.common.interfaces.Payload
+import com.eyr.demo.core.interfaces.Payload
 import org.springframework.data.domain.Page
 
 /**

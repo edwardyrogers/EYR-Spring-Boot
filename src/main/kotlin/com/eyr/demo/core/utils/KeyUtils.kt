@@ -1,4 +1,4 @@
-package cc.worldline.common.utils
+package com.eyr.demo.core.utils
 
 import java.security.MessageDigest
 import java.text.SimpleDateFormat

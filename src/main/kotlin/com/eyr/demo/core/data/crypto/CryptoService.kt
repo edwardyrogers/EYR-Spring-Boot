@@ -1,4 +1,4 @@
-package cc.worldline.common.data.crypto
+package com.eyr.demo.core.data.crypto
 
 interface CryptoService {
     fun setRSAFrontendPubKeyByte(key: ByteArray)

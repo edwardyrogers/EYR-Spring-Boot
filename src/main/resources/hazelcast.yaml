@@ -28,5 +28,10 @@ hazelcast:
           - 10.129.105.179
 
   map:
-    CryptoServiceImpl.GenOrGetRSAKeyPair:
-      time-to-live-seconds: 30
+    default:
+      eviction:
+        max-size-policy: USED_HEAP_PERCENTAGE
+        size: 70
+        eviction-policy: LRU
+
+      time-to-live-seconds: 180
