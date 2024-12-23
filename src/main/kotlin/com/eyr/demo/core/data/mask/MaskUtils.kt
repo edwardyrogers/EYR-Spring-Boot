@@ -1,7 +1,7 @@
-package com.eyr.demo.common.data.mask
+package cc.worldline.common.data.mask
 
-import com.eyr.demo.common.constants.ReturnCode
-import com.eyr.demo.common.exceptions.ServiceException
+import cc.worldline.common.constants.ReturnCode
+import cc.worldline.common.exceptions.ServiceException
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,40 +56,40 @@ object MaskUtils {
     }
 
     // Partial mask (leave the first few characters visible, encrypt the rest)
-    fun mask(data: String, prefixLength: Int, secretKey: String): String = run {
-        if (prefixLength >= data.length) {
+    fun mask(data: String, encryptedLength: Int, secretKey: String): String = run {
+        if (encryptedLength >= data.length) {
             throw ServiceException(
                 ReturnCode.INVALID,
-                ": Prefix length cannot be longer than the data length"
+                ": Encrypted length cannot be longer than the data length"
             )
         }
 
-        val prefix = data.substring(0, prefixLength) // Unmasked part
-        val toEncrypt = data.substring(prefixLength) // Part to be encrypted
+        val toEncrypt = data.substring(0, data.length - encryptedLength) // Part to be encrypted
+        val suffix = data.substring(data.length - encryptedLength) // Unmasked part
 
         // Encrypt the remaining part
-        val encryptedPart = encrypt(toEncrypt, secretKey)
+        val encrypted = encrypt(toEncrypt, secretKey)
 
         // Concatenate the unmasked prefix with the encrypted part
-        return@run "$prefix$encryptedPart"
+        return@run "$encrypted$suffix"
     }
 
     // Decrypt and combine with the visible part
-    fun unmask(data: String, prefixLength: Int, secretKey: String): String = run {
-        if (prefixLength >= data.length) {
+    fun unmask(data: String, encryptedLength: Int, secretKey: String): String = run {
+        if (encryptedLength >= data.length) {
             throw ServiceException(
                 ReturnCode.INVALID,
                 "Prefix length cannot be longer than the data length"
             )
         }
 
-        val prefix = data.substring(0, prefixLength) // Unmasked part
-        val encryptedPart = data.substring(prefixLength) // Encrypted part
+        val encrypted = data.substring(0, data.length - encryptedLength) // Encrypted part
+        val suffix = data.substring(data.length - encryptedLength) // Unmasked part
 
         // Decrypt the remaining part
-        val decryptedPart = decrypt(encryptedPart, secretKey)
+        val decrypted = decrypt(encrypted, secretKey)
 
         // Concatenate the unmasked prefix with the decrypted part
-        return@run "$prefix$decryptedPart"
+        return@run "$decrypted$suffix"
     }
 }

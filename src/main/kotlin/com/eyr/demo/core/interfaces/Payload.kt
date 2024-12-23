@@ -1,4 +1,4 @@
-package com.eyr.demo.common.interfaces
+package cc.worldline.common.interfaces
 
 /**
  * Interface representing a generic payload.

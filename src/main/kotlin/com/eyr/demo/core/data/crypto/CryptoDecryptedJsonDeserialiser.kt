@@ -1,19 +1,17 @@
-package com.eyr.demo.common.data.crypto
+package cc.worldline.common.data.crypto
 
-import com.eyr.demo.common.objects.RequestMetadata
+import cc.worldline.common.objects.RequestMetadata
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 import java.util.*
 
-@Component
-class CryptoDecryptedJsonDeserialiser(
+open class CryptoDecryptedJsonDeserialiser(
     private val cryptoService: CryptoService,
 ) : JsonDeserializer<String>() {
 
-    @Value("\${cryptography.enabled}")
+    @Value("\${backend-core.crypto.enabled:false}")
     private val enabled: Boolean = false
 
     override fun deserialize(parser: JsonParser, context: DeserializationContext): String = run {

@@ -1,4 +1,4 @@
-package com.eyr.demo.common.constants
+package cc.worldline.common.constants
 
 import com.fasterxml.jackson.annotation.JsonFormat
 
@@ -13,5 +13,9 @@ import com.fasterxml.jackson.annotation.JsonFormat
 @JsonFormat(shape = JsonFormat.Shape.STRING)
 enum class ClientChannel {
     UNKNOWN,
-    EYR
+    IBK,
+    PWS,
+    MBK,
+    ASC,
+    STAFF_CHANNEL
 }

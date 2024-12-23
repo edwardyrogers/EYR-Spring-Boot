@@ -1,19 +1,19 @@
-package com.eyr.demo.common.filters.model
+package cc.worldline.common.filters.model
 
-import com.eyr.demo.common.models.Meta
-import com.eyr.demo.common.objects.RequestMetadata
-import com.eyr.demo.common.streams.HttpBodyServletInputStream
+import cc.worldline.common.models.Meta
+import cc.worldline.common.objects.RequestMetadata
+import cc.worldline.common.streams.HttpBodyServletInputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import jakarta.servlet.ServletInputStream
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletRequestWrapper
 import org.springframework.util.StreamUtils
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
+import javax.servlet.ServletInputStream
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletRequestWrapper
 
 /**
  * A wrapper class for [HttpServletRequest] that allows manipulation of the request data.

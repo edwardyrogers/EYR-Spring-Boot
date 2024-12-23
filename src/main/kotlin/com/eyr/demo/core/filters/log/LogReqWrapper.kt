@@ -1,18 +1,19 @@
-package com.eyr.demo.common.filters.log
+package cc.worldline.common.filters.log
 
-import com.eyr.demo.common.streams.HttpBodyServletInputStream
+import cc.worldline.common.models.Meta
+import cc.worldline.common.streams.HttpBodyServletInputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import jakarta.servlet.ServletInputStream
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletRequestWrapper
 import org.slf4j.LoggerFactory
 import org.springframework.util.StreamUtils
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
+import javax.servlet.ServletInputStream
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletRequestWrapper
 
 /**
  * A wrapper class for [HttpServletRequest] that allows manipulation of the request data.
@@ -38,7 +39,17 @@ class LogReqWrapper(
             object : TypeReference<Map<String, Any>>() {} // Type reference for deserialization
         )
 
-        val prettyReq = MAPPER.writeValueAsString(req)
+        val meta: Meta = MAPPER.convertValue(
+            req["meta"],
+            Meta::class.java
+        )
+
+        val prettyReq = MAPPER.writeValueAsString(
+            mapOf(
+                "meta" to meta.toMutableMap(),
+                "payload" to req["payload"]
+            )
+        )
 
         LOGGER.info("--> [${request.method}] ${request.requestURI} $prettyReq")
     }

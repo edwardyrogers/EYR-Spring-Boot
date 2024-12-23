@@ -1,8 +1,8 @@
-package com.eyr.demo.common.models
+package cc.worldline.common.models
 
-import com.eyr.demo.common.interfaces.Payload
-import com.eyr.demo.common.objects.RequestMetadata
-import jakarta.validation.Valid
+import cc.worldline.common.interfaces.Payload
+import cc.worldline.common.objects.RequestMetadata
+import javax.validation.Valid
 
 /**
  * An open class representing a request containing metadata and a payload.

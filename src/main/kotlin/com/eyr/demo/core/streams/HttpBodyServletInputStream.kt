@@ -1,8 +1,8 @@
-package com.eyr.demo.common.streams
+package cc.worldline.common.streams
 
-import jakarta.servlet.ReadListener
-import jakarta.servlet.ServletInputStream
 import java.io.InputStream
+import javax.servlet.ReadListener
+import javax.servlet.ServletInputStream
 
 class HttpBodyServletInputStream(
     private val inputStream: InputStream

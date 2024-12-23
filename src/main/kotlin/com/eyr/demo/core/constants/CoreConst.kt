@@ -1,4 +1,4 @@
-package com.eyr.demo.common.constants
+package cc.worldline.common.constants
 
 class CoreConst {
     companion object {

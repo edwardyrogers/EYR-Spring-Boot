@@ -1,13 +1,16 @@
-package com.eyr.demo.common.models
+package cc.worldline.common.models
 
-import com.eyr.demo.common.constants.ClientChannel
-import com.eyr.demo.common.data.crypto.CryptoService
-import com.eyr.demo.common.utils.KeyUtils
+import cc.worldline.common.constants.ClientChannel
+import cc.worldline.common.constants.ReturnCode
+import cc.worldline.common.data.crypto.CryptoService
+import cc.worldline.common.exceptions.ServiceException
+import cc.worldline.common.utils.KeyUtils
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import org.slf4j.LoggerFactory
 import java.util.*
 
 /**
@@ -28,7 +31,7 @@ open class Meta(
 
     open val deviceId: String = "",
 
-    @JsonDeserialize(using = JsonCPTKeyDeserializer::class)
+    @JsonDeserialize(using = JsonCPTKeyDeserialiser::class)
     open val cptKey: ByteArray = byteArrayOf(),
 
     open val apiKey: String = KeyUtils.generateKey(),
@@ -63,16 +66,41 @@ open class Meta(
         client
     )
 
-    class JsonCPTKeyDeserializer(
+    class JsonCPTKeyDeserialiser(
         private val _cryptoService: CryptoService,
     ) : JsonDeserializer<ByteArray>() {
         override fun deserialize(
             p: JsonParser,
             ctxt: DeserializationContext
         ): ByteArray = run {
-            val encryptedBytes = Base64.getDecoder().decode(p.text)
+            val cptKeyText = p.text
+
+            if (cptKeyText.isNullOrEmpty()) {
+                LOGGER.info("No cpt key")
+                return@run byteArrayOf()
+            }
+
+            val encryptedBytes = try {
+                Base64.getDecoder().decode(cptKeyText)
+            } catch (e: IllegalArgumentException) {
+                throw ServiceException(
+                    ReturnCode.INVALID, ": cpt key is not a valid Base64-encoded string"
+                )
+            }
+
+            if (encryptedBytes.size < 256) {
+                throw ServiceException(
+                    ReturnCode.INVALID, ": cpt key must be at least 256 bytes after decoding"
+                )
+            }
+
             val encryptedKey = encryptedBytes.sliceArray(0 until 256)
+
             return@run _cryptoService.doRSADecryption(encryptedKey)
+        }
+
+        companion object {
+            private val LOGGER = LoggerFactory.getLogger(JsonCPTKeyDeserialiser::class.java)
         }
     }
 }

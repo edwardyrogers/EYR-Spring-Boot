@@ -1,6 +1,6 @@
-package com.eyr.demo.common.interfaces
+package cc.worldline.common.interfaces
 
-import com.eyr.demo.common.models.BizLogicModel
+import cc.worldline.common.models.BizLogicModel
 
 /**
  * Interface defining business logic for operations that return a custom value.

@@ -1,18 +1,18 @@
-package com.eyr.demo.common.filters.log
+package cc.worldline.common.filters.log
 
-import com.eyr.demo.common.streams.HttpBodyServletOutputStream
+import cc.worldline.common.streams.HttpBodyServletOutputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import jakarta.servlet.ServletOutputStream
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
-import jakarta.servlet.http.HttpServletResponseWrapper
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
+import javax.servlet.ServletOutputStream
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.HttpServletResponseWrapper
 
 /**
  * A wrapper class for [HttpServletResponse] that allows manipulation of the response data.

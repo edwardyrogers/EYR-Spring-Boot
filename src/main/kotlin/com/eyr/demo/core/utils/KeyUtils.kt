@@ -1,4 +1,4 @@
-package com.eyr.demo.common.utils
+package cc.worldline.common.utils
 
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -8,6 +8,14 @@ import java.util.*
  * Utility class for generating keys.
  */
 object KeyUtils {
+
+    private var dateFormatSeed: String? = null
+
+    fun initialize(
+        dateFormatSeed: String?,
+    ) {
+        this.dateFormatSeed = dateFormatSeed
+    }
 
     /**
      * Generates a unique API key based on the current date and a UUID.
@@ -37,16 +45,22 @@ object KeyUtils {
             "yyyy-MM-dd",
             "MM-dd-yyyy",
             "dd-MM-yyyy",
+
             "yyyy/MM/dd",
             "MM/dd/yyyy",
             "dd/MM/yyyy",
+
             "yyyyMMdd",
             "MMddyyyy",
             "ddMMyyyy"
         )
 
-        // Use the current date (formatted as yyyy-MM-dd) as a seed
-        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        // Use the current date as a seed
+        val today = SimpleDateFormat(
+            dateFormatSeed ?: "dd-MM-yyyy",
+            Locale.getDefault()
+        ).format(Date())
+
         val seed = today.hashCode() // Generate a hash based on today's date
 
         // Use the seed to consistently pick a format for today

@@ -1,8 +1,7 @@
-package com.eyr.demo.common.data.crypto
+package cc.worldline.common.data.crypto
 
-import com.eyr.demo.common.constants.ReturnCode
-import com.eyr.demo.common.exceptions.ServiceException
-import com.eyr.demo.common.data.crypto.CryptoData
+import cc.worldline.common.constants.ReturnCode
+import cc.worldline.common.exceptions.ServiceException
 import com.hazelcast.core.HazelcastInstance
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -18,18 +17,18 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 @Service
-class CryptoServiceImpl(
+open class CryptoServiceImpl(
     private val hazelcastInstance: HazelcastInstance?
 ) : CryptoService {
 
-    @Value("\${cryptography.enabled}")
-    private var isCryptoEnabled = false
+    @Value("\${backend-core.crypto.enabled:false}")
+    private val isCryptoEnabled = false
 
-    @Value("\${cryptography.rsa.algorithms}")
-    lateinit var rsaAlgo: String
+    @Value("\${backend-core.crypto.rsa.algorithms:RSA/ECB/PKCS1Padding}")
+    private val rsaAlgo: String = "RSA/ECB/PKCS1Padding"
 
-    @Value("\${cryptography.aes.algorithms}")
-    lateinit var aesAlgo: String
+    @Value("\${backend-core.crypto.aes.algorithms:AES/CBC/PKCS5Padding}")
+    private val aesAlgo: String = "AES/CBC/PKCS5Padding"
 
     private lateinit var frontendRSAPubKeyByte: ByteArray
 

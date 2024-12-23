@@ -1,17 +1,17 @@
-package com.eyr.demo.common.data.mask
+package cc.worldline.common.data.mask
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import org.springframework.beans.factory.annotation.Value
 
-class MaskJsonDeserialiser : JsonDeserializer<String>() {
+open class MaskJsonDeserialiser : JsonDeserializer<String>() {
 
-    @Value("\${cryptography.enabled}")
+    @Value("\${backend-core.mask.enabled:false}")
     private val enabled: Boolean = false
 
-    @Value("\${cryptography.masking-length}")
-    private val maskingLen: Int = 1
+    @Value("\${backend-core.mask.revealed-length:5}")
+    private val maskingLen: Int = 5
 
     override fun deserialize(parser: JsonParser, context: DeserializationContext): String = run {
         if (!enabled) return@run parser.valueAsString

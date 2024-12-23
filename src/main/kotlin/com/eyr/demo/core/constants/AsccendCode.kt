@@ -1,6 +1,6 @@
-package com.eyr.demo.common.constants
+package cc.worldline.common.constants
 
-import com.eyr.demo.common.models.AsccendResponse
+import cc.worldline.common.models.AsccendResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.text.MessageFormat
 import java.util.*

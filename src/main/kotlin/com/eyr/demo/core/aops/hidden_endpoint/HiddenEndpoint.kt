@@ -1,4 +1,4 @@
-package com.eyr.demo.common.hidden_endpoint
+package cc.worldline.common.aops.hidden_endpoint
 
 import kotlin.annotation.AnnotationRetention.RUNTIME
 import kotlin.annotation.AnnotationTarget.FUNCTION

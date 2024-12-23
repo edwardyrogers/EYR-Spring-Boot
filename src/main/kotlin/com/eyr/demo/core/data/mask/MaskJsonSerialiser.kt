@@ -1,17 +1,17 @@
-package com.eyr.demo.common.data.mask
+package cc.worldline.common.data.mask
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import org.springframework.beans.factory.annotation.Value
 
-class MaskJsonSerialiser : JsonSerializer<Any>() {
+open class MaskJsonSerialiser : JsonSerializer<Any>() {
 
-    @Value("\${cryptography.enabled}")
+    @Value("\${backend-core.mask.enabled:false}")
     private val enabled: Boolean = false
 
-    @Value("\${cryptography.masking-length}")
-    private val maskingLen: Int = 1
+    @Value("\${backend-core.mask.revealed-length:5}")
+    private val maskingLen: Int = 5
 
     override fun serialize(value: Any, generator: JsonGenerator, provider: SerializerProvider) = run {
         if (!enabled) {

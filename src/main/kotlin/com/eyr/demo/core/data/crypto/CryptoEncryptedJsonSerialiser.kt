@@ -1,19 +1,17 @@
-package com.eyr.demo.common.data.crypto
+package cc.worldline.common.data.crypto
 
-import com.eyr.demo.common.objects.RequestMetadata
+import cc.worldline.common.objects.RequestMetadata
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 import java.util.*
 
-@Component
-class CryptoEncryptedJsonSerialiser(
+open class CryptoEncryptedJsonSerialiser(
     private val cryptoService: CryptoService,
 ) : JsonSerializer<Any>() {
 
-    @Value("\${cryptography.enabled}")
+    @Value("\${backend-core.crypto.enabled:false}")
     private val enabled: Boolean = false
 
     override fun serialize(value: Any, generator: JsonGenerator, provider: SerializerProvider) = run {

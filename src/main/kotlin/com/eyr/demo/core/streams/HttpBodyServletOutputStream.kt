@@ -1,8 +1,8 @@
-package com.eyr.demo.common.streams
+package cc.worldline.common.streams
 
-import jakarta.servlet.ServletOutputStream
-import jakarta.servlet.WriteListener
 import java.io.ByteArrayOutputStream
+import javax.servlet.ServletOutputStream
+import javax.servlet.WriteListener
 
 class HttpBodyServletOutputStream(
     private val _outputStream: ByteArrayOutputStream,

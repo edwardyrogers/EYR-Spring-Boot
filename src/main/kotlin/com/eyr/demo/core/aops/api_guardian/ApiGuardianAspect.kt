@@ -1,11 +1,11 @@
-package com.eyr.demo.common.aops
+package cc.worldline.common.aops.api_guardian
 
-import com.eyr.demo.common.constants.CoreConst
-import com.eyr.demo.common.constants.ReturnCode
-import com.eyr.demo.common.exceptions.ServiceException
-import com.eyr.demo.common.filters.log.LogFilter
-import com.eyr.demo.common.models.Request
-import com.eyr.demo.common.utils.KeyUtils
+import cc.worldline.common.constants.CoreConst
+import cc.worldline.common.constants.ReturnCode
+import cc.worldline.common.exceptions.ServiceException
+import cc.worldline.common.filters.log.LogFilter
+import cc.worldline.common.models.Request
+import cc.worldline.common.utils.KeyUtils
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -19,7 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes
 @Aspect
 @Component
 @Order(1)
-class ApiAuthCheckerAspect(
+class ApiGuardianAspect(
     private val _environment: Environment,
 ) {
     @Around(CoreConst.MIDDLEWARE_CONDITION)

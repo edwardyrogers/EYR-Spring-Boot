@@ -1,13 +1,13 @@
-package com.eyr.demo.common.aops
+package cc.worldline.common.aops.error_catcher
 
-import com.eyr.demo.common.constants.CoreConst
-import com.eyr.demo.common.constants.ReturnCode
-import com.eyr.demo.common.exceptions.ELKErrorRecordException
-import com.eyr.demo.common.exceptions.ServiceException
-import com.eyr.demo.common.interfaces.Code
-import com.eyr.demo.common.interfaces.ErrorService
-import com.eyr.demo.common.models.Failure
-import com.eyr.demo.common.models.Response
+import cc.worldline.common.constants.CoreConst
+import cc.worldline.common.constants.ReturnCode
+import cc.worldline.common.exceptions.ELKErrorRecordException
+import cc.worldline.common.exceptions.ServiceException
+import cc.worldline.common.interfaces.Code
+import cc.worldline.common.interfaces.ErrorService
+import cc.worldline.common.models.Failure
+import cc.worldline.common.models.Response
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect

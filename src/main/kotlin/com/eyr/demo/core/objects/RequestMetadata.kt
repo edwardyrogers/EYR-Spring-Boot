@@ -1,6 +1,6 @@
-package com.eyr.demo.common.objects
+package cc.worldline.common.objects
 
-import com.eyr.demo.common.models.Meta
+import cc.worldline.common.models.Meta
 
 object RequestMetadata {
     private val value = ThreadLocal<Meta>()
