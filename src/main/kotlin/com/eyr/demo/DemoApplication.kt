@@ -17,11 +17,24 @@ class DemoApplication(
             listOf(
                 UserRepoEntity(
                     username = "Edward",
-                    email = "edward@email.com"
+                    email = "edward@email.com",
+                    age = "36",
+                    phone = "0900000000",
+                    status = UserRepoEntity.UserStatus.ACTIVE
                 ),
                 UserRepoEntity(
                     username = "Iris",
-                    email = "iris@email.com"
+                    email = "iris@email.com",
+                    age = "36",
+                    phone = "0911000000",
+                    status = UserRepoEntity.UserStatus.ACTIVE
+                ),
+                UserRepoEntity(
+                    username = "Ryan",
+                    email = "ryan@email.com",
+                    age = "11",
+                    phone = "0922000000",
+                    status = UserRepoEntity.UserStatus.INACTIVE
                 )
             )
         )

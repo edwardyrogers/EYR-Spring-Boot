@@ -12,5 +12,20 @@ data class UserRepoEntity(
     val username: String,
 
     @Column(nullable = false, unique = true)
-    val email: String
-)
+    val email: String,
+
+    @Column
+    val age: String,
+
+    @Column
+    val phone: String,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    var status: UserStatus,
+) {
+    enum class UserStatus {
+        ACTIVE,
+        INACTIVE;
+    }
+}

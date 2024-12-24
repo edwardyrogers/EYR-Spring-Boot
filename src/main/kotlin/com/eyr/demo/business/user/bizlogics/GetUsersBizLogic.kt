@@ -22,6 +22,15 @@ class GetUsersBizLogic(
         )
 
         val response = when (val payload = req.payload) {
+
+            is UserModel.GetUsersREQ.ByStatus -> _repository.findAllByStatus(
+                PageRequest.of(
+                    0, 20
+                ),
+                payload.status,
+                req.projection
+            )
+
             is UserModel.GetUsersREQ.All -> _repository.findAllBy(
                 PageRequest.of(
                     0, 20

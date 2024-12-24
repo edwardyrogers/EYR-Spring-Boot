@@ -1,6 +1,6 @@
 package com.eyr.demo.api.user
 
-import com.eyr.demo.business.user.UserProjector
+import com.eyr.demo.business.user.UserProjs
 import com.eyr.demo.business.user.bizlogics.GetUsersBizLogic
 import com.eyr.demo.core.models.Request
 import com.eyr.demo.core.models.Response
@@ -36,7 +36,7 @@ class UserController(
         val response = _getUsersBizLogic.execute(
             GetUsersBizLogic.REQ(
                 payload,
-                UserProjector.fromString(body.payload.proj)
+                UserProjs.fromString(body.payload.proj)
             )
         )
 
