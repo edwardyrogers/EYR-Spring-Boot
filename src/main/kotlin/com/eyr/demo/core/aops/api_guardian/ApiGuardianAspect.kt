@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.core.annotation.Order
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Component
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
 
 @Aspect
 @Component
@@ -22,6 +24,13 @@ class ApiGuardianAspect(
 ) {
     @Around(CoreConst.MIDDLEWARE_CONDITION)
     fun handleApiAuth(joinPoint: ProceedingJoinPoint): Any? = run {
+        val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
+        val request = requestAttributes?.request
+
+        if (request != null && !request.requestURI.startsWith("/api/v2/")) {
+            return@run joinPoint.proceed()
+        }
+
         val requestBody = joinPoint.args.firstOrNull() as? Request<*> ?: throw ServiceException(
             ReturnCode.INVALID, "Request body..."
         )

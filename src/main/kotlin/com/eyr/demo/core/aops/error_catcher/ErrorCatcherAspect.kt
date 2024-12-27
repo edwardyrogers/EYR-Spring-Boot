@@ -13,6 +13,8 @@ import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
 
 @Aspect
 @Component
@@ -22,6 +24,13 @@ class ErrorCatcherAspect(
 ) {
     @Around(CoreConst.MIDDLEWARE_CONDITION)
     fun handleErrors(joinPoint: ProceedingJoinPoint): Any? = run {
+        val requestAttributes = RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
+        val request = requestAttributes?.request
+
+        if (request != null && !request.requestURI.startsWith("/api/v2/")) {
+            return@run joinPoint.proceed()
+        }
+
         runCatching {
             // Proceed with the original execution
             return@run joinPoint.proceed()

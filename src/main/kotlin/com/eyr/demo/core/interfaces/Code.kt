@@ -1,5 +1,6 @@
 package com.eyr.demo.core.interfaces
 
+import java.text.MessageFormat
 import java.util.*
 
 /**
@@ -28,5 +29,12 @@ interface Code {
     val value: String
     val msgKey: String
 
-    fun messageIn(locale: Locale = Locale.ENGLISH, vararg params: Any): String
+    val resourceBundleName: String
+        get() = "core_messages"
+
+    fun messageIn(locale: Locale = Locale.ENGLISH, vararg params: Any): String = run {
+        val resourceBundle = ResourceBundle.getBundle(resourceBundleName, locale)
+        val message = resourceBundle.getString(msgKey)
+        return@run MessageFormat.format(message, *params)
+    }
 }

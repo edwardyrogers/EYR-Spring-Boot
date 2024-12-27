@@ -42,10 +42,16 @@ open class CryptoServiceImpl(
 
     private val rsaPrivateKey: PrivateKey
         get() = run {
-            val keyPairMap = hazelcastInstance?.getMap<Any, Any>("GenOrGetRSAKeyPair")
-                ?: throw ServiceException(
-                    ReturnCode.INVALID, "HazelCast map name"
+            if (hazelcastInstance == null) {
+                throw ServiceException(
+                    ReturnCode.INVALID,
+                    ": Please enable caching to save RSA key pair to avoid different key used on different VM"
                 )
+            }
+
+            val keyPairMap = hazelcastInstance.getMap<Any, Any>(
+                "GenOrGetRSAKeyPair"
+            )
 
             val keyPair = keyPairMap["rsa-key"].let {
                 @Suppress("UNCHECKED_CAST")
@@ -57,6 +63,7 @@ open class CryptoServiceImpl(
             val keyFactory = KeyFactory.getInstance("RSA")
             val privateKey = keyPair.second
             val privateKeySpec = PKCS8EncodedKeySpec(privateKey)
+
             return@run keyFactory.generatePrivate(privateKeySpec)
         }
 

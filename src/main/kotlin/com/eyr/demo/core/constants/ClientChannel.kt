@@ -13,9 +13,5 @@ import com.fasterxml.jackson.annotation.JsonFormat
 @JsonFormat(shape = JsonFormat.Shape.STRING)
 enum class ClientChannel {
     UNKNOWN,
-    IBK,
-    PWS,
-    MBK,
-    ASC,
-    STAFF_CHANNEL
+    EYR
 }

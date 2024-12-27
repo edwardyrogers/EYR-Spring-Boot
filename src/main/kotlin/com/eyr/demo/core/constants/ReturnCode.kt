@@ -1,8 +1,6 @@
 package com.eyr.demo.core.constants
 
 import com.eyr.demo.core.interfaces.Code
-import java.text.MessageFormat
-import java.util.*
 
 /**
  * Enum class representing various return codes for error handling.
@@ -29,18 +27,4 @@ enum class ReturnCode(
     PROJECTION_NOT_MATCHED("009", "projection.not.matched"),
     ASCCEND_ERROR("010", "asccend.error"),
     ENDPOINT_NOT_FOUND("011", "endpoint.not.found");
-
-    /**
-     * Retrieves the message associated with the error code based on the provided locale.
-     *
-     * If no locale is specified, it defaults to [Locale.ENGLISH].
-     *
-     * @param locale The locale for which to retrieve the message.
-     * @return The localized message corresponding to the error code.
-     */
-    override fun messageIn(locale: Locale, vararg params: Any): String = run {
-        val resourceBundle = ResourceBundle.getBundle("hsbc_core_messages", locale)
-        val message = resourceBundle.getString(msgKey)
-        MessageFormat.format(message, *params)
-    }
 }

@@ -64,7 +64,8 @@ open class GlobalExceptionCoreHandler(
 
                     when (cause) {
                         is UnrecognizedPropertyException -> "$parameter: is not recognized"
-                        else -> "$parameter: must not be missing or null value"
+                        is MismatchedInputException -> "$parameter: must not be missing or null value"
+                        else -> "${ex.message}"
                     }
                 },
                 stacktrace = ex.stackTrace.contentToString()
