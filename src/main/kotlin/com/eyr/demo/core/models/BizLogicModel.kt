@@ -7,7 +7,7 @@ class BizLogicModel {
     /**
      * A sealed class representing the request model, which can either be a given type of returning data of a Void of no return.
      */
-    sealed class REQ {
+    open class REQ {
 
         /**
          * Represents a generic request for fetching data.
@@ -17,17 +17,17 @@ class BizLogicModel {
          */
         open class Data<T>(
             open val projection: Class<T>
-        )
+        ) : REQ()
 
         /**
          * Represents a void return.
          */
-        open class Void
+        open class Void : REQ()
 
         /**
          * Represents a common value return.
          */
-        open class ValueReturn
+        open class ValueReturn : REQ()
     }
 
     /**
@@ -39,13 +39,13 @@ class BizLogicModel {
          */
         open class Single<T>(
             open val data: T
-        )
+        ) : RES()
 
         /**
          * Represents a result containing a paginated list of items of type T.
          */
         open class Paginated<T>(
             open val data: Page<T>
-        )
+        ) : RES()
     }
 }
