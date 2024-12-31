@@ -50,15 +50,17 @@ open class CryptoServiceImpl(
             }
 
             val keyPairMap = hazelcastInstance.getMap<Any, Any>(
-                "GenOrGetRSAKeyPair"
+                "for-a-day-cache"
             )
 
-            val keyPair = keyPairMap["rsa-key"].let {
+            val keyPair: Pair<ByteArray, ByteArray> = keyPairMap["rsa-key"].let {
                 @Suppress("UNCHECKED_CAST")
                 it as? Pair<ByteArray, ByteArray>
-            } ?: throw ServiceException(
-                ReturnCode.NOT_FOUND, "req by keyPairMap[\"rsa-key\"]"
-            )
+            } ?: run {
+                val newKey = genOrGetRSAKeyPair()
+                keyPairMap.put("rsa-key", newKey)
+                newKey
+            }
 
             val keyFactory = KeyFactory.getInstance("RSA")
             val privateKey = keyPair.second
@@ -72,7 +74,7 @@ open class CryptoServiceImpl(
     }
 
     @Cacheable(
-        cacheNames = ["GenOrGetRSAKeyPair"],
+        cacheNames = ["for-a-day-cache"],
         key = "'rsa-key'"
     )
     override fun genOrGetRSAKeyPair(): Pair<ByteArray, ByteArray> = run {

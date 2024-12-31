@@ -38,7 +38,7 @@ import org.springframework.data.domain.Pageable
     matchIfMissing = false
 )
 open class CachingConfig {
-    open class HazelcastSerialiser : StreamSerializer<BizLogicModel.RES> {
+    open class BizLogicCachingSerialiser : StreamSerializer<BizLogicModel.RES> {
 
         private val objectMapper = jacksonObjectMapper().apply {
             registerModule(
@@ -108,32 +108,32 @@ open class CachingConfig {
         override fun destroy() {
             // Cleanup if needed
         }
+    }
 
-        open class PageDeserializer<T> : StdDeserializer<Page<T>>(Page::class.java) {
+    open class PageDeserializer<T> : StdDeserializer<Page<T>>(Page::class.java) {
 
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Page<T> = run {
-                // Get the type of T from the context
-                val node: JsonNode = p.codec.readTree(p)
+        override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Page<T> = run {
+            // Get the type of T from the context
+            val node: JsonNode = p.codec.readTree(p)
 
-                // Extract content (List<T>) from the JSON
-                val contentNode = node.get("content")
-                val content: List<T> = p.codec.readValue(
-                    contentNode.traverse(),
-                    object : TypeReference<List<T>>() {}
-                )
+            // Extract content (List<T>) from the JSON
+            val contentNode = node.get("content")
+            val content: List<T> = p.codec.readValue(
+                contentNode.traverse(),
+                object : TypeReference<List<T>>() {}
+            )
 
-                // Extract total elements from the JSON
-                val totalElements = node.get("totalElements").asLong()
+            // Extract total elements from the JSON
+            val totalElements = node.get("totalElements").asLong()
 
-                // Extract pageable information (e.g., page size, page number) from the JSON
-                val pageableNode = node.get("pageable")
-                val pageNumber = pageableNode?.get("pageNumber")?.asInt() ?: 0
-                val pageSize = pageableNode?.get("pageSize")?.asInt() ?: 20
-                val pageable: Pageable = PageRequest.of(pageNumber, pageSize)
+            // Extract pageable information (e.g., page size, page number) from the JSON
+            val pageableNode = node.get("pageable")
+            val pageNumber = pageableNode?.get("pageNumber")?.asInt() ?: 0
+            val pageSize = pageableNode?.get("pageSize")?.asInt() ?: 20
+            val pageable: Pageable = PageRequest.of(pageNumber, pageSize)
 
-                // Return a new PageImpl instance (or other Page implementation)
-                return@run PageImpl(content, pageable, totalElements)
-            }
+            // Return a new PageImpl instance (or other Page implementation)
+            return@run PageImpl(content, pageable, totalElements)
         }
     }
 
@@ -148,8 +148,8 @@ open class CachingConfig {
 
         serializationConfig.addSerializerConfig(
             SerializerConfig().apply {
-                typeClass = Any::class.java
-                implementation = HazelcastSerialiser()
+                typeClass = BizLogicModel.RES::class.java
+                implementation = BizLogicCachingSerialiser()
             }
         )
 

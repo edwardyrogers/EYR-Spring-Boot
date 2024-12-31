@@ -35,3 +35,15 @@ hazelcast:
         eviction-policy: LRU
 
       time-to-live-seconds: 180
+
+    for-half-day-cache:
+      time-to-live-seconds: 43200
+
+    for-a-day-cache:
+      time-to-live-seconds: 86400
+
+    for-a-week-cache:
+      time-to-live-seconds: 604800
+
+    for-30-day-cache:
+      time-to-live-seconds: 2592000
