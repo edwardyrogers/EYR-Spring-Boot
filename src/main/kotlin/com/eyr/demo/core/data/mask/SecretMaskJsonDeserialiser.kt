@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import org.springframework.beans.factory.annotation.Value
 
-open class MaskJsonDeserialiser : JsonDeserializer<String>() {
+open class SecretMaskJsonDeserialiser : JsonDeserializer<String>() {
 
     @Value("\${backend-core.mask.enabled:false}")
     private val enabled: Boolean = false

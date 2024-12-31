@@ -55,35 +55,38 @@ object MaskUtils {
     }
 
     // Partial mask (leave the first few characters visible, encrypt the rest)
-    fun mask(data: String, encryptedLength: Int, secretKey: String): String = run {
-        if (encryptedLength >= data.length) {
+    fun mask(data: String, revealedLen: Int, secretKey: String): String = run {
+        if (revealedLen > data.length) {
             throw ServiceException(
                 ReturnCode.INVALID,
                 ": Encrypted length cannot be longer than the data length"
             )
         }
 
-        val toEncrypt = data.substring(0, data.length - encryptedLength) // Part to be encrypted
-        val suffix = data.substring(data.length - encryptedLength) // Unmasked part
+        if (revealedLen == data.length) {
+            return@run data
+        }
+
+        val toEncrypt = data.substring(0, data.length - revealedLen) // Part to be encrypted
+        val suffix = data.substring(data.length - revealedLen) // Unmasked part
 
         // Encrypt the remaining part
         val encrypted = encrypt(toEncrypt, secretKey)
 
         // Concatenate the unmasked prefix with the encrypted part
-        return@run "$encrypted$suffix"
+        return@run "$encrypted\u001F$suffix"
     }
 
     // Decrypt and combine with the visible part
-    fun unmask(data: String, encryptedLength: Int, secretKey: String): String = run {
-        if (encryptedLength >= data.length) {
-            throw ServiceException(
-                ReturnCode.INVALID,
-                "Prefix length cannot be longer than the data length"
-            )
+    fun unmask(data: String, secretKey: String): String = run {
+        val parts = data.split("\u001F")
+
+        if (parts.size != 2) {
+            return@run data
         }
 
-        val encrypted = data.substring(0, data.length - encryptedLength) // Encrypted part
-        val suffix = data.substring(data.length - encryptedLength) // Unmasked part
+        val encrypted = parts.first() // Encrypted part
+        val suffix = parts.last() // Unmasked part
 
         // Decrypt the remaining part
         val decrypted = decrypt(encrypted, secretKey)

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import org.springframework.beans.factory.annotation.Value
 
-open class MaskJsonSerialiser : JsonSerializer<Any>() {
+open class SecretMaskJsonSerialiser : JsonSerializer<Any>() {
 
     @Value("\${backend-core.mask.enabled:false}")
     private val enabled: Boolean = false
@@ -26,7 +26,7 @@ open class MaskJsonSerialiser : JsonSerializer<Any>() {
         generator.writeString(
             MaskUtils.mask(
                 value.toString(),
-                (value.toString().length * 0.5).toInt(),
+                0,
                 MaskUtils.generateKey()
             )
         )

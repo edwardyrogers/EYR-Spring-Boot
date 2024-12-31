@@ -26,8 +26,8 @@ Defines cryptographic algorithms for RSA and AES encryption.
 
 **Notes:**
 - Default algorithms can be overridden using environment variables:
-    - `RSA_ALGORITHMS`
-    - `AES_ALGORITHMS`
+  - `RSA_ALGORITHMS`
+  - `AES_ALGORITHMS`
 
 ---
 
@@ -37,7 +37,6 @@ Controls data masking functionality, typically used for sensitive information.
 | Property                            | Type    | Default Value | Description                                         |
 |-------------------------------------|---------|---------------|-----------------------------------------------------|
 | `backend-core.mask.enabled`         | Boolean | `false`       | Enables or disables data masking.                   |
-| `backend-core.mask.revealed-length` | Integer | `5`           | Number of characters to be revealed in masked data. |
 
 ---
 
@@ -76,7 +75,6 @@ backend-core:
 
     mask:
         enabled: true
-        revealed-length: 3
 
     key-util:
         date-format-seed: yyyy-MM-dd
