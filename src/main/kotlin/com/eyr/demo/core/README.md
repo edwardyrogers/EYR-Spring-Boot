@@ -34,9 +34,10 @@ Defines cryptographic algorithms for RSA and AES encryption.
 ### 3. Masking
 Controls data masking functionality, typically used for sensitive information.
 
-| Property                            | Type    | Default Value | Description                                         |
-|-------------------------------------|---------|---------------|-----------------------------------------------------|
-| `backend-core.mask.enabled`         | Boolean | `false`       | Enables or disables data masking.                   |
+| Property                                     | Type         | Default Value | Description                       |
+|----------------------------------------------|--------------|---------------|-----------------------------------|
+| `backend-core.mask.enabled`                  | Boolean      | `false`       | Enables or disables data masking. |
+| `backend-core.mask.hidden-types.type.fileds` | List<String> | `[]`          | Fields where to hide.             |
 
 ---
 
@@ -65,7 +66,7 @@ To override default values, use the following environment variables:
 backend-core:
     caching:
         enabled: true
-
+        
     crypto:
         enabled: true
         rsa:
@@ -75,6 +76,21 @@ backend-core:
 
     mask:
         enabled: true
+        hidden-types:
+            all:
+                fields: example,example
+                
+            head:
+                fields: phone,mobileNumber
+              
+            middle:
+                fields: cardNumber,creditCardNumber
+      
+            tail:
+                fields: nationalId,username
+                
+            two-sides:
+                fields: example,example
 
     key-util:
         date-format-seed: yyyy-MM-dd

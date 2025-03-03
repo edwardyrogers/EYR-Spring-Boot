@@ -1,5 +1,6 @@
 package com.eyr.demo.core.filters.log
 
+import com.eyr.demo.core.data.mask.SensitiveDataHandler
 import com.eyr.demo.core.streams.HttpBodyServletOutputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -39,12 +40,19 @@ class LogResWrapper(
      * and then writes the modified response to the output stream.
      *
      */
-    fun log(request: HttpServletRequest) = run {
+    fun log(
+        request: HttpServletRequest,
+    ) = run {
         if ("$byteArrayOutputStream".isEmpty()) return@run
 
         val res = MAPPER.readValue(
             "$byteArrayOutputStream",
             object : TypeReference<HashMap<String, Any>>() {}
+        )
+
+        val payload = MAPPER.convertValue(
+            res["payload"],
+            Map::class.java
         )
 
         val modelStr = if (environment.activeProfiles.contains("dev")) {
@@ -55,7 +63,13 @@ class LogResWrapper(
             mapOf(
                 "success" to res["success"],
                 "meta" to res["meta"],
-                "payload" to res["payload"]
+                "payload" to if (SensitiveDataHandler.maskConfig.enabled) {
+                    SensitiveDataHandler.doCheckAndMask(
+                        payload,
+                    )
+                } else {
+                    payload
+                }
             )
         )
 

@@ -1,5 +1,6 @@
 package com.eyr.demo.core.filters.log
 
+import com.eyr.demo.core.data.mask.SensitiveDataHandler
 import com.eyr.demo.core.models.Meta
 import com.eyr.demo.core.streams.HttpBodyServletInputStream
 import com.fasterxml.jackson.core.type.TypeReference
@@ -46,6 +47,11 @@ class LogReqWrapper(
             Meta::class.java
         )
 
+        val payload = MAPPER.convertValue(
+            req["payload"],
+            Map::class.java
+        )
+
         val modelStr = if (environment.activeProfiles.contains("dev")) {
             MAPPER
         } else {
@@ -53,7 +59,13 @@ class LogReqWrapper(
         }.writeValueAsString(
             mapOf(
                 "meta" to meta.toMutableMap(),
-                "payload" to req["payload"]
+                "payload" to if (SensitiveDataHandler.maskConfig.enabled) {
+                    SensitiveDataHandler.doCheckAndMask(
+                        payload,
+                    )
+                } else {
+                    payload
+                }
             )
         )
 
@@ -72,7 +84,6 @@ class LogReqWrapper(
         inputStream = ByteArrayInputStream(body)
     )
 
-
     /**
      * Returns a reader for reading the request body.
      *
@@ -86,7 +97,6 @@ class LogReqWrapper(
             ByteArrayInputStream(body)
         )
     )
-
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(LogFilter::class.java)

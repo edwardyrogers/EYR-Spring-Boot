@@ -1,4 +1,4 @@
-package com.eyr.demo.common.error
+package com.eyr.demo.common.services.error
 
 import com.eyr.demo.common.constants.CommonConst
 import com.eyr.demo.common.constants.EYRReturnCode

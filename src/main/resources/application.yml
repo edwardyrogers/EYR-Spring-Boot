@@ -8,6 +8,12 @@ spring:
   hazelcast:
     config: classpath:hazelcast.yaml
 
+server:
+  port: 9999
+  servlet:
+    encoding:
+      charset: UTF-8
+
 app:
   security:
     jwt:
@@ -17,8 +23,18 @@ app:
       refresh:
         expiration: 604800000
 
-  cryptography:
+backend-core:
+  mask:
     enabled: true
+    hidden-types:
+      middle:
+        fields: ic,nationalId,username,phone,mobileNumber,cardNumber,creditCardNumber
+
+      tail:
+        fields: email
+
+  crypto:
+    enabled: false
     rsa:
       algorithms: "${RSA_ALGORITHMS:RSA/ECB/PKCS1Padding}"
     aes:

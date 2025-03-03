@@ -24,7 +24,7 @@ import java.io.InputStreamReader
  * @param request The original [HttpServletRequest] that is being wrapped.
  */
 class ModelReqWrapper(
-    private val request: HttpServletRequest
+    private val request: HttpServletRequest,
 ) : HttpServletRequestWrapper(request) {
 
     private val body: ByteArray = StreamUtils.copyToByteArray(
@@ -39,6 +39,8 @@ class ModelReqWrapper(
      * [RequestMetadata.set].
      */
     fun setCurrentMeta() = run {
+        if (body.isEmpty()) return@run
+
         // Parse the request body into a map
         val req: Map<String, Any> = MAPPER.readValue(
             body,
