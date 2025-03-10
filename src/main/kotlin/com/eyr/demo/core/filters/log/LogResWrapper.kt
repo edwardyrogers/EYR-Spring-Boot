@@ -45,8 +45,12 @@ class LogResWrapper(
     ) = run {
         if ("$byteArrayOutputStream".isEmpty()) return@run
 
+        val byteArray = byteArrayOutputStream.toByteArray()
+
+        val inputString = byteArray.toString(Charsets.UTF_8)
+
         val res = MAPPER.readValue(
-            "$byteArrayOutputStream",
+            inputString,
             object : TypeReference<HashMap<String, Any>>() {}
         )
 
@@ -81,7 +85,7 @@ class LogResWrapper(
             LOGGER.error("x-- [${request.method}] ${request.requestURI} $modelStr")
         }
 
-        response.outputStream.write(byteArrayOutputStream.toByteArray())
+        response.outputStream.write(byteArray)
     }
 
     /**

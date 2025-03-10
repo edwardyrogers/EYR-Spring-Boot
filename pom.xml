@@ -17,6 +17,7 @@
         <spring-boot.version>3.3.4</spring-boot.version>
         <spring-cloud.version>2023.0.2</spring-cloud.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <maven.build.timestamp>${maven.build.timestamp}</maven.build.timestamp>
     </properties>
 
     <groupId>com.eyr</groupId>
@@ -206,6 +207,34 @@
                                     <version>${org.mapstruct.version}</version>
                                 </annotationProcessorPath>
                             </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                        <configuration>
+                            <delimiters>
+                                <delimiter>@</delimiter>
+                            </delimiters>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>**/*.properties</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>

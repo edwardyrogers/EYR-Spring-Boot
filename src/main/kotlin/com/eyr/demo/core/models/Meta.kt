@@ -4,6 +4,7 @@ import com.eyr.demo.core.constants.ClientChannel
 import com.eyr.demo.core.constants.ReturnCode
 import com.eyr.demo.core.data.crypto.CryptoService
 import com.eyr.demo.core.exceptions.ServiceException
+import com.eyr.demo.core.objects.CoreParam
 import com.eyr.demo.core.utils.KeyUtils
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.core.JsonParser
@@ -25,6 +26,8 @@ import java.util.*
  * @property client Represent which client request for data
  */
 open class Meta(
+    open val coreVol: String = CoreParam.coreVol,
+
     open val lang: String = "The metadata is not given from the request",
 
     open val sessionId: String = "",
@@ -43,6 +46,7 @@ open class Meta(
 
     fun toMutableMap(): MutableMap<String, *> = run {
         mutableMapOf(
+            "coreVol" to coreVol,
             "lang" to lang,
             "deviceId" to deviceId,
             "sessionId" to sessionId,
@@ -51,6 +55,7 @@ open class Meta(
     }
 
     fun copy(
+        coreVol: String = this.coreVol,
         lang: String = this.lang,
         sessionId: String = this.sessionId,
         deviceId: String = this.deviceId,
@@ -58,6 +63,7 @@ open class Meta(
         apiKey: String = this.apiKey,
         client: ClientChannel = this.client
     ) = Meta(
+        coreVol,
         lang,
         sessionId,
         deviceId,

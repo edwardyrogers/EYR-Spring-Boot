@@ -39,8 +39,12 @@ class ModelResWrapper(
     fun writeOutputStream() = run {
         if ("$byteArrayOutputStream".isEmpty()) return@run
 
+        val byteArray = byteArrayOutputStream.toByteArray()
+
+        val inputString = byteArray.toString(Charsets.UTF_8)
+
         val res = MAPPER.readValue(
-            "$byteArrayOutputStream",
+            inputString,
             object : TypeReference<HashMap<String, Any>>() {}
         )
 
@@ -52,7 +56,7 @@ class ModelResWrapper(
             )
         )
 
-        response.outputStream.write(modified.toByteArray())
+        response.outputStream.write(modified.toByteArray(Charsets.UTF_8))
     }
 
     /**
