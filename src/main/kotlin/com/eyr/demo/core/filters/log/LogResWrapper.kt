@@ -65,7 +65,6 @@ class LogResWrapper(
             MAPPER.copy().disable(SerializationFeature.INDENT_OUTPUT)
         }.writeValueAsString(
             mapOf(
-                "success" to res["success"],
                 "meta" to res["meta"],
                 "payload" to if (SensitiveDataHandler.maskConfig.enabled) {
                     SensitiveDataHandler.doCheckAndMask(
@@ -77,12 +76,12 @@ class LogResWrapper(
             )
         )
 
-        val isSuccess = res["success"] as? Boolean ?: false
+        val isSuccess = res["stacktrace"] as? Boolean ?: false
 
         if (isSuccess) {
-            LOGGER.info("<-- [${request.method}] ${request.requestURI} $modelStr")
+            LOGGER.info("<-- [${request.method}-RES] ${request.requestURI} $modelStr")
         } else {
-            LOGGER.error("x-- [${request.method}] ${request.requestURI} $modelStr")
+            LOGGER.error("x-- [${request.method}-ERR] ${request.requestURI} $modelStr")
         }
 
         response.outputStream.write(byteArray)

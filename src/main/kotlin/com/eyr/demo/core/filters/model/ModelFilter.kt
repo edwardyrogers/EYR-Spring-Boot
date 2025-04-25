@@ -29,8 +29,7 @@ class ModelFilter : OncePerRequestFilter() {
         val reqWrapped = ModelReqWrapper(request) // Create a wrapped version of the request
         val resWrapped = ModelResWrapper(response) // Create a wrapped version of the response
 
-        // Set metadata for the current request in the wrapped request object
-        reqWrapped.setCurrentMeta()
+        reqWrapped.writeInputStream()
 
         // Continue the filter chain with the wrapped request and response
         chain.doFilter(reqWrapped, resWrapped)

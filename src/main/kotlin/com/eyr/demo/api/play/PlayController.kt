@@ -1,31 +1,36 @@
 package com.eyr.demo.api.play
 
+import com.eyr.demo.core.constants.ReturnCode
+import com.eyr.demo.core.exceptions.ELKErrorRecordException
+import com.eyr.demo.core.exceptions.ServiceException
 import com.eyr.demo.core.interfaces.Payload
-import com.eyr.demo.core.models.Request
-import com.eyr.demo.core.models.Response
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.*
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/play")
 class PlayController {
     @PostMapping("test")
     fun test(
-        @Valid @RequestBody body: Request<PlayModel.TestREQ>
-    ): Response<PlayModel.TestRES> = run {
-        Response.success(
-            payload = PlayModel.TestRES(
-                greeting = "Hello, ${body.payload.username}.",
-                cardNumber = body.payload.sub.cardNumber,
-                revealedPSW = body.payload.sub.email,
+        @Valid @RequestBody body: PlayModel.TestREQ
+    ): ResponseEntity<PlayModel.TestRES> = run {
+        ResponseEntity.ok(
+            PlayModel.TestRES(
+                greeting = "Hello, ${body.username}.",
+                cardNumber = body.sub.cardNumber,
+                revealedPSW = body.sub.email,
             )
         )
     }
 
-    @GetMapping("test-get")
+    @PostMapping("test-get")
     fun testGet(
-        @RequestParam test: String
-    ): Response<Payload.Empty> = run {
-        Response.success()
+        @Valid @RequestBody body: PlayModel.TestREQ
+    ): ResponseEntity<Payload.Empty> = run {
+        throw ServiceException(ReturnCode.GENERAL_ERROR)
     }
 }

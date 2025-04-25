@@ -16,4 +16,13 @@ open class Failure(
     open val code: String = "",
     open val message: String = "",
     open val stacktrace: String? = null
-) : Payload
+) : Payload {
+    fun toMutableMap(): MutableMap<String, *> = run {
+        mutableMapOf(
+            "timestamp" to timestamp,
+            "code" to code,
+            "message" to message,
+            "stacktrace" to stacktrace,
+        )
+    }
+}

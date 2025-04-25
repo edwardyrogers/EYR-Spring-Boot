@@ -2,9 +2,8 @@ package com.eyr.demo.api.user
 
 import com.eyr.demo.business.user.UserProjs
 import com.eyr.demo.business.user.bizlogics.GetUsersBizLogic
-import com.eyr.demo.core.models.Request
-import com.eyr.demo.core.models.Response
 import jakarta.validation.Valid
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -29,18 +28,17 @@ class UserController(
 //        ]
 //    )
     fun getCustomers(
-        @Valid @RequestBody body: Request<UserModel.GetUsersREQ>
-    ): Response<UserModel.GetUsersRES> = run {
-        val payload = body.payload
+        @Valid @RequestBody body: UserModel.GetUsersREQ
+    ): ResponseEntity<UserModel.GetUsersRES> = run {
 
         val response = _getUsersBizLogic.execute(
             GetUsersBizLogic.REQ(
-                payload,
-                UserProjs.fromString(body.payload.proj)
+                body,
+                UserProjs.fromString(body.proj)
             )
         )
 
-        Response.success(
+        ResponseEntity.ok(
             UserModel.GetUsersRES(
                 users = response.data
             )

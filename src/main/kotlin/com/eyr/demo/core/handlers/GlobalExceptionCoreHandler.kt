@@ -6,7 +6,6 @@ import com.eyr.demo.core.constants.ReturnCode
 import com.eyr.demo.core.exceptions.ELKErrorRecordException
 import com.eyr.demo.core.interfaces.ErrorService
 import com.eyr.demo.core.models.Failure
-import com.eyr.demo.core.models.Response
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import org.springframework.http.HttpStatus
@@ -45,32 +44,31 @@ open class GlobalExceptionCoreHandler(
     open fun httpMessageNotReadableException(
         ex: HttpMessageNotReadableException,
         handler: HandlerMethod
-    ): Response<Failure> = run {
+    ): Failure = run {
         // "Missing or null value for required parameter: 'nationalId' [payload.nationalId]"
-        return@run Response.failure(
-            Failure(
-                code = _errorService.formatErrorCode(
-                    ReturnCode.INVALID.value,
-                    handler.beanType.kotlin
-                ),
-                message = run {
-                    val cause = ex.cause
-
-                    val parameter = if (cause is MismatchedInputException) {
-                        cause.path.joinToString(".") { it.fieldName ?: "unknown" }
-                    } else {
-                        "unknown"
-                    }
-
-                    when (cause) {
-                        is UnrecognizedPropertyException -> "$parameter: is not recognized"
-                        is MismatchedInputException -> "$parameter: must not be missing or null value"
-                        else -> "${ex.message}"
-                    }
-                },
-                stacktrace = ex.stackTrace.contentToString()
+        return@run Failure(
+            code = _errorService.formatErrorCode(
+                ReturnCode.INVALID.value,
+                handler.beanType.kotlin
             ),
+            message = run {
+                val cause = ex.cause
+
+                val parameter = if (cause is MismatchedInputException) {
+                    cause.path.joinToString(".") { it.fieldName ?: "unknown" }
+                } else {
+                    "unknown"
+                }
+
+                when (cause) {
+                    is UnrecognizedPropertyException -> "$parameter: is not recognized"
+                    is MismatchedInputException -> "$parameter: must not be missing or null value"
+                    else -> "${ex.message}"
+                }
+            },
+            stacktrace = ex.stackTrace.contentToString()
         )
+
     }
 
     /**
@@ -96,20 +94,18 @@ open class GlobalExceptionCoreHandler(
     open fun methodArgumentNotValidException(
         ex: MethodArgumentNotValidException,
         handler: HandlerMethod
-    ): Response<Failure> = run {
-        return@run Response.failure(
-            Failure(
-                code = _errorService.formatErrorCode(
-                    ReturnCode.INVALID.value,
-                    handler.beanType.kotlin
-                ),
-                message = ex.bindingResult
-                    .fieldErrors
-                    .joinToString(" | ") {
-                        "${it.field}: ${it.defaultMessage ?: "invalid value"}"
-                    },
-                stacktrace = ex.stackTrace.contentToString()
+    ): Failure = run {
+        return@run Failure(
+            code = _errorService.formatErrorCode(
+                ReturnCode.INVALID.value,
+                handler.beanType.kotlin
             ),
+            message = ex.bindingResult
+                .fieldErrors
+                .joinToString(" | ") {
+                    "${it.field}: ${it.defaultMessage ?: "invalid value"}"
+                },
+            stacktrace = ex.stackTrace.contentToString()
         )
     }
 
@@ -133,7 +129,7 @@ open class GlobalExceptionCoreHandler(
      */
     open fun elkErrorRecordException(
         ex: ELKErrorRecordException
-    ): ResponseEntity<Response<Failure>> = run {
+    ): ResponseEntity<Failure> = run {
         return@run ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
@@ -167,21 +163,18 @@ open class GlobalExceptionCoreHandler(
     open fun exception(
         ex: Exception,
         handler: HandlerMethod
-    ): ResponseEntity<Response<Failure>> = run {
+    ): ResponseEntity<Failure> = run {
         return@run ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(
-                Response.failure(
-                    Failure(
-                        code = _errorService.formatErrorCode(
-                            ReturnCode.UNEXPECTED_ERROR.value,
-                            handler.beanType.kotlin
-                        ),
-                        message = ex.localizedMessage,
-                        stacktrace = ex.stackTrace.contentToString()
+                Failure(
+                    code = _errorService.formatErrorCode(
+                        ReturnCode.UNEXPECTED_ERROR.value,
+                        handler.beanType.kotlin
                     ),
-                )
+                    message = ex.localizedMessage,
+                    stacktrace = ex.stackTrace.contentToString()
+                ),
             )
-
     }
 }

@@ -4,7 +4,6 @@ import com.eyr.demo.core.exceptions.ELKErrorRecordException
 import com.eyr.demo.core.handlers.GlobalExceptionCoreHandler
 import com.eyr.demo.core.interfaces.ErrorService
 import com.eyr.demo.core.models.Failure
-import com.eyr.demo.core.models.Response
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -54,7 +53,7 @@ class GlobalExceptionHandler(
     @ExceptionHandler(ELKErrorRecordException::class)
     fun elkErrorRecordException(
         ex: ELKErrorRecordException
-    ): ResponseEntity<Response<Failure>> = run {
+    ): ResponseEntity<Failure> = run {
         _globalExceptionCoreHandler.elkErrorRecordException(ex)
     }
 

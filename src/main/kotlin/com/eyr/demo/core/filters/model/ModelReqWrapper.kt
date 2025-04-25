@@ -27,21 +27,13 @@ class ModelReqWrapper(
     private val request: HttpServletRequest,
 ) : HttpServletRequestWrapper(request) {
 
-    private val body: ByteArray = StreamUtils.copyToByteArray(
+    private var body: ByteArray = StreamUtils.copyToByteArray(
         this.request.inputStream
     )
 
-    /**
-     * Sets the current metadata from the request body into the [RequestMetadata].
-     *
-     * This method parses the request body as a JSON object and retrieves the "meta" field,
-     * converting it into an instance of [Meta]. The metadata is then stored using
-     * [RequestMetadata.set].
-     */
-    fun setCurrentMeta() = run {
+    fun writeInputStream() = run {
         if (body.isEmpty()) return@run
 
-        // Parse the request body into a map
         val req: Map<String, Any> = MAPPER.readValue(
             body,
             object : TypeReference<Map<String, Any>>() {} // Type reference for deserialization
@@ -54,6 +46,18 @@ class ModelReqWrapper(
 
         // Set the extracted metadata into the RequestMetadata
         RequestMetadata.set(meta)
+
+        val payload = MAPPER.convertValue(
+            req["payload"],
+            Map::class.java
+        )
+
+        val modified = MAPPER.writeValueAsString(
+            payload
+        )
+
+        // 🔁 Replace the body so getInputStream()/getReader() will use the new version
+        body = modified.toByteArray()
     }
 
     /**

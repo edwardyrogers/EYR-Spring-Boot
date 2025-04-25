@@ -3,7 +3,6 @@ package com.eyr.demo.core.exceptions
 import com.eyr.demo.core.interfaces.Code
 import com.eyr.demo.core.interfaces.Error
 import com.eyr.demo.core.models.Failure
-import com.eyr.demo.core.models.Response
 import com.eyr.demo.core.objects.RequestMetadata
 
 /**
@@ -26,12 +25,10 @@ class ELKErrorRecordException(
     override val message: String = code.messageIn(RequestMetadata.get().obtainLocale(), *msgParams),
     private val customFormattedCodeCallback: (code: Code) -> String? = { null },
 ) : Error<Code>, RuntimeException() {
-    val failure: Response<Failure>
-        get() = Response.failure(
-            Failure(
-                code = customFormattedCodeCallback(code) ?: "NotDefinedCustomFormattedCodeCallback${code.value}",
-                message = message,
-                stacktrace = stackTrace.contentToString()
-            ),
+    val failure: Failure
+        get() = Failure(
+            code = customFormattedCodeCallback(code) ?: "NotDefinedCustomFormattedCodeCallback${code.value}",
+            message = message,
+            stacktrace = stackTrace.contentToString()
         )
 }

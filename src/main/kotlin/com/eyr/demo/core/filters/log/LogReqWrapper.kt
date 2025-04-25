@@ -43,12 +43,13 @@ class LogReqWrapper(
         )
 
         val meta: Meta = MAPPER.convertValue(
-            req["meta"],
+            req["meta"] ?: throw IllegalArgumentException("meta: must not be missing or null value"),
             Meta::class.java
         )
 
+
         val payload = MAPPER.convertValue(
-            req["payload"],
+            req["payload"] ?: throw IllegalArgumentException("payload: must not be missing or null value"),
             Map::class.java
         )
 
@@ -69,7 +70,7 @@ class LogReqWrapper(
             )
         )
 
-        LOGGER.info("--> [${request.method}] ${request.requestURI} $modelStr")
+        LOGGER.info("--> [${request.method}-REQ] ${request.requestURI} $modelStr")
     }
 
     /**

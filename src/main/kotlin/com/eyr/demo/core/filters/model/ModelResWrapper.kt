@@ -45,18 +45,17 @@ class ModelResWrapper(
 
         val res = MAPPER.readValue(
             inputString,
-            object : TypeReference<HashMap<String, Any>>() {}
+            object : TypeReference<Map<String, Any>>() {}
         )
 
         val modified = MAPPER.writeValueAsString(
             mapOf(
-                "success" to res["success"],
                 "meta" to RequestMetadata.get().toMutableMap(),
-                "payload" to res["payload"],
+                "payload" to res
             )
         )
 
-        response.outputStream.write(modified.toByteArray(Charsets.UTF_8))
+        response.outputStream.write(modified.toByteArray())
     }
 
     /**
