@@ -1,7 +1,6 @@
 package com.eyr.demo.api.play
 
 import com.eyr.demo.core.constants.ReturnCode
-import com.eyr.demo.core.exceptions.ELKErrorRecordException
 import com.eyr.demo.core.exceptions.ServiceException
 import com.eyr.demo.core.interfaces.Payload
 import jakarta.validation.Valid

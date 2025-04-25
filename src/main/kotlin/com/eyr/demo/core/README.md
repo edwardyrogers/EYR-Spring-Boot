@@ -1,12 +1,14 @@
 # `backend-core` Configuration
 
-This document provides an overview of the configuration properties available in the `application.yaml` file. These properties control various functionalities such as caching, cryptography, masking, and key utilities.
+This document provides an overview of the configuration properties available in the `application.yaml` file. These
+properties control various functionalities such as caching, cryptography, masking, and key utilities.
 
 ---
 
 ## Configuration Overview
 
 ### 1. Caching
+
 Controls the caching feature of the application.
 
 | Property                       | Type    | Default Value | Description                  |
@@ -16,6 +18,7 @@ Controls the caching feature of the application.
 ---
 
 ### 2. Cryptography
+
 Defines cryptographic algorithms for RSA and AES encryption.
 
 | Property                             | Type    | Default Value          | Description                                 |
@@ -25,13 +28,15 @@ Defines cryptographic algorithms for RSA and AES encryption.
 | `backend-core.crypto.aes.algorithms` | String  | `AES/CBC/PKCS5Padding` | AES algorithm to be used.                   |
 
 **Notes:**
+
 - Default algorithms can be overridden using environment variables:
-  - `RSA_ALGORITHMS`
-  - `AES_ALGORITHMS`
+    - `RSA_ALGORITHMS`
+    - `AES_ALGORITHMS`
 
 ---
 
 ### 3. Masking
+
 Controls data masking functionality, typically used for sensitive information.
 
 | Property                                     | Type         | Default Value | Description                       |
@@ -42,6 +47,7 @@ Controls data masking functionality, typically used for sensitive information.
 ---
 
 ### 4. Key Utility
+
 Specifies utility settings for key generation.
 
 | Property                                 | Type   | Default Value | Description                          |
@@ -51,6 +57,7 @@ Specifies utility settings for key generation.
 ---
 
 ## Environment Variables
+
 To override default values, use the following environment variables:
 
 | Environment Variable | Description             |
