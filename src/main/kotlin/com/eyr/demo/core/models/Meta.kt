@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -28,7 +29,7 @@ import java.util.*
 open class Meta(
     open val coreVol: String = CoreParam.coreVol,
 
-    open val lang: String = "The metadata is not given from the request",
+    open val lang: String = "",
 
     open val sessionId: String = "",
 
@@ -109,4 +110,34 @@ open class Meta(
             private val LOGGER = LoggerFactory.getLogger(JsonCPTKeyDeserialiser::class.java)
         }
     }
+
+    class MetaDeserializer : JsonDeserializer<Meta>() {
+        override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Meta {
+            val node: JsonNode = p.codec.readTree(p)
+
+            // Manually check each field for required values
+            val lang =
+                node["lang"]?.asText() ?: throw IllegalArgumentException("lang: must not be missing or null value")
+            val sessionId = node["sessionId"]?.asText()
+                ?: throw IllegalArgumentException("sessionId: must not be missing or null value")
+            val deviceId = node["deviceId"]?.asText()
+                ?: throw IllegalArgumentException("deviceId: must not be missing or null value")
+            val cptKey = node["cptKey"]?.binaryValue()
+                ?: throw IllegalArgumentException("cptKey: must not be missing or null value")
+            val apiKey =
+                node["apiKey"]?.asText() ?: throw IllegalArgumentException("apiKey: must not be missing or null value")
+            val client = node["client"]?.asText()?.let { ClientChannel.valueOf(it) } ?: ClientChannel.UNKNOWN
+
+            // Return an instance of the Meta class
+            return Meta(
+                lang = lang,
+                sessionId = sessionId,
+                deviceId = deviceId,
+                cptKey = cptKey,
+                apiKey = apiKey,
+                client = client
+            )
+        }
+    }
+
 }

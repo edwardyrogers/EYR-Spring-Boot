@@ -6,6 +6,7 @@ import com.eyr.demo.core.streams.HttpBodyServletInputStream
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import jakarta.servlet.ServletInputStream
 import jakarta.servlet.http.HttpServletRequest
@@ -43,10 +44,9 @@ class LogReqWrapper(
         )
 
         val meta: Meta = MAPPER.convertValue(
-            req["meta"] ?: throw IllegalArgumentException("meta: must not be missing or null value"),
+            req["meta"],
             Meta::class.java
         )
-
 
         val payload = MAPPER.convertValue(
             req["payload"] ?: throw IllegalArgumentException("payload: must not be missing or null value"),
@@ -105,6 +105,7 @@ class LogReqWrapper(
         private val MAPPER = ObjectMapper().apply {
             enable(SerializationFeature.INDENT_OUTPUT)
             registerModule(JavaTimeModule())
+            registerModule(SimpleModule().addDeserializer(Meta::class.java, Meta.MetaDeserializer()))
         }
     }
 }
