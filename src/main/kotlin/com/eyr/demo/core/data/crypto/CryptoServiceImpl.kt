@@ -80,11 +80,7 @@ open class CryptoServiceImpl(
     override fun genOrGetRSAKeyPair(): Pair<ByteArray, ByteArray> = run {
         val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
         val parameterSpec = RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4)
-        val secureRandom = SecureRandom.getInstance("SHA1PRNG")
-
-        secureRandom.setSeed(
-            ByteArray(32) { SecureRandom().nextInt(256).toByte() }
-        )
+        val secureRandom = SecureRandom()
 
         keyPairGenerator.initialize(parameterSpec, secureRandom)
 
@@ -108,17 +104,21 @@ open class CryptoServiceImpl(
     }
 
     override fun doAESEncryption(key: ByteArray, data: ByteArray): ByteArray = run {
-        val secretKey = SecretKeySpec(key, "AES")
+        val iv = key.copyOfRange(0, 16)
+        val actualKey = key.copyOfRange(16, key.size)
+        val secretKey = SecretKeySpec(actualKey, "AES")
         val cipher = Cipher.getInstance(aesAlgo)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, IvParameterSpec(key.copyOfRange(16, key.size)))
-        return@run cipher.doFinal(data)
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, IvParameterSpec(iv))
+        cipher.doFinal(data)
     }
 
     override fun doAESDecryption(key: ByteArray, data: ByteArray): ByteArray = run {
-        val secretKey = SecretKeySpec(key, "AES")
+        val iv = key.copyOfRange(0, 16)
+        val actualKey = key.copyOfRange(16, key.size)
+        val secretKey = SecretKeySpec(actualKey, "AES")
         val cipher = Cipher.getInstance(aesAlgo)
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(key.copyOfRange(16, key.size)))
-        return@run cipher.doFinal(data)
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(iv))
+        cipher.doFinal(data)
     }
 
     override fun encrypt(data: ByteArray): CryptoData = run {
