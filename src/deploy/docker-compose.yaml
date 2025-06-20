@@ -6,65 +6,65 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./certs/server.crt:/etc/nginx/ssl/server.crt
-      - ./certs/server.key:/etc/nginx/ssl/server.key
-      - ./certs/ca.crt:/etc/nginx/ssl/ca.crt
+      - ./certs/srv-chain.crt:/etc/nginx/ssl/server.crt
+      - ./certs/srv.key:/etc/nginx/ssl/server.key
+      - ./certs/rot-chain.crt:/etc/nginx/ssl/root.crt
     ports:
-      - "80:80"
+      - "8080:80"
       - "443:443"
     networks:
       - eyr
 
-  eyr-backend-1:
-    container_name: eyr-backend-1
-    image: eyr-backend
-    expose:
-      - 8080
-    networks:
-      eyr:
-        ipv4_address: 10.129.105.161
+#  eyr-backend-1:
+#    container_name: eyr-backend-1
+#    image: eyr-backend
+#    expose:
+#      - 8080
+#    networks:
+#      eyr:
+#        ipv4_address: 10.129.105.161
+#
+#  eyr-backend-2:
+#    container_name: eyr-backend-2
+#    image: eyr-backend
+#    expose:
+#      - 8080
+#    networks:
+#      eyr:
+#        ipv4_address: 10.129.105.162
+#
+#  eyr-backend-3:
+#    container_name: eyr-backend-3
+#    image: eyr-backend
+#    expose:
+#      - 8080
+#    networks:
+#      eyr:
+#        ipv4_address: 10.129.105.178
+#
+#  eyr-backend-4:
+#    container_name: eyr-backend-4
+#    image: eyr-backend
+#    expose:
+#      - 8080
+#    networks:
+#      eyr:
+#        ipv4_address: 10.129.105.179
 
-  eyr-backend-2:
-    container_name: eyr-backend-2
-    image: eyr-backend
-    expose:
-      - 8080
-    networks:
-      eyr:
-        ipv4_address: 10.129.105.162
-
-  eyr-backend-3:
-    container_name: eyr-backend-3
-    image: eyr-backend
-    expose:
-      - 8080
-    networks:
-      eyr:
-        ipv4_address: 10.129.105.178
-
-  eyr-backend-4:
-    container_name: eyr-backend-4
-    image: eyr-backend
-    expose:
-      - 8080
-    networks:
-      eyr:
-        ipv4_address: 10.129.105.179
-
-  # eyr-hazelcast:
-  #   container_name: eyr-hazelcast
-  #   image: hazelcast/hazelcast:5.5.0
-  #   environment:
-  #     - HZ_NETWORK_PUBLICADDRESS=eyr-hazelcast:5701
-  #     - HZ_CLUSTERNAME=eyr-one-piece
-  #   volumes:
-  #     - ./hazelcast.yaml:/opt/hazelcast/config/hazelcast.yaml
-  #   expose:
-  #     - 5701
-  #   ports:
-  #     - '5701:5701'
-  #   networks:
-  #     - eyr
+#   eyr-hazelcast:
+#     container_name: eyr-hazelcast
+#     image: hazelcast/hazelcast:5.5.0
+#     environment:
+#       - HZ_NETWORK_PUBLICADDRESS=eyr-hazelcast:5701
+#       - HZ_CLUSTERNAME=eyr-one-piece
+#     volumes:
+#       - ./hazelcast.yaml:/opt/hazelcast/config/hazelcast.yaml
+#     expose:
+#       - 5701
+#     ports:
+#       - '5701:5701'
+#     networks:
+#       - eyr
 
 networks:
   eyr:
